@@ -266,7 +266,11 @@ error AgentAlreadyExists();
     }
 
     // =============================================================================
-    // Computations (Simplified - real FHE ops would require FHEVM)
+    // Computations
+    // NOTE: This is a DEMO PLACEHOLDER. Real FHE arithmetic operations require
+    // Fhenix FHEVM runtime. This returns encrypted first chunk as demonstration.
+    // When integrated with Fhenix CoFHE, replace with actual FHE ops:
+    // result = FHE.add(result, _agents[agentId].context[offset + i]);
     // =============================================================================
     
     /**
@@ -275,7 +279,7 @@ error AgentAlreadyExists();
      * @param operation The operation to perform (e.g., "sum", "avg")
      * @param offset Start index
      * @param length Number of chunks
-     * @return result The computed encrypted result
+     * @return result The computed encrypted result (demo: returns first chunk)
      */
     function computeOnContext(
         address agentId,
@@ -298,16 +302,16 @@ error AgentAlreadyExists();
             ? contextLength - offset 
             : length;
         
-        // For mock implementation, return sum of first chunk as placeholder
-        // Real implementation would use FHE arithmetic operations
+        // DEMO: Return first chunk as placeholder for sum/avg
+        // TODO: Replace with FHE.add() loop when using Fhenix FHEVM
         if (keccak256(abi.encodePacked(operation)) == keccak256("sum") ||
             keccak256(abi.encodePacked(operation)) == keccak256("avg")) {
             
             euint256 result = FHE.asEuint256(0);
             
             for (uint256 i = 0; i < actualLength; i++) {
-                // In real FHE: result = FHE.add(result, _agents[agentId].context[offset + i]);
-                // Mock: just return first chunk
+                // DEMO PLACEHOLDER: Return first chunk only
+                // PRODUCTION: FHE.add(result, _agents[agentId].context[offset + i]);
                 if (i == 0) {
                     result = _agents[agentId].context[offset];
                 }

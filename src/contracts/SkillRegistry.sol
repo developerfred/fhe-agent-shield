@@ -201,13 +201,15 @@ contract SkillRegistry {
 
     // =============================================================================
     // Execution
+    // NOTE: This is a DEMO PLACEHOLDER. Real skill execution would use Fhenix FHEVM
+    // to run skill code on encrypted data. This returns input as output for demo.
     // =============================================================================
     
     /**
      * @notice Execute a verified skill with encrypted input
      * @param skillId The skill ID
      * @param encryptedInput The encrypted input data
-     * @return encryptedOutput The encrypted output (mock: input * 2)
+     * @return encryptedOutput The encrypted output (demo: returns input)
      */
     function executeSkill(address skillId, inEuint256 calldata encryptedInput) external returns (euint256) {
         // Verify skill exists
@@ -223,8 +225,8 @@ contract SkillRegistry {
         // Convert input
         euint256 input = FHE.asEuint256(encryptedInput);
         
-        // Mock execution: simply return input value (in real FHEVM, would execute skill code)
-        // For demo purposes, we just return the input as-is
+        // DEMO PLACEHOLDER: Return input as output
+        // PRODUCTION: Execute skill code via Fhenix FHEVM
         euint256 output = input;
         
         emit SkillExecuted(skillId, msg.sender, block.timestamp);
