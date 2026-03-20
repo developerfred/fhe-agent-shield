@@ -11,6 +11,7 @@ FHE-Agent Shield provides **true end-to-end encryption** for AI agents using Ful
 | Framework | GitHub Stars | Language | Memory | Credentials | Encryption |
 |-----------|-------------|----------|--------|-------------|------------|
 | **OpenClaw** | 327K | TypeScript/Node.js | Plaintext | Plaintext | None |
+| **Moltis** | 2.3K | Rust | SQLite + vector | Vault (XChaCha20) | At-rest only |
 | **IronClaw** | 10K+ | Rust | Plaintext | Plaintext | None (privacy focus) |
 | **ZeroClaw** | - | Rust | Plaintext | Plaintext | WASM sandbox |
 | **GoClaw** | - | Go | Plaintext | Plaintext | None |
@@ -22,6 +23,106 @@ FHE-Agent Shield provides **true end-to-end encryption** for AI agents using Ful
 | **AutoGen** | 40K+ | Python | Plaintext | Plaintext | None |
 | **Semantic Kernel** | - | C#/Python | Varies | Plaintext | None |
 | **JanHQ** | - | Rust | Plaintext | Plaintext | None (has OpenClaw integration) |
+
+## OpenClaw Ecosystem: Multi-Language Analysis
+
+O ecossistema OpenClaw exploded em 2026 com múltiplas reimplementações em diferentes linguagens:
+
+### 0. Moltis (Rust) - `moltis-org/moltis` ⭐ **NOVO**
+
+**Stars:** 2.3K | **Forks:** 263 | **Language:** Rust (67.8%) | **License:** MIT
+
+**Overview:** Moltis is a Rust-native personal AI assistant that was designed as an alternative to OpenClaw. It compiles into a single binary without requiring external runtimes like Node.js or Python.
+
+**Key Features:**
+- **Zero unsafe code** — denied workspace-wide, only opt-in FFI behind `local-embeddings` flag
+- **Sandboxed execution** — Docker + Apple Container, per-session isolation
+- **Secret handling** — `secrecy::Secret`, zeroed on drop, redacted from tool output
+- **Authentication** — password + passkey (WebAuthn), rate-limited, per-IP throttle
+- **Vault encryption** — XChaCha20-Poly1305 + Argon2id for at-rest encryption
+- **MCP support** — Built-in MCP servers (stdio + HTTP/SSE)
+- **Voice I/O** — Built-in (15+ TTS/STTS providers)
+- **2,300+ tests** with 0 unsafe code
+- **46 modular crates** for auditability
+
+**Architecture:**
+- `moltis-vault` — Encryption-at-rest vault (NOT FHE)
+- `moltis-auth` — Password + passkey + API key auth
+- `moltis-memory` — SQLite + vector embeddings + full-text search
+- `moltis-skills` — Runtime skill system
+- `moltis-mcp` — MCP protocol support
+- `moltis-swift-bridge` — Swift integration
+
+**Security Analysis:**
+- Vault encryption uses XChaCha20-Poly1305 + Argon2id — **NOT FHE**
+- Secrets are encrypted at rest but server CAN decrypt with key
+- SSRF protection, CSWSH protection built-in
+- **Gap:** No threshold decryption, no FHE computation
+
+**FHE-Agent Shield Opportunity:** Our Rust SDK could integrate with Moltis via:
+1. **FHE Credential Vault** — Replace `moltis-vault` with FHE-backed storage
+2. **FHE Memory Layer** — Encrypt memory context with FHE
+3. **MCP FHE Tools** — Add FHE-enabled MCP tool servers
+
+```rust
+// Moltis + FHE-Agent Shield integration
+use fhe_agent_shield::{FHECredentialVault, MoltisBridge};
+
+// Replace Moltis vault with FHE vault
+let fhe_vault = FHECredentialVault::new(
+    contract_address,
+    threshold: 2,
+);
+
+// Moltis can now use FHE for credential management
+let credential = fhe_vault.retrieve_with_threshold(
+    permit: "tool-access",
+    signatures: vec![sig1, sig2],
+)?;
+```
+
+---
+
+### 0.1 Moltbook (Social Network) - AI Agent Social Layer
+
+**Overview:** Moltbook is a social network for AI agents (1.5M+ agents, 17.6K+ communities). It was created by an AI agent (Clawd Clawderberg) in January 2026.
+
+**Official SDK:** `moltbook/agent-development-kit`
+- TypeScript (66.9%)
+- Swift (15.8%)
+- Kotlin (13.7%)
+- Package: `@moltbook/sdk`
+
+**Key Integrations Found:**
+- `gitroomhq/postiz-app` — Moltbook provider for social media posting
+- `borovkovgroup/moltbook-agent` — Claude Code plugin for Moltbook
+
+**Security Issues Found:**
+- **1.5M+ tokens exposed** in production due to hardcoded credentials
+- Missing row-level security (RLS)
+- Unrestricted agent execution
+
+**FHE-Agent Shield Opportunity:**
+- FHE credential layer for Moltbook agents
+- Encrypted agent memory on-chain
+- Threshold authorization for agent actions
+
+---
+
+### 0.2 Moltworker - Cloudflare Workers Deployment
+
+**Overview:** `cloudflare/moltworker` runs Moltbot/OpenClaw in Cloudflare Sandbox containers.
+
+**Features:**
+- Web UI at /
+- WebSocket support for real-time communication
+- Admin UI at /_admin/
+
+**FHE-Agent Shield Opportunity:**
+- TypeScript SDK for Cloudflare Workers
+- FHE edge computing via Fhenix
+
+---
 
 ## OpenClaw Ecosystem: Multi-Language Analysis
 
@@ -279,17 +380,19 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 
 ### What We Offer That Competitors Don't
 
-| Feature | OpenClaw | IronClaw | ElixirClaw | GoClaw | CrewAI | LangGraph | **FHE-Agent Shield** |
-|---------|----------|----------|------------|--------|--------|-----------|----------------------|
-| E2E Encryption | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| FHE Computation | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Server Cannot Decrypt | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| On-Chain Memory | ❌ | ❌ | ❌ | ❌ | ❌ | Optional | ✅ |
-| Credential Vault | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| WASM Sandbox | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Rust Implementation | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| OTP Reliability | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
-| <5MB Binary | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ (FHE overhead) |
+| Feature | OpenClaw | Moltis | IronClaw | ElixirClaw | GoClaw | CrewAI | LangGraph | **FHE-Agent Shield** |
+|---------|----------|--------|----------|------------|--------|--------|-----------|----------------------|
+| E2E Encryption | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| FHE Computation | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Server Cannot Decrypt | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| On-Chain Memory | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Optional | ✅ |
+| Credential Vault | ❌ | ✅* | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| WASM Sandbox | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Rust Implementation | ❌ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| OTP Reliability | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| <5MB Binary | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ (FHE overhead) |
+
+*Moltis has `moltis-vault` but uses XChaCha20-Poly1305 — server CAN decrypt with key, NOT FHE
 
 ### Key Differentiators
 
@@ -332,6 +435,7 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 - [x] Rust SDK → Custom agent frameworks
 - [x] TypeScript SDK → LangGraph
 - [x] Elixir SDK → ElixirClaw integration (NEW!)
+- [ ] Rust SDK → Moltis integration (PRIORITY!)
 - [ ] Rust SDK → IronClaw/ZeroClaw integration
 - [ ] Go SDK → GoClaw integration
 - [ ] Zig SDK → NullClaw integration
@@ -341,6 +445,8 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 - [ ] FHE memory layer for AutoGen
 - [ ] FHE credential provider for Semantic Kernel
 - [ ] FHE gateway para IronClaw/ZeroClaw
+- [ ] FHE Moltbook agent credentials
+- [ ] FHE Moltworker integration (Cloudflare)
 
 ## Security Comparison: Real Encryption vs. Marketing
 
@@ -355,11 +461,12 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 | ClawSouls | "E2E Memory" | Uses GitHub as encrypted backend |
 | **FHE-Agent Shield** | **True E2E FHE** | **Server cannot decrypt** |
 
-## OpenClaw Variants Comparison
+## OpenClaw/Molt Variants Comparison
 
 | Variant | Language | Size | Memory | Security | FHE |
 |---------|----------|------|--------|----------|-----|
 | OpenClaw | TypeScript | ~100MB | High | None | ❌ |
+| Moltis | Rust | 44MB | Medium | Vault (XChaCha20) | ❌ |
 | IronClaw | Rust | ~50MB | Medium | Privacy-focused | ❌ |
 | ElixirClaw | Elixir | ~30MB | Medium | OTP reliability | ❌ |
 | ZeroClaw | Rust | <5MB | Low | WASM sandbox | ❌ |
@@ -367,11 +474,14 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 | NullClaw | Zig | 678KB | Very Low | None | ❌ |
 | Nanobot | ? | Minimal | Ultra Low | None | ❌ |
 | ClawWork | ? | ? | ? | Economic | ❌ |
+| Moltbook | Multi | SDK | High | API keys | ❌ |
 | **FHE-Agent Shield** | **TS/Py/Rust/Elixir** | **~10MB** | **Medium** | **True E2E FHE** | **✅** |
 
 ## Conclusion
 
-O ecossistema OpenClaw exploded em 2026 com variantes em Rust, Elixir, Go, Zig e mais - cada uma otimizando para different metrics (performance, size, isolation, reliability). **Nenhuma** implementa encryption real.
+O ecossistema OpenClaw/Molt exploded em 2026 com variantes em Rust, Elixir, Go, Zig e mais - cada uma otimizando para different metrics (performance, size, isolation, reliability). **Nenhuma** implementa FHE real.
+
+**Moltis** é o mais interessante - tem vault encryption (XChaCha20-Poly1305) mas ainda é "server CAN decrypt" - não FHE.
 
 FHE-Agent Shield é a **única** solução que oferece:
 1. **True end-to-end encryption** — server never sees plaintext
@@ -381,8 +491,16 @@ FHE-Agent Shield é a **única** solução que oferece:
 
 Competitors estão resolvendo sintomas (PII redaction, encryption at rest, WASM sandbox, OTP reliability). FHE-Agent Shield resolve a causa raiz: **o server nunca deveria ter acesso aos dados em plaintext**.
 
+**Próximos passos para FHE-Agent Shield:**
+1. Integrar Rust SDK com Moltis (substituir vault por FHE)
+2. Adicionar FHE credential layer para Moltbook agents
+3. Cloudflare Workers FHE via Moltworker
+
 ## References
 
+- [Moltis - Rust-native claw](https://github.com/moltis-org/moltis)
+- [Moltbook - Social network for AI agents](https://github.com/moltbook/agent-development-kit)
+- [Moltworker - Cloudflare Workers](https://github.com/cloudflare/moltworker)
 - [IronClaw - nearai/ironclaw](https://github.com/nearai/ironclaw)
 - [ZeroClaw - Rust minimal agent](https://dev.to/lightningdev123/zeroclaw-a-minimal-rust-based-ai-agent-framework-for-self-hosted-systems-5593)
 - [GoClaw - Lean Go rewrite](https://www.linkedin.com/posts/sausheong_github-sausheonggoclaw-self-hosted-ai-activity-7432597690913398784-ZwsE)
