@@ -14,6 +14,8 @@ FHE-Agent Shield provides **true end-to-end encryption** for AI agents using Ful
 | **IronClaw** | 10K+ | Rust | Plaintext | Plaintext | None (privacy focus) |
 | **ZeroClaw** | - | Rust | Plaintext | Plaintext | WASM sandbox |
 | **GoClaw** | - | Go | Plaintext | Plaintext | None |
+| **ElixirClaw** | 13 | Elixir | Plaintext | Plaintext | OTP reliability |
+| **NullClaw** | - | Zig | Plaintext | Plaintext | None |
 | **AutoGPT** | 170K+ | Python | Plaintext | Plaintext | None |
 | **CrewAI** | 43K | Python | SQLite plaintext | Plaintext | PII redaction only |
 | **LangGraph** | 26K | Python/JS | SQLite + encryption API | Plaintext | At-rest (server key) |
@@ -83,7 +85,61 @@ let protected_skill = vault.wrap_skill(base_skill, FHEConfig::default());
 
 ---
 
-### 4. NullClaw (Zig) - Minimalismo Radical
+### 4. ElixirClaw (Elixir) - OTP Reliability ⭐
+
+**Stars:** 13 | **Language:** Elixir (93.9%) | **License:** MIT
+
+**Repository:** [developerfred/ElixirClaw](https://github.com/developerfred/ElixirClaw)
+
+**Philosophy:** "High-performance OpenClaw Node implemented in pure Elixir"
+
+**Key Features:**
+- **OTP Reliability:** 99.9999999% uptime - built on BEAM (WhatsApp, Ericsson, Nintendo Online)
+- **Hot Reload:** Update AI node without restarting
+- **Built-in Telemetry:** See agent thinking in real-time
+- **Security First:** Input sanitization, TLS, command allowlisting
+- **BEAM Distribution:** Scale to 1000 nodes with built-in clustering
+- WebSocket client with TLS
+- Camera/screen capture (macOS, Linux)
+- System notifications
+- Location services
+- Command execution with allowlist
+
+**Supported LLM Providers:**
+- Claude (Anthropic)
+- OpenAI GPT-4
+- NVIDIA NIM
+- OpenRouter
+- OpenCode
+
+**Security:** Input sanitization + TLS, mas **sem FHE encryption**
+
+**FHE-Agent Shield Opportunity:** Elixir SDK com FHE real
+
+```elixir
+# ElixirClaw integration com FHE-Agent Shield
+{:ok, client} = FHEAgentShield.new(
+  network: :fhenix_helium,
+  private_key: System.get_env("PRIVATE_KEY")
+)
+
+# Wrap ElixirClaw skill with FHE protection
+{:ok, protected_cap} = FHEAgentShield.wrap_elixir_claw_skill(
+  client,
+  "screen.record",
+  require_permits: ["screen_record"]
+)
+
+# Create FHE-protected memory handler
+{:ok, memory} = FHEAgentShield.create_elixir_claw_memory(client)
+
+# Create FHE credential vault
+{:ok, vault} = FHEAgentShield.create_elixir_claw_vault(client)
+```
+
+---
+
+### 5. NullClaw (Zig) - Minimalismo Radical
 
 **Binary Size:** 678 KB | **RAM:** ~1 MB
 
@@ -223,16 +279,17 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 
 ### What We Offer That Competitors Don't
 
-| Feature | OpenClaw | IronClaw | ZeroClaw | CrewAI | LangGraph | **FHE-Agent Shield** |
-|---------|----------|----------|----------|--------|-----------|----------------------|
-| E2E Encryption | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| FHE Computation | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Server Cannot Decrypt | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| On-Chain Memory | ❌ | ❌ | ❌ | ❌ | Optional | ✅ |
-| Credential Vault | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| WASM Sandbox | ❌ | ✅ | ✅ | ❌ | ❌ | ✅ |
-| Rust Implementation | ❌ | ✅ | ✅ | ❌ | ❌ | ✅ |
-| <5MB Binary | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ (FHE overhead) |
+| Feature | OpenClaw | IronClaw | ElixirClaw | GoClaw | CrewAI | LangGraph | **FHE-Agent Shield** |
+|---------|----------|----------|------------|--------|--------|-----------|----------------------|
+| E2E Encryption | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| FHE Computation | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Server Cannot Decrypt | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| On-Chain Memory | ❌ | ❌ | ❌ | ❌ | ❌ | Optional | ✅ |
+| Credential Vault | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| WASM Sandbox | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Rust Implementation | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| OTP Reliability | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ |
+| <5MB Binary | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ (FHE overhead) |
 
 ### Key Differentiators
 
@@ -252,10 +309,12 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
    - Audit trail on-chain
 
 4. **Universal Language Support**
-   - TypeScript SDK → OpenClaw, LangGraph
-   - Python SDK → CrewAI, AutoGen
+   - TypeScript SDK → OpenClaw, LangGraph, ElizaOS
+   - Python SDK → CrewAI, AutoGen, LangGraph
    - Rust SDK → IronClaw, ZeroClaw, JanHQ
+   - Elixir SDK → ElixirClaw (NEW!)
    - Go SDK → GoClaw (future)
+   - Zig SDK → NullClaw (future)
 
 ## Integration Roadmap
 
@@ -264,14 +323,16 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 - [x] FHEAgentMemoryProvider (TypeScript)
 - [x] FHECredentialVault (TypeScript)
 - [x] ElizaOS plugin
-- [ ] Rust SDK → IronClaw/ZeroClaw integration
-- [ ] Python SDK → CrewAI integration
+- [x] Python SDK → CrewAI integration
+- [x] TypeScript SDK → LangGraph
 - [ ] Full credential flow on testnet
 
 ### Phase 2: Cross-Language SDKs
 - [x] Python SDK → CrewAI integration
 - [x] Rust SDK → Custom agent frameworks
 - [x] TypeScript SDK → LangGraph
+- [x] Elixir SDK → ElixirClaw integration (NEW!)
+- [ ] Rust SDK → IronClaw/ZeroClaw integration
 - [ ] Go SDK → GoClaw integration
 - [ ] Zig SDK → NullClaw integration
 
@@ -289,6 +350,7 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 | CrewAI | "PII Redaction" | Redacts in traces — stored plaintext |
 | OpenClaw | None | Plaintext everything |
 | IronClaw | "Privacy-focused" | No encryption - marketing only |
+| ElixirClaw | "Security First" | Input sanitization only - no encryption |
 | ZeroClaw | "WASM sandbox" | Isolation, not encryption |
 | ClawSouls | "E2E Memory" | Uses GitHub as encrypted backend |
 | **FHE-Agent Shield** | **True E2E FHE** | **Server cannot decrypt** |
@@ -299,31 +361,33 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 |---------|----------|------|--------|----------|-----|
 | OpenClaw | TypeScript | ~100MB | High | None | ❌ |
 | IronClaw | Rust | ~50MB | Medium | Privacy-focused | ❌ |
+| ElixirClaw | Elixir | ~30MB | Medium | OTP reliability | ❌ |
 | ZeroClaw | Rust | <5MB | Low | WASM sandbox | ❌ |
 | GoClaw | Go | <10MB | Low | None | ❌ |
 | NullClaw | Zig | 678KB | Very Low | None | ❌ |
 | Nanobot | ? | Minimal | Ultra Low | None | ❌ |
 | ClawWork | ? | ? | ? | Economic | ❌ |
-| **FHE-Agent Shield** | **TS/Py/Rust** | **~10MB** | **Medium** | **True E2E FHE** | **✅** |
+| **FHE-Agent Shield** | **TS/Py/Rust/Elixir** | **~10MB** | **Medium** | **True E2E FHE** | **✅** |
 
 ## Conclusion
 
-O ecossistema OpenClaw exploded em 2026 com variantes em Rust, Go, Zig e mais - cada uma otimizando para different metrics (performance, size, isolation). **Nenhuma** implementa encryption real.
+O ecossistema OpenClaw exploded em 2026 com variantes em Rust, Elixir, Go, Zig e mais - cada uma otimizando para different metrics (performance, size, isolation, reliability). **Nenhuma** implementa encryption real.
 
 FHE-Agent Shield é a **única** solução que oferece:
 1. **True end-to-end encryption** — server never sees plaintext
 2. **On-chain FHE computation** — decentralized, auditable
 3. **Threshold decryption** — no single point of trust
-4. **Universal SDK** — TypeScript, Python, Rust, Go (coming)
+4. **Universal SDK** — TypeScript, Python, Rust, Elixir, Go (coming)
 
-Competitors estão resolvendo sintomas (PII redaction, encryption at rest, WASM sandbox). FHE-Agent Shield resolve a causa raiz: **o server nunca deveria ter acesso aos dados em plaintext**.
+Competitors estão resolvendo sintomas (PII redaction, encryption at rest, WASM sandbox, OTP reliability). FHE-Agent Shield resolve a causa raiz: **o server nunca deveria ter acesso aos dados em plaintext**.
 
 ## References
 
 - [IronClaw - nearai/ironclaw](https://github.com/nearai/ironclaw)
 - [ZeroClaw - Rust minimal agent](https://dev.to/lightningdev123/zeroclaw-a-minimal-rust-based-ai-agent-framework-for-self-hosted-systems-5593)
 - [GoClaw - Lean Go rewrite](https://www.linkedin.com/posts/sausheong_github-sausheonggoclaw-self-hosted-ai-activity-7432597690913398784-ZwsE)
+- [ElixirClaw - Pure Elixir OpenClaw](https://github.com/developerfred/ElixirClaw)
 - [OpenClaw SDK Python](https://masteryodaa.github.io/openclaw-sdk/)
 - [JanHQ OpenClaw Integration](https://github.com/janhq/jan)
-- [FHE-Agent Shield Architecture](../docs/architecture.md)
+- [FHE-Agent Shield SDKs](../sdk/)
 - [Fhenix CoFHE Documentation](https://docs.fhenix.zone)
