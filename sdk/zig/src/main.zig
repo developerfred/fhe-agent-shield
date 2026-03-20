@@ -2,11 +2,11 @@
 //!
 //! Provides FHE-encrypted credential and memory management for NullClaw and other Zig-based AI agents.
 
-pub const Network = @import("fhe/client.zig").Network;
-pub const Client = @import("fhe/client.zig").Client;
-pub const Config = @import("fhe/client.zig").Config;
-pub const ContractAddresses = @import("fhe/client.zig").ContractAddresses;
-pub const default_contracts = @import("fhe/client.zig").default_contracts;
+pub const Network = @import("../fhe/client.zig").Network;
+pub const Client = @import("../fhe/client.zig").Client;
+pub const Config = @import("../fhe/client.zig").Config;
+pub const ContractAddresses = @import("../fhe/client.zig").ContractAddresses;
+pub const default_contracts = @import("../fhe/client.zig").default_contracts;
 
 // Re-export client functions
 pub fn initClient(config: Config) !Client {
