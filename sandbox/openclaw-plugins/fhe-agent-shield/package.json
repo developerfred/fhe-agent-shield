@@ -1,0 +1,10 @@
+{
+  "name": "fhe-agent-shield",
+  "version": "1.0.0",
+  "description": "FHE-Agent Shield - Privacy layer for AI agents using FHE via Fhenix",
+  "main": "index.ts",
+  "openclaw": {
+    "type": "plugin",
+    "version": "2026.3.0"
+  }
+}
