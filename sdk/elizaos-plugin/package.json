@@ -1,0 +1,21 @@
+{
+  "name": "@elizaos/plugin-fhe-shield",
+  "version": "1.0.0",
+  "description": "FHE-encrypted credentials and memory for ElizaOS agents",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@elizaos/core": "^1.0.0",
+    "@fhe-agent-shield/sdk": "file:../typescript",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.9"
+  }
+}
