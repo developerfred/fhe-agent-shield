@@ -2,32 +2,53 @@
 
 ## Quick Start with Cast (Foundry)
 
-### 1. Deploy Contracts to Fhenix Testnet
+### 1. Setup Environment
 
 ```bash
-# Set environment
-export DEPLOYER_PRIVATE_KEY=your_private_key_here
-export FHENIX_RPC=https://api.helium.fhenix.zone
+# Copy environment template
+cp .env.example .env
+
+# Edit .env and add your private key
+# NEVER COMMIT .env FILE!
+export PRIVATE_KEY=your_private_key_here
+```
+
+### 2. Deploy Contracts
+
+#### Option A: Deploy All at Once (Recommended)
+```bash
+# Deploys to Fhenix Helium testnet by default
+forge script script/DeployAll.s.sol:Deploy --rpc-url fhenixHelium -vvv
+
+# Or deploy to Arbitrum Sepolia
+forge script script/DeployAll.s.sol:Deploy --rpc-url arbitrumSepolia -vvv
+```
+
+#### Option B: Deploy Individual Contracts
+
+```bash
+# Deploy to Fhenix Helium (Chain ID: 8008135)
+export RPC=https://api.helium.fhenix.zone
 
 # Deploy AgentVault
 forge create src/contracts/AgentVault.sol:AgentVault \
-  --rpc-url $FHENIX_RPC \
-  --private-key $DEPLOYER_PRIVATE_KEY
+  --rpc-url $RPC \
+  --private-key $PRIVATE_KEY
 
 # Deploy AgentMemory  
 forge create src/contracts/AgentMemory.sol:AgentMemory \
-  --rpc-url $FHENIX_RPC \
-  --private-key $DEPLOYER_PRIVATE_KEY
+  --rpc-url $RPC \
+  --private-key $PRIVATE_KEY
 
 # Deploy SkillRegistry
 forge create src/contracts/SkillRegistry.sol:SkillRegistry \
-  --rpc-url $FHENIX_RPC \
-  --private-key $DEPLOYER_PRIVATE_KEY
+  --rpc-url $RPC \
+  --private-key $PRIVATE_KEY
 
 # Deploy ActionSealer
 forge create src/contracts/ActionSealer.sol:ActionSealer \
-  --rpc-url $FHENIX_RPC \
-  --private-key $DEPLOYER_PRIVATE_KEY
+  --rpc-url $RPC \
+  --private-key $PRIVATE_KEY
 ```
 
 ### 2. Demo Commands
