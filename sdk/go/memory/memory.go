@@ -44,7 +44,12 @@ func (m *Memory) AppendContext(data string) (string, error) {
 
 	// In production, this would call the AgentMemory contract
 	// Return mock tx hash
-	return "0x" + hex.EncodeToString([]byte("tx_" + data))[:40], nil
+	txData := "tx_" + data
+	hexStr := hex.EncodeToString([]byte(txData))
+	if len(hexStr) > 40 {
+		hexStr = hexStr[:40]
+	}
+	return "0x" + hexStr, nil
 }
 
 // GetContext retrieves recent memory context
@@ -67,10 +72,16 @@ func (m *Memory) ClearMemory() (string, error) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
+	// Reset context slice to empty but keep capacity
 	m.context = m.context[:0]
 
 	// In production, this would call the AgentMemory contract
-	return "0x" + hex.EncodeToString([]byte("clear"))[:40], nil
+	// Return mock tx hash
+	hexStr := hex.EncodeToString([]byte("clear"))
+	if len(hexStr) > 40 {
+		hexStr = hexStr[:40]
+	}
+	return "0x" + hexStr, nil
 }
 
 // CreateSnapshot creates a snapshot of current memory state

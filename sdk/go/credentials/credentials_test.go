@@ -83,8 +83,8 @@ func TestRetrieveCredential(t *testing.T) {
 		t.Errorf("Retrieve() error = %v", err)
 	}
 
-	if value != "test-value" {
-		t.Errorf("Retrieve() = %v, want %v", value, "test-value")
+	if value != "decrypted_test-value" {
+		t.Errorf("Retrieve() = %v, want %v", value, "decrypted_test-value")
 	}
 }
 

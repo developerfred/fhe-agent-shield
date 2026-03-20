@@ -20,6 +20,7 @@ var ErrNotFound = errors.New("credential not found")
 type Credential struct {
 	ID        string
 	Key       string
+	Value     string
 	Owner     string
 	Threshold uint8
 	CreatedAt uint64
@@ -38,7 +39,7 @@ func NewVault(client *fhe.Client, contracts fhe.ContractAddresses) *Vault {
 	return &Vault{
 		client:    client,
 		contracts: contracts,
-		store:     make(map[string)Credential),
+		store:     make(map[string]Credential),
 	}
 }
 
@@ -58,6 +59,7 @@ func (v *Vault) Store(key, value string) (string, error) {
 	v.store[id] = Credential{
 		ID:        id,
 		Key:       key,
+		Value:     value,
 		Owner:     v.client.Address(),
 		Threshold: 2,
 		CreatedAt: uint64(0), // Would be block timestamp in production
@@ -81,7 +83,7 @@ func (v *Vault) Retrieve(id, permit string) (string, error) {
 	// 2. Decrypt using FHE
 	// 3. Return plaintext
 
-	return fmt.Sprintf("decrypted_%s", cred.Key), nil
+	return fmt.Sprintf("decrypted_%s", cred.Value), nil
 }
 
 // List returns all credentials for the client
