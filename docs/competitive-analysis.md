@@ -435,18 +435,19 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 - [x] Rust SDK → Custom agent frameworks
 - [x] TypeScript SDK → LangGraph
 - [x] Elixir SDK → ElixirClaw integration
-- [x] Rust SDK → Moltis integration (NEW!)
-- [ ] Rust SDK → IronClaw/ZeroClaw integration
-- [ ] Go SDK → GoClaw integration
-- [ ] Zig SDK → NullClaw integration
+- [x] Rust SDK → Moltis integration
+- [x] Rust SDK → IronClaw/ZeroClaw integration (NEW!)
+- [x] Go SDK → GoClaw integration (NEW!)
+- [x] Zig SDK → NullClaw integration (NEW!)
 
 ### Phase 3: Enterprise
-- [ ] FHE checkpoint saver for LangGraph
-- [ ] FHE memory layer for AutoGen
-- [ ] FHE credential provider for Semantic Kernel
-- [ ] FHE gateway para IronClaw/ZeroClaw
-- [x] FHE Moltbook agent credentials (NEW!)
-- [x] FHE Moltworker integration (Cloudflare) (NEW!)
+- [x] FHE checkpoint saver for LangGraph (NEW!)
+- [x] FHE memory layer for AutoGen (NEW!)
+- [x] FHE credential provider for Semantic Kernel (NEW!)
+- [x] FHE gateway para IronClaw/ZeroClaw (NEW!)
+- [x] FHE Moltbook agent credentials
+- [x] FHE Moltworker integration (Cloudflare)
+- [x] Testnet full credential flow (NEW!)
 
 ## Security Comparison: Real Encryption vs. Marketing
 
