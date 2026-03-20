@@ -4,6 +4,11 @@ coverage
 node_modules
 out
 
+# build artifacts
+target/
+.zig-cache/
+*.toml.tdz
+
 # files
 *.env
 *.log
