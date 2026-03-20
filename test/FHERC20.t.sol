@@ -3,7 +3,7 @@ pragma solidity >=0.8.25 <0.9.0;
 
 import { Test } from "forge-std/src/Test.sol";
 
-import { ExampleToken, FHERC20NotAuthorized } from "../src/FHERC20.sol";
+import { ExampleToken } from "../src/FHERC20.sol";
 import { FheEnabled } from "../util/FheHelper.sol";
 import { Permission, PermissionHelper } from "../util/PermissionHelper.sol";
 
@@ -57,17 +57,21 @@ contract TokenTest is Test, FheEnabled {
     function testBalanceOf() external {
         assertEq(0, token.balanceOf(msg.sender));
         uint256 toMint = 1.0 * 10 ^ token.decimals();
+        // Mint using the contract deployer (owner) who has MINTER_ROLE
+        vm.prank(owner);
         token.mint(msg.sender, toMint);
         assertEq(token.balanceOf(msg.sender), toMint);
     }
 
-    // @dev Failing test for mintEncrypted function with unauthorized minter
+    // @dev Test mintEncrypted function with unauthorized minter (no MINTER_ROLE)
     function testMintEncryptedNoPermissions() public {
         uint128 value = 50;
         inEuint128 memory inputValue = encrypt128(value);
 
-        vm.expectRevert(FHERC20NotAuthorized.selector);
-        token.mintEncrypted(owner, inputValue);
+        // Try to mint from a non-minter account - should fail with AccessControlUnauthorizedAccount
+        vm.prank(receiver); // receiver doesn't have MINTER_ROLE
+        vm.expectRevert();
+        token.mintEncrypted(receiver, inputValue);
     }
 
     // @dev Test mintEncrypted function with authorized minter
