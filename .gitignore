@@ -23,3 +23,5 @@ yarn.lock
 !broadcast
 broadcast/*
 broadcast/*/31337/
+frontend/dist
+frontend/node_modules

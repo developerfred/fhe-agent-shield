@@ -38,10 +38,10 @@ export class FHESkillDecorator {
       execute: async (context: SkillExecutionContext): Promise<EncryptedSkillResult> => {
         const encryptedInput = await this.encryptInput(context.input);
         
-        const result = await skill.execute(context);
+        const result = await skill.execute(context) as { output: unknown; [key: string]: unknown };
         
         return {
-          ...result,
+          output: result.output,
           encryptedOutput: await this.encryptOutput(result.output),
           proof: await this.generateProof(skill.id, encryptedInput),
         };
