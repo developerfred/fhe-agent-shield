@@ -86,6 +86,9 @@ contract ActionSealer {
     /// @notice Mapping from actionId to approver address to approval status
     mapping(address => mapping(address => bool)) private _approvals;
     
+    /// @notice Mapping from actionId to approval count
+    mapping(address => uint256) private _approvalCounts;
+    
     /// @notice Counter for generating action IDs
     uint256 private _actionCounter;
 
@@ -234,9 +237,10 @@ contract ActionSealer {
         
         // Record approval
         _approvals[actionId][msg.sender] = true;
+        _approvalCounts[actionId]++;
         
         // Count approvals
-        uint256 approvalCount = _countApprovals(actionId);
+        uint256 approvalCount = _approvalCounts[actionId];
         
         emit ReleaseApproval(actionId, msg.sender, approvalCount, block.timestamp);
     }
@@ -266,10 +270,7 @@ contract ActionSealer {
      * @return count Number of approvals
      */
     function _countApprovals(address actionId) internal view returns (uint256 count) {
-        // This is a simplified version - real implementation would need
-        // to iterate through all possible approvers or maintain a count
-        // For now, we track this via events and external counting
-        return 0; // Placeholder - would need implementation
+        return _approvalCounts[actionId];
     }
 
     // =============================================================================
@@ -304,9 +305,10 @@ contract ActionSealer {
             }
         }
         
-        // Check threshold met (simplified - would need proper approval counting)
-        // For mock: assume threshold is always met if condition is active
-        // Real implementation would check _countApprovals >= _conditions[actionId].threshold
+        // Check threshold met
+        if (_approvalCounts[actionId] < _conditions[actionId].threshold) {
+            revert ThresholdNotMet();
+        }
         
         // Release action
         _actions[actionId].status = ActionStatus.Released;
