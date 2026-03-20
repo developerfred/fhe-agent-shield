@@ -1,5 +1,6 @@
 use fhe_agent_shield::{FHEAgentShield, Network, ContractAddresses};
 use ethers::types::Address;
+use std::str::FromStr;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
