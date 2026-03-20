@@ -42,17 +42,27 @@
   wrap_comments = true
 
 [rpc_endpoints]
-  arbitrum = "https://arbitrum-mainnet.infura.io/v3/${API_KEY_INFURA}"
+  # Local
+  localhost = "http://localhost:8545"
+
+  # Fhenix Networks (FHE-enabled L1 and L2s)
+  fhenixHelium = "https://api.helium.fhenix.zone"
+  fhenixNitrogen = "https://api.nitrogen.fhenix.zone"
+
+  # L2 Rollups with FHE
   arbitrumSepolia = "https://sepolia-rollup.arbitrum.io/rpc"
+  baseSepolia = "https://sepolia.base.org"
+
+  # Ethereum
+  sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
+  mainnet = "https://eth-mainnet.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
+
+  # Other networks
+  arbitrum = "https://arbitrum-mainnet.infura.io/v3/${API_KEY_INFURA}"
   avalanche = "https://avalanche-mainnet.infura.io/v3/${API_KEY_INFURA}"
   base = "https://mainnet.base.org"
-  baseSepolia = "https://sepolia.base.org"
   bnb_smart_chain = "https://bsc-dataseed.binance.org"
   gnosis_chain = "https://rpc.gnosischain.com"
   goerli = "https://goerli.infura.io/v3/${API_KEY_INFURA}"
-  localhost = "http://localhost:8545"
-  mainnet = "https://eth-mainnet.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
   optimism = "https://optimism-mainnet.infura.io/v3/${API_KEY_INFURA}"
   polygon = "https://polygon-mainnet.infura.io/v3/${API_KEY_INFURA}"
-  sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
-  fhenix = "https://api.helium.fhenix.zone"

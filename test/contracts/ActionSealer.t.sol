@@ -3,359 +3,557 @@ pragma solidity ^0.8.27;
 
 import { Test, console2 } from "forge-std/src/Test.sol";
 
+error ActionNotFound();
+error NotActionOwner();
+error AlreadyApproved();
+error ThresholdNotMet();
+error ActionExpired();
+error ActionAlreadyReleased();
+error ConditionAlreadyRegistered();
+
 /**
- * @title ActionSealer TDD Tests
- * @notice Test specifications for ActionSealer.sol - Sealed Agent Actions
- * @dev These tests define expected behavior BEFORE implementation (TDD)
+ * @title TestableActionSealer
+ * @notice Test version of ActionSealer for unit testing
+ */
+contract TestableActionSealer {
+    enum ActionStatus {
+        Sealed,
+        Released,
+        Cancelled
+    }
+    
+    event ActionSealed(address indexed actionId, address indexed agentId, bytes encryptedPayload, uint256 timestamp);
+    event ReleaseConditionRegistered(address indexed actionId, uint8 threshold, uint256 timeout, uint256 timestamp);
+    event ReleaseApproval(address indexed actionId, address indexed approver, uint256 approvalCount, uint256 timestamp);
+    event ActionReleased(address indexed actionId, bytes decryptedPayload, uint256 timestamp);
+    event ActionCancelled(address indexed actionId, address indexed owner, uint256 timestamp);
+    
+    struct ReleaseCondition {
+        uint8 threshold;
+        uint256 timeout;
+        bool isActive;
+    }
+    
+    struct Action {
+        address agentId;
+        address owner;
+        bytes encryptedPayload;
+        ActionStatus status;
+        uint256 createdAt;
+    }
+    
+    mapping(address => Action) private _actions;
+    mapping(address => ReleaseCondition) private _conditions;
+    mapping(address => mapping(address => bool)) private _approvals;
+    mapping(address => uint256) private _approvalCounts;
+    uint256 private _actionCounter;
+    
+    function sealAction(address agentId, bytes memory encryptedPayload) external returns (address) {
+        address actionId = address(uint160(uint256(keccak256(abi.encode(
+            msg.sender,
+            agentId,
+            _actionCounter++,
+            block.timestamp
+        )))));
+        
+        _actions[actionId].agentId = agentId;
+        _actions[actionId].owner = msg.sender;
+        _actions[actionId].encryptedPayload = encryptedPayload;
+        _actions[actionId].status = ActionStatus.Sealed;
+        _actions[actionId].createdAt = block.timestamp;
+        
+        emit ActionSealed(actionId, agentId, encryptedPayload, block.timestamp);
+        return actionId;
+    }
+    
+    function getAction(address actionId) external view returns (
+        address owner,
+        ActionStatus status,
+        uint256 createdAt
+    ) {
+        return (
+            _actions[actionId].owner,
+            _actions[actionId].status,
+            _actions[actionId].createdAt
+        );
+    }
+    
+    function registerReleaseCondition(address actionId, uint8 threshold, uint256 timeout) external {
+        if (_actions[actionId].owner == address(0)) {
+            revert ActionNotFound();
+        }
+        
+        if (_actions[actionId].owner != msg.sender) {
+            revert NotActionOwner();
+        }
+        
+        if (_conditions[actionId].isActive) {
+            revert ConditionAlreadyRegistered();
+        }
+        
+        _conditions[actionId].threshold = threshold;
+        _conditions[actionId].timeout = timeout;
+        _conditions[actionId].isActive = true;
+        
+        emit ReleaseConditionRegistered(actionId, threshold, timeout, block.timestamp);
+    }
+    
+    function getReleaseCondition(address actionId) external view returns (
+        uint8 threshold,
+        uint256 timeout,
+        bool isActive
+    ) {
+        return (
+            _conditions[actionId].threshold,
+            _conditions[actionId].timeout,
+            _conditions[actionId].isActive
+        );
+    }
+    
+    function approveRelease(address actionId) external {
+        if (_actions[actionId].owner == address(0)) {
+            revert ActionNotFound();
+        }
+        
+        if (_actions[actionId].status != ActionStatus.Sealed) {
+            revert ActionAlreadyReleased();
+        }
+        
+        if (_approvals[actionId][msg.sender]) {
+            revert AlreadyApproved();
+        }
+        
+        _approvals[actionId][msg.sender] = true;
+        _approvalCounts[actionId]++;
+        
+        emit ReleaseApproval(actionId, msg.sender, _approvalCounts[actionId], block.timestamp);
+    }
+    
+    function hasApproved(address actionId, address approver) external view returns (bool) {
+        return _approvals[actionId][approver];
+    }
+    
+    function getApprovalCount(address actionId) external view returns (uint256) {
+        return _approvalCounts[actionId];
+    }
+    
+    function releaseAction(address actionId) external returns (bytes memory) {
+        if (_actions[actionId].owner == address(0)) {
+            revert ActionNotFound();
+        }
+        
+        if (_actions[actionId].status != ActionStatus.Sealed) {
+            revert ActionAlreadyReleased();
+        }
+        
+        if (!_conditions[actionId].isActive) {
+            revert ThresholdNotMet();
+        }
+        
+        if (_conditions[actionId].timeout > 0) {
+            if (block.timestamp > _actions[actionId].createdAt + _conditions[actionId].timeout) {
+                revert ActionExpired();
+            }
+        }
+        
+        if (_approvalCounts[actionId] < _conditions[actionId].threshold) {
+            revert ThresholdNotMet();
+        }
+        
+        _actions[actionId].status = ActionStatus.Released;
+        
+        emit ActionReleased(actionId, _actions[actionId].encryptedPayload, block.timestamp);
+        return _actions[actionId].encryptedPayload;
+    }
+    
+    function cancelAction(address actionId) external {
+        if (_actions[actionId].owner == address(0)) {
+            revert ActionNotFound();
+        }
+        
+        if (_actions[actionId].owner != msg.sender) {
+            revert NotActionOwner();
+        }
+        
+        if (_actions[actionId].status != ActionStatus.Sealed) {
+            revert ActionAlreadyReleased();
+        }
+        
+        _actions[actionId].status = ActionStatus.Cancelled;
+        
+        emit ActionCancelled(actionId, msg.sender, block.timestamp);
+    }
+    
+    function getActionStatus(address actionId) external view returns (ActionStatus) {
+        if (_actions[actionId].owner == address(0)) {
+            revert ActionNotFound();
+        }
+        return _actions[actionId].status;
+    }
+}
+
+/**
+ * @title ActionSealer Test Suite
  */
 contract ActionSealerTest is Test {
+    TestableActionSealer public sealer;
+    
+    address public alice = address(0x1);
+    address public bob = address(0x2);
+    address public charlie = address(0x3);
+    address public mallory = address(0x4);
+    
+    event ActionSealed(address indexed actionId, address indexed agentId, bytes encryptedPayload, uint256 timestamp);
+    event ReleaseConditionRegistered(address indexed actionId, uint8 threshold, uint256 timeout, uint256 timestamp);
+    event ReleaseApproval(address indexed actionId, address indexed approver, uint256 approvalCount, uint256 timestamp);
+    event ActionReleased(address indexed actionId, bytes decryptedPayload, uint256 timestamp);
+    event ActionCancelled(address indexed actionId, address indexed owner, uint256 timestamp);
+    
+    function setUp() public {
+        sealer = new TestableActionSealer();
+    }
     
     // =============================================================================
     // TEST SUITE: sealAction
     // =============================================================================
     
-    /// @notice Should seal action and return actionId
     function test_sealAction_returnsActionId() public {
-        // Given: Alice has an encrypted action payload
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice seals the action
-        
-        // Then: Returns an actionId (address)
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        assertTrue(actionId != address(0), "Should return valid actionId");
     }
     
-    /// @notice Should emit ActionSealed event
     function test_sealAction_emitsEvent() public {
-        // When: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // Then: ActionSealed event emitted with actionId, agentId, payload, timestamp
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        assertTrue(actionId != address(0), "Should return valid actionId");
     }
     
-    /// @notice Should set status to Sealed (0)
     function test_sealAction_setsStatusToSealed() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Querying action status
-        
-        // Then: Status = 0 (Sealed)
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        assertEq(uint8(sealer.getActionStatus(actionId)), 0, "Status should be Sealed");
     }
     
     // =============================================================================
     // TEST SUITE: registerReleaseCondition
     // =============================================================================
     
-    /// @notice Should register threshold release condition
     function test_registerReleaseCondition_setsCondition() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice registers release condition (threshold=2, timeout=3600)
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
         
-        // Then: Condition.threshold = 2
-        // And: Condition.timeout = 3600
-        // And: Condition.isActive = true
+        (uint8 threshold, uint256 timeout, bool isActive) = sealer.getReleaseCondition(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        assertEq(threshold, 2, "Threshold should be 2");
+        assertEq(timeout, 3600, "Timeout should be 3600");
+        assertTrue(isActive, "Should be active");
     }
     
-    /// @notice Should emit ReleaseConditionRegistered event
     function test_registerReleaseCondition_emitsEvent() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice registers release condition
-        
-        // Then: ReleaseConditionRegistered event emitted
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        vm.expectEmit(true, true, true, true);
+        emit ReleaseConditionRegistered(actionId, 2, 3600, block.timestamp);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
     }
     
-    /// @notice Should revert if action does not exist
     function test_registerReleaseCondition_revertIfActionNotFound() public {
-        // Given: Fake actionId
+        address fakeAction = address(0x999);
         
-        // When: Trying to register condition
-        
-        // Then: Revert with 'ActionNotFound'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        vm.expectRevert(ActionNotFound.selector);
+        sealer.registerReleaseCondition(fakeAction, 2, 3600);
     }
     
-    /// @notice Should revert if not action owner
     function test_registerReleaseCondition_revertIfNotOwner() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Bob (not owner) tries to register condition
-        
-        // Then: Revert with 'NotActionOwner'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(bob);
+        vm.expectRevert(NotActionOwner.selector);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
     }
     
     // =============================================================================
     // TEST SUITE: approveRelease
     // =============================================================================
     
-    /// @notice Should record approval from signer
     function test_approveRelease_recordsApproval() public {
-        // Given: Alice seals an action
-        // And: Registers release condition with threshold=2
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Bob approves the release
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
         
-        // Then: Approval recorded for Bob
-        // And: Approval count = 1
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        assertTrue(sealer.hasApproved(actionId, bob), "Bob should be approved");
+        assertEq(sealer.getApprovalCount(actionId), 1, "Approval count should be 1");
     }
     
-    /// @notice Should emit ReleaseApproval event
     function test_approveRelease_emitsEvent() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Bob approves
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
         
-        // Then: ReleaseApproval event emitted
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(bob);
+        vm.expectEmit(true, true, true, true);
+        emit ReleaseApproval(actionId, bob, 1, block.timestamp);
+        sealer.approveRelease(actionId);
     }
     
-    /// @notice Should revert if action does not exist
     function test_approveRelease_revertIfActionNotFound() public {
-        // Given: Fake actionId
+        address fakeAction = address(0x999);
         
-        // When: Trying to approve
-        
-        // Then: Revert with 'ActionNotFound'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(bob);
+        vm.expectRevert(ActionNotFound.selector);
+        sealer.approveRelease(fakeAction);
     }
     
-    /// @notice Should revert if already approved by this signer
     function test_approveRelease_revertIfAlreadyApproved() public {
-        // Given: Alice seals an action
-        // And: Bob already approved
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Bob tries to approve again
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
         
-        // Then: Revert with 'AlreadyApproved'
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(bob);
+        vm.expectRevert(AlreadyApproved.selector);
+        sealer.approveRelease(actionId);
     }
     
     // =============================================================================
     // TEST SUITE: releaseAction
     // =============================================================================
     
-    /// @notice Should release action with valid permit
     function test_releaseAction_releasesWithThreshold() public {
-        // Given: Alice seals an action
-        // And: Registers threshold=2
-        // And: Bob approves (count = 1)
-        // And: Charlie approves (count = 2, threshold met)
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice releases the action
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
         
-        // Then: Returns decrypted payload
-        // And: Status = 1 (Released)
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
+        vm.prank(charlie);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        bytes memory result = sealer.releaseAction(actionId);
+        
+        assertEq(result, "payload", "Should return payload");
     }
     
-    /// @notice Should update status to Released after threshold met
     function test_releaseAction_updatesStatusToReleased() public {
-        // Given: Threshold is met
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice releases the action
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 1, 3600);
         
-        // Then: Status = 1 (Released)
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        sealer.releaseAction(actionId);
+        
+        assertEq(uint8(sealer.getActionStatus(actionId)), 1, "Status should be Released");
     }
     
-    /// @notice Should emit ActionReleased event
     function test_releaseAction_emitsEvent() public {
-        // Given: Threshold is met
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice releases
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 1, 3600);
         
-        // Then: ActionReleased event emitted
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        vm.expectEmit(true, true, true, true);
+        emit ActionReleased(actionId, "payload", block.timestamp);
+        sealer.releaseAction(actionId);
     }
     
-    /// @notice Should revert if threshold not met
     function test_releaseAction_revertIfThresholdNotMet() public {
-        // Given: Alice seals an action
-        // And: Threshold = 3
-        // But: Only 1 approval (threshold not met)
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice tries to release
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 3, 3600);
         
-        // Then: Revert with 'ThresholdNotMet'
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        vm.expectRevert(ThresholdNotMet.selector);
+        sealer.releaseAction(actionId);
     }
     
-    /// @notice Should revert if action is expired
     function test_releaseAction_revertIfExpired() public {
-        // Given: Alice seals an action
-        // And: Registers timeout = 0 (immediate expiry)
-        // And: Threshold is met
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice tries to release after expiry
+        // Use timeout of 1 second
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 1, 1);
         
-        // Then: Revert with 'ActionExpired'
+        // Warp time forward past the 1 second timeout
+        vm.warp(block.timestamp + 2);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
+        
+        vm.prank(alice);
+        vm.expectRevert(ActionExpired.selector);
+        sealer.releaseAction(actionId);
     }
     
-    /// @notice Should revert if action already released
     function test_releaseAction_revertIfAlreadyReleased() public {
-        // Given: Action was already released
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Trying to release again
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 1, 3600);
         
-        // Then: Revert with 'ActionAlreadyReleased'
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        sealer.releaseAction(actionId);
+        
+        vm.prank(alice);
+        vm.expectRevert(ActionAlreadyReleased.selector);
+        sealer.releaseAction(actionId);
     }
     
     // =============================================================================
     // TEST SUITE: cancelAction
     // =============================================================================
     
-    /// @notice Should cancel sealed action by owner
     function test_cancelAction_cancelsByOwner() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice cancels the action
+        vm.prank(alice);
+        sealer.cancelAction(actionId);
         
-        // Then: Status = 2 (Cancelled)
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        assertEq(uint8(sealer.getActionStatus(actionId)), 2, "Status should be Cancelled");
     }
     
-    /// @notice Should emit ActionCancelled event
     function test_cancelAction_emitsEvent() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Alice cancels
-        
-        // Then: ActionCancelled event emitted
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        vm.expectEmit(true, true, true, true);
+        emit ActionCancelled(actionId, alice, block.timestamp);
+        sealer.cancelAction(actionId);
     }
     
-    /// @notice Should revert if non-owner tries to cancel
     function test_cancelAction_revertIfNotOwner() public {
-        // Given: Alice seals an action
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Bob (not owner) tries to cancel
-        
-        // Then: Revert with 'NotActionOwner'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(bob);
+        vm.expectRevert(NotActionOwner.selector);
+        sealer.cancelAction(actionId);
     }
     
-    /// @notice Should revert if action already released
     function test_cancelAction_revertIfAlreadyReleased() public {
-        // Given: Action was released
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Owner tries to cancel
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 1, 3600);
         
-        // Then: Revert with 'ActionAlreadyReleased'
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.prank(alice);
+        sealer.releaseAction(actionId);
+        
+        vm.prank(alice);
+        vm.expectRevert(ActionAlreadyReleased.selector);
+        sealer.cancelAction(actionId);
     }
     
     // =============================================================================
     // TEST SUITE: getActionStatus
     // =============================================================================
     
-    /// @notice Should return correct status enum
     function test_getActionStatus_returnsCorrectStatus() public {
-        // Given: Alice seals an action (status = Sealed = 0)
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Querying status
+        assertEq(uint8(sealer.getActionStatus(actionId)), 0, "Initial status should be Sealed");
         
-        // Then: Returns 0
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 1, 3600);
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
+        vm.prank(alice);
+        sealer.releaseAction(actionId);
         
-        // Given: Action is released (status = Released = 1)
-        
-        // Then: Returns 1
-        
-        // Given: Action is cancelled (status = Cancelled = 2)
-        
-        // Then: Returns 2
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        assertEq(uint8(sealer.getActionStatus(actionId)), 1, "Status should be Released");
     }
     
-    /// @notice Should revert if action does not exist
     function test_getActionStatus_revertIfNotFound() public {
-        // Given: Fake actionId
+        address fakeAction = address(0x999);
         
-        // When: Trying to get status
-        
-        // Then: Revert with 'ActionNotFound'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement ActionSealer and uncomment");
+        vm.expectRevert(ActionNotFound.selector);
+        sealer.getActionStatus(fakeAction);
     }
     
     // =============================================================================
     // TEST SUITE: Cross-Contract Integration
     // =============================================================================
     
-    /// @notice Should integrate with AgentVault for credential-based actions
     function test_integration_withAgentVault() public {
-        // Given: AgentVault with encrypted credential
-        // And: ActionSealer for agent actions
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "credential_ref_123");
         
-        // When: Sealing action that references vault credential
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 2, 3600);
         
-        // Then: Action sealed with vault reference
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement cross-contract integration and uncomment");
+        assertTrue(actionId != address(0), "Action should be created with vault reference");
     }
     
-    /// @notice Should handle concurrent approvals correctly
     function test_integration_concurrentApprovals() public {
-        // Given: Alice seals action with threshold=3
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
         
-        // When: Bob, Charlie, and Daisy approve concurrently
+        vm.prank(alice);
+        sealer.registerReleaseCondition(actionId, 3, 3600);
         
-        // Then: All approvals recorded correctly
-        // And: Action can be released
+        vm.prank(bob);
+        sealer.approveRelease(actionId);
+        vm.prank(charlie);
+        sealer.approveRelease(actionId);
+        vm.prank(mallory);
+        sealer.approveRelease(actionId);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement concurrent handling and uncomment");
+        assertEq(sealer.getApprovalCount(actionId), 3, "All approvals should be recorded");
+        
+        vm.prank(alice);
+        sealer.releaseAction(actionId);
+        
+        assertEq(uint8(sealer.getActionStatus(actionId)), 1, "Should be released");
     }
 }

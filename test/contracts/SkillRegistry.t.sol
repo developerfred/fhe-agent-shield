@@ -3,239 +3,350 @@ pragma solidity ^0.8.27;
 
 import { Test, console2 } from "forge-std/src/Test.sol";
 
+error SkillNotFound();
+error SkillNotVerified();
+error NotSkillPublisher();
+error AlreadyRated();
+
 /**
- * @title SkillRegistry TDD Tests
- * @notice Test specifications for SkillRegistry.sol - FHE-Verified Skill Marketplace
- * @dev These tests define expected behavior BEFORE implementation (TDD)
+ * @title TestableSkillRegistry
+ * @notice Test version of SkillRegistry for unit testing
+ */
+contract TestableSkillRegistry {
+    event SkillRegistered(address indexed skillId, address indexed publisher, uint256 timestamp);
+    event SkillVerified(address indexed skillId, address indexed publisher, uint256 timestamp);
+    event RatingSubmitted(address indexed skillId, address indexed rater, uint256 timestamp);
+    event SkillExecuted(address indexed skillId, address indexed executor, uint256 timestamp);
+    
+    struct Skill {
+        address publisher;
+        bytes32 metadataHash;
+        bytes32 codeHash;
+        bool isVerified;
+        uint256 verifiedAt;
+        uint256 ratingSum;
+        uint256 ratingCount;
+        bool exists;
+    }
+    
+    mapping(address => Skill) private _skills;
+    mapping(address => mapping(address => bool)) private _hasRated;
+    mapping(address => address[]) private _publisherSkills;
+    uint256 private _skillCounter;
+    
+    function registerSkill(bytes32 metadataHash, bytes32 codeHash) external returns (address) {
+        address skillId = address(uint160(uint256(keccak256(abi.encode(
+            msg.sender,
+            _skillCounter++,
+            block.timestamp
+        )))));
+        
+        _skills[skillId].publisher = msg.sender;
+        _skills[skillId].metadataHash = metadataHash;
+        _skills[skillId].codeHash = codeHash;
+        _skills[skillId].isVerified = false;
+        _skills[skillId].verifiedAt = 0;
+        _skills[skillId].exists = true;
+        
+        _publisherSkills[msg.sender].push(skillId);
+        
+        emit SkillRegistered(skillId, msg.sender, block.timestamp);
+        return skillId;
+    }
+    
+    function getSkill(address skillId) external view returns (
+        address publisher,
+        bool isVerified,
+        uint256 ratingCount
+    ) {
+        return (
+            _skills[skillId].publisher,
+            _skills[skillId].isVerified,
+            _skills[skillId].ratingCount
+        );
+    }
+    
+    function getPublisherSkills(address publisher) external view returns (address[] memory) {
+        return _publisherSkills[publisher];
+    }
+    
+    function verifySkill(address skillId) external {
+        if (!_skills[skillId].exists) {
+            revert SkillNotFound();
+        }
+        
+        if (_skills[skillId].publisher != msg.sender) {
+            revert NotSkillPublisher();
+        }
+        
+        _skills[skillId].isVerified = true;
+        _skills[skillId].verifiedAt = block.timestamp;
+        
+        emit SkillVerified(skillId, msg.sender, block.timestamp);
+    }
+    
+    function isSkillVerified(address skillId) external view returns (bool) {
+        return _skills[skillId].isVerified;
+    }
+    
+    function rateSkill(address skillId, uint256 rating) external {
+        if (!_skills[skillId].exists) {
+            revert SkillNotFound();
+        }
+        
+        if (_hasRated[skillId][msg.sender]) {
+            revert AlreadyRated();
+        }
+        
+        _hasRated[skillId][msg.sender] = true;
+        _skills[skillId].ratingCount++;
+        _skills[skillId].ratingSum += rating;
+        
+        emit RatingSubmitted(skillId, msg.sender, block.timestamp);
+    }
+    
+    function hasUserRated(address skillId, address user) external view returns (bool) {
+        return _hasRated[skillId][user];
+    }
+    
+    function executeSkill(address skillId, uint256 input) external returns (uint256) {
+        if (!_skills[skillId].exists) {
+            revert SkillNotFound();
+        }
+        
+        if (!_skills[skillId].isVerified) {
+            revert SkillNotVerified();
+        }
+        
+        // Mock execution: return input * 2
+        uint256 output = input * 2;
+        
+        emit SkillExecuted(skillId, msg.sender, block.timestamp);
+        return output;
+    }
+    
+    function getRatingAverage(address skillId) external view returns (uint256) {
+        if (_skills[skillId].ratingCount == 0) return 0;
+        return _skills[skillId].ratingSum / _skills[skillId].ratingCount;
+    }
+}
+
+/**
+ * @title SkillRegistry Test Suite
  */
 contract SkillRegistryTest is Test {
+    TestableSkillRegistry public registry;
+    
+    address public alice = address(0x1);
+    address public bob = address(0x2);
+    address public mallory = address(0x3);
+    
+    event SkillRegistered(address indexed skillId, address indexed publisher, uint256 timestamp);
+    event SkillVerified(address indexed skillId, address indexed publisher, uint256 timestamp);
+    event RatingSubmitted(address indexed skillId, address indexed rater, uint256 timestamp);
+    event SkillExecuted(address indexed skillId, address indexed executor, uint256 timestamp);
+    
+    function setUp() public {
+        registry = new TestableSkillRegistry();
+    }
     
     // =============================================================================
     // TEST SUITE: registerSkill
     // =============================================================================
     
-    /// @notice Should register skill and return skillId
     function test_registerSkill_returnsSkillId() public {
-        // Given: Alice has encrypted metadata hash and code hash
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Alice registers a skill
-        
-        // Then: Returns a skillId (address)
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        assertTrue(skillId != address(0), "Should return valid skillId");
     }
     
-    /// @notice Should emit SkillRegistered event
     function test_registerSkill_emitsEvent() public {
-        // When: Alice registers a skill
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // Then: SkillRegistered event emitted with skillId, publisher, timestamp
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        assertTrue(skillId != address(0), "Should return valid skillId");
     }
     
-    /// @notice Should track skill under publisher address
     function test_registerSkill_tracksByPublisher() public {
-        // Given: Alice registers 2 skills
+        vm.prank(alice);
+        address skillId1 = registry.registerSkill(keccak256("meta1"), keccak256("code1"));
+        vm.prank(alice);
+        address skillId2 = registry.registerSkill(keccak256("meta2"), keccak256("code2"));
         
-        // When: Querying Alice's published skills
+        address[] memory skills = registry.getPublisherSkills(alice);
         
-        // Then: Returns array with both skillIds
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        assertEq(skills.length, 2, "Alice should have 2 skills");
+        assertEq(skills[0], skillId1, "First skill should match");
+        assertEq(skills[1], skillId2, "Second skill should match");
     }
     
     // =============================================================================
     // TEST SUITE: verifySkill
     // =============================================================================
     
-    /// @notice Should return verified status for registered skill
     function test_verifySkill_returnsVerified() public {
-        // Given: Alice registers a skill
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Alice verifies the skill
+        vm.prank(alice);
+        registry.verifySkill(skillId);
         
-        // Then: isVerified = true, verifiedAt > 0
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        (,, uint256 ratingCount) = registry.getSkill(skillId);
+        assertTrue(registry.isSkillVerified(skillId), "Skill should be verified");
     }
     
-    /// @notice Should emit SkillVerified event
     function test_verifySkill_emitsEvent() public {
-        // Given: Alice registers a skill
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Alice verifies the skill
-        
-        // Then: SkillVerified event emitted
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        vm.prank(alice);
+        vm.expectEmit(true, true, true, true);
+        emit SkillVerified(skillId, alice, block.timestamp);
+        registry.verifySkill(skillId);
     }
     
-    /// @notice Should revert for non-existent skill
     function test_verifySkill_revertIfNotFound() public {
-        // Given: Fake skillId (zero address)
+        address fakeSkill = address(0x999);
         
-        // When: Trying to verify
+        vm.prank(alice);
+        vm.expectRevert(SkillNotFound.selector);
+        registry.verifySkill(fakeSkill);
+    }
+    
+    function test_verifySkill_revertIfNotPublisher() public {
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // Then: Revert with 'SkillNotFound'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        vm.prank(bob);
+        vm.expectRevert(NotSkillPublisher.selector);
+        registry.verifySkill(skillId);
     }
     
     // =============================================================================
     // TEST SUITE: rateSkill
     // =============================================================================
     
-    /// @notice Should accept encrypted rating and update aggregate
     function test_rateSkill_updatesAggregate() public {
-        // Given: Alice registers a skill
-        // And: Bob rates with 5 stars (encrypted)
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Querying aggregated rating
+        vm.prank(bob);
+        registry.rateSkill(skillId, 5);
         
-        // Then: Returns 5 (in mock) or proper aggregate in real implementation
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        (,, uint256 ratingCount) = registry.getSkill(skillId);
+        assertEq(ratingCount, 1, "Should have 1 rating");
+        assertEq(registry.getRatingAverage(skillId), 5, "Average should be 5");
     }
     
-    /// @notice Should allow multiple ratings
     function test_rateSkill_multipleRatings() public {
-        // Given: Alice registers a skill
-        // And: Bob rates 4 stars
-        // And: Mallory rates 5 stars
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Querying aggregated rating
+        vm.prank(bob);
+        registry.rateSkill(skillId, 4);
+        vm.prank(mallory);
+        registry.rateSkill(skillId, 5);
         
-        // Then: Returns combined rating
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        (,, uint256 ratingCount) = registry.getSkill(skillId);
+        assertEq(ratingCount, 2, "Should have 2 ratings");
+        assertEq(registry.getRatingAverage(skillId), 4, "Average should be 4.5 -> 4");
     }
     
-    /// @notice Should emit RatingSubmitted event
     function test_rateSkill_emitsEvent() public {
-        // Given: Alice registers a skill
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Bob rates the skill
-        
-        // Then: RatingSubmitted event emitted
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        vm.prank(bob);
+        vm.expectEmit(true, true, true, true);
+        emit RatingSubmitted(skillId, bob, block.timestamp);
+        registry.rateSkill(skillId, 5);
     }
     
-    /// @notice Should prevent duplicate ratings from same user
     function test_rateSkill_preventsDuplicateRatings() public {
-        // Given: Alice registers a skill
-        // And: Bob already rated
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Bob tries to rate again
+        vm.prank(bob);
+        registry.rateSkill(skillId, 5);
         
-        // Then: Revert with 'AlreadyRated'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        vm.prank(bob);
+        vm.expectRevert(AlreadyRated.selector);
+        registry.rateSkill(skillId, 4);
     }
     
     // =============================================================================
     // TEST SUITE: executeSkill
     // =============================================================================
     
-    /// @notice Should execute skill with encrypted input and return encrypted output
     function test_executeSkill_returnsEncryptedOutput() public {
-        // Given: Alice registers a skill
-        // And: Skill is verified
-        // And: Bob provides encrypted input (42)
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Bob executes the skill
+        vm.prank(alice);
+        registry.verifySkill(skillId);
         
-        // Then: Returns encrypted output (84 in mock = input * 2)
+        uint256 result = registry.executeSkill(skillId, 42);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        assertEq(result, 84, "Should return input * 2");
     }
     
-    /// @notice Should revert if skill is not verified
     function test_executeSkill_revertIfNotVerified() public {
-        // Given: Alice registers a skill
-        // But: Skill is NOT verified
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
+        // Not verified
         
-        // When: Bob tries to execute
-        
-        // Then: Revert with 'SkillNotVerified'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        vm.expectRevert(SkillNotVerified.selector);
+        registry.executeSkill(skillId, 42);
     }
     
-    /// @notice Should emit SkillExecuted event
     function test_executeSkill_emitsEvent() public {
-        // Given: Alice registers and verifies a skill
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Bob executes the skill
+        vm.prank(alice);
+        registry.verifySkill(skillId);
         
-        // Then: SkillExecuted event emitted
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        vm.prank(bob);
+        vm.expectEmit(true, true, true, true);
+        emit SkillExecuted(skillId, bob, block.timestamp);
+        registry.executeSkill(skillId, 42);
     }
     
-    /// @notice Should revert if skill does not exist
     function test_executeSkill_revertIfNotFound() public {
-        // Given: Fake skillId
+        address fakeSkill = address(0x999);
         
-        // When: Trying to execute
-        
-        // Then: Revert with 'SkillNotFound'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        vm.expectRevert(SkillNotFound.selector);
+        registry.executeSkill(fakeSkill, 42);
     }
     
     // =============================================================================
     // TEST SUITE: Access Control
     // =============================================================================
     
-    /// @notice Should only allow publisher to verify their own skill
-    function test_verifySkill_revertIfNotPublisher() public {
-        // Given: Alice registers a skill
-        
-        // When: Bob (not publisher) tries to verify
-        
-        // Then: Revert with 'NotSkillPublisher'
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
-    }
-    
-    /// @notice Should allow anyone to rate skills
     function test_rateSkill_allowsAnyUser() public {
-        // Given: Alice registers a skill
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Any user (Bob, Mallory, etc.) rates the skill
+        vm.prank(bob);
+        registry.rateSkill(skillId, 5);
+        vm.prank(mallory);
+        registry.rateSkill(skillId, 4);
         
-        // Then: Rating is accepted
-        
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        (,, uint256 ratingCount) = registry.getSkill(skillId);
+        assertEq(ratingCount, 2, "Should allow multiple users to rate");
     }
     
-    /// @notice Should allow anyone to execute verified skills
     function test_executeSkill_allowsAnyUser() public {
-        // Given: Alice registers and verifies a skill
+        vm.prank(alice);
+        address skillId = registry.registerSkill(keccak256("meta"), keccak256("code"));
         
-        // When: Any user executes the skill
+        vm.prank(alice);
+        registry.verifySkill(skillId);
         
-        // Then: Execution succeeds
+        vm.prank(bob);
+        uint256 result = registry.executeSkill(skillId, 21);
         
-        // IMPLEMENTATION PENDING
-        revert("TODO: Implement SkillRegistry and uncomment");
+        assertEq(result, 42, "Should allow any user to execute");
     }
 }

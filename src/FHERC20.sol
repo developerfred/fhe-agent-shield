@@ -5,29 +5,29 @@ import { FHERC20 } from "@fhenixprotocol/contracts/experimental/token/FHERC20/FH
 import { inEuint128 } from "@fhenixprotocol/contracts/FHE.sol";
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 
-error FHERC20NotAuthorized();
+event MintEncrypted(address indexed recipient, uint256 amount);
 
 contract ExampleToken is FHERC20, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    uint256 public lol;
+    uint256 public immutable initialSupply;
 
-    constructor(string memory name, string memory symbol, uint256 initialBalance) FHERC20(name, symbol) {
-        lol = initialBalance;
-        // _mintEncrypted(msg.sender, encryptedBalance);
-        _grantRole(MINTER_ROLE, msg.sender);
+    constructor(string memory tokenName, string memory tokenSymbol, uint256 initialBalance) FHERC20(tokenName, tokenSymbol) {
+        initialSupply = initialBalance;
+        if (!_grantRole(MINTER_ROLE, msg.sender)) {
+            revert RoleGrantFailed();
+        }
         _mint(msg.sender, initialBalance);
     }
 
-    function mintEncrypted(address recipient, inEuint128 memory amount) public {
-        if (hasRole(MINTER_ROLE, msg.sender)) {
-            _mintEncrypted(recipient, amount);
-        } else {
-            revert FHERC20NotAuthorized();
-        }
+    error RoleGrantFailed();
+
+    function mintEncrypted(address recipient, inEuint128 memory encryptedAmount) external onlyRole(MINTER_ROLE) {
+        _mintEncrypted(recipient, encryptedAmount);
+        emit MintEncrypted(recipient, 0); // Amount is encrypted, cannot log unsealed value
     }
 
-    function mint(address _address, uint256 _amount) public {
-        _mint(_address, _amount);
+    function mint(address to, uint256 amount) external onlyRole(MINTER_ROLE) {
+        _mint(to, amount);
     }
 }
