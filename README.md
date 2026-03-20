@@ -1,271 +1,379 @@
-# Foundry Template [![Open in Gitpod][gitpod-badge]][gitpod] [![Github Actions][gha-badge]][gha] [![Foundry][foundry-badge]][foundry] [![License: MIT][license-badge]][license]
+# FHE-Agent Shield
 
-[gitpod]: https://gitpod.io/#https://github.com/fhenixprotocol/fhenix-foundry-template
-[gitpod-badge]: https://img.shields.io/badge/Gitpod-Open%20in%20Gitpod-FFB45B?logo=gitpod
-[gha]: https://github.com/fhenixprotocol/fhenix-foundry-template/actions
-[gha-badge]: https://github.com/fhenixprotocol/fhenix-foundry-template/actions/workflows/ci.yml/badge.svg
-[foundry]: https://getfoundry.sh/
-[foundry-badge]: https://img.shields.io/badge/Built%20with-Foundry-FFDB1C.svg
-[license]: https://opensource.org/licenses/MIT
-[license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
+> **Privacy layer for AI agents using Fully Homomorphic Encryption**
 
-Fhenix provides a Foundry-based template for developing Solidity smart contracts and includes sensible defaults. Links
-are provided to specific topics for further exploration.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Buildathon: Fhenix Privacy-by-Design](https://img.shields.io/badge/Buildathon-Fhenix-green.svg)](https://fhenix.io)
+[![Tests: 150 Passing](https://img.shields.io/badge/Tests-150%20Passing-brightgreen.svg)]()
 
-## What's Inside
+**FHE-Agent Shield** protects AI agents from credential theft, prompt injection, and data exfiltration attacks using Fully Homomorphic Encryption (FHE) via Fhenix CoFHE.
 
-- [Forge](https://github.com/foundry-rs/foundry/blob/master/forge): Tools to compile, test, fuzz, format, and deploy
-  smart contracts.
-- [Forge Std](https://github.com/foundry-rs/forge-std): A collection of helpful contracts and utilities for testing.
-- [Prettier](https://github.com/prettier/prettier): A code formatter for non-Solidity files.
-- [Solhint](https://github.com/protofire/solhint): A linter for Solidity code.
-- [PermissionHelper.sol](./util/PermissionHelper.sol): Utilities for managing permissions related to FHE operations.
-- [FheHelper.sol](./util/FheHelper.sol): Utilities for simulating FHE operations.
+## Problem Statement
 
-## Getting Started
+OpenClaw (250K+ GitHub stars) suffers from critical security vulnerabilities:
 
-To create a new repository using this template, click the
-[`Use this template`](https://github.com/fhenixprotocol/fhenix-foundry-template/generate) button at the top of the page.
-Alternatively, install the template manually as follows:
+| Vulnerability | Impact | FHE-Agent Shield Solution |
+|--------------|--------|---------------------------|
+| **Credential Exposure** | 135K+ instances with plaintext API keys | Encrypted credential vault with threshold decryption |
+| **Prompt Injection** | 91% attack success rate | FHE-protected input processing |
+| **Data Exfiltration** | Agent reads local files, exfiltrates to attackers | Encrypted agent memory |
+| **ClawHavoc Supply Chain** | 1,184+ malicious skills | FHE-verified skill execution |
 
-```sh
-$ mkdir my-project
-$ cd my-project
-$ forge init --template fhenixprotocol/fhenix-foundry-template
-$ bun install # install Solhint, Prettier, and other Node.js deps
+## Solution
+
+FHE-Agent Shield wraps OpenClaw skills with FHE protection:
+
 ```
-
-If this is your first time using Foundry, refer to the
-[installation](https://github.com/foundry-rs/foundry#installation) instructions for guidance.
+┌─────────────────────────────────────────────────────────────┐
+│              OpenClaw Agent Runtime (Unchanged)             │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │              FHESkillDecorator                       │   │
+│  │  • Encrypts inputs before skill execution           │   │
+│  │  • Decrypts outputs after execution                 │   │
+│  │  • Manages credential access via permits            │   │
+│  └─────────────────────────────────────────────────────┘   │
+│                              │                              │
+│                              ▼                              │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │        FHE-Agent Shield Smart Contracts              │   │
+│  │  AgentVault │ AgentMemory │ SkillRegistry │ ActionSealer   │
+│  └─────────────────────────────────────────────────────┘   │
+│                              │                              │
+│                              ▼                              │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │              Fhenix CoFHE Layer                       │   │
+│  │  • FHE Precompiles (tfhe_add, tfhe_mul, etc.)       │   │
+│  │  • Threshold decryption network                     │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ## Features
 
-- Simulated FHE Operations: All FHE operations, including encryption, decryption, and encrypted data handling, are
-  simulated to replicate their behavior in a network environment. This approach facilitates seamless development and
-  testing without requiring a fully operational FHE network.
-- Permissions: The template includes utilities (PermissionHelper.sol) for creating permissions related to FHE
-  operations. These utilities enable users to test and verify that contracts correctly implement access-controlled
-  actions, such as viewing balances of encrypted tokens. For more about permissions, see the [Fhenix Documentation] https://docs.fhenix.zone/docs/devdocs/Writing%20Smart%20Contracts/Permissions)
-  section.
+### Core Smart Contracts
 
-## Installing Dependencies
+| Contract | Description |
+|----------|-------------|
+| **AgentVault** | Encrypted credential storage with threshold decryption |
+| **AgentMemory** | Encrypted agent context with snapshot/restore |
+| **SkillRegistry** | FHE-verified marketplace for AI agent skills |
+| **ActionSealer** | Threshold-released sealed actions |
 
-Follow these steps to install dependencies:
+### FHE-Protected Skills
 
-1. Install the dependency using your preferred package manager, for example: `bun install dependency-name`
-   - If installing from Github, use: `bun install github:username/repo-name`
-2. Add a remapping for the dependency in [remappings.txt](./remappings.txt), for example:
-   `dependency-name=node_modules/dependency-name`
+| Skill | Description |
+|-------|-------------|
+| **EmailSkill** | Encrypted email operations (compose, send, read) |
+| **BrowserSkill** | Encrypted browser session management |
+| **FileSkill** | Encrypted file operations with access control |
 
-Note that OpenZeppelin Contracts is pre-installed as an example.
+### Integration
 
-## Writing Tests
+| Module | Description |
+|--------|-------------|
+| **FHESkillDecorator** | Wrap OpenClaw skills with FHE protection |
+| **FHEAgentMemoryProvider** | OpenClaw memory provider with encryption |
+| **FHECredentialVault** | OpenClaw credential manager |
 
-To write a new test contract:
+### React Hooks
 
-1. Start by importing `Test` from `forge-std`.
-2. Inherit the test contract.
+| Hook | Description |
+|------|-------------|
+| **useFHEClient** | Core FHE encryption/decryption client |
+| **useEncryptedAgent** | Encrypted agent state management |
+| **useAgentVault** | Credential storage hooks |
+| **useSealedAction** | Sealed action management |
 
-Note that: Forge Std comes with a pre-instantiated [cheatcodes](https://book.getfoundry.sh/cheatcodes/) environment,
-which is accessible via the vm property. To view the logs in the terminal output, add the -vvv flag and use
-[console.log](https://book.getfoundry.sh/faq?highlight=console.log#how-do-i-use-consolelog).
+## Quick Start
 
-This template includes an example test contract [FHERC20.t.sol](./test/FHERC20.t.sol).
+### Prerequisites
 
-For contracts utilizing FHE operations, insert FHE mock operations using the `FheEnabled` contract. By inheriting the
-`FheEnabled` contract in the test contract, you gain access to FHE operations. The following code demonstrates this.
+- [Foundry](https://getfoundry.sh/) - Ethereum development toolkit
+- [Node.js](https://nodejs.org/) 18+ 
+- [Fhenix Helium Testnet](https://docs.fhenix.zone/) access
 
-```solidity
-import { FheEnabled } from "./util/FheHelper.sol";
+### Installation
 
-contract MyTestContract is Test, FheEnabled {
-    // Your test contract code here
-}
+```bash
+# Clone repository
+git clone https://github.com/codingsh/fhenix-ecossystem
+cd fhe-agent-shield
+
+# Install dependencies
+bun install
+
+# Build contracts
+forge build
 ```
 
-During test setup, `initializeFhe` the FHE environment using the initializeFhe function:
+### Testing
 
-```solidity
-function setUp() public {
-    initializeFhe();
-}
+```bash
+# Run all tests (150 total)
+forge test
+
+# Run FHE integration tests only
+forge test --match-contract "FheIntegrationTest"
+
+# Run with gas report
+forge test --gas-report
+
+# Run coverage
+forge coverage
+
+# Run TypeScript integration tests
+npx tsx sandbox/test-openclaw-integration.ts
 ```
 
-For a complete example, including mocked encryption, decryption, sealing and permission usage, refer to the example
-**tests** provided in the tests directory.
+For detailed FHE testing documentation, see [docs/fhe-testing.md](docs/fhe-testing.md).
 
-## Permissions
+### Deploy to Fhenix Helium Testnet
 
-The **PermissionHelper** contract provides utilities for managing permissions related to FHE operations. These utilities
-enable users to test and verify that contracts correctly implement access-controlled actions, such as viewing balances
-of encrypted tokens.
+```bash
+# Set environment variables
+export PRIVATE_KEY=your_private_key
+export HELIUM_RPC=https://api.helium.fhenix.zone
 
-Consider using the following code as an example for a **PermissionHelper** contract in a test contract:
+# Deploy all contracts
+forge script script/DeployAll.s.sol --rpc-url $HELIUM_RPC --broadcast
 
-```solidity
-import { Test } from "forge-std/src/Test.sol";
-
-import { ContractWeAreTesting } from "./src/ContractWeAreTesting.sol";
-import { PermissionHelper } from "./util/PermissionHelper.sol";
-
-contract MyContract is Test {
-    ContractWeAreTesting private contractToTest;
-    PermissionHelper private permitHelper;
-
-    function setUp() public {
-        // The contract we are testing must be deployed first
-        contractToTest = new ContractWeAreTesting();
-
-        // The PermissionHelper contract must be deployed with the address of the contract we are testing
-        // otherwise the permission generated will not match the address of the contract being tested
-        permitHelper = new PermissionHelper(address(contractToTest));
-    }
-
-    function testOnlyOwnerCanViewBalance() public {
-        // Owner key and address
-        uint256 ownerPrivateKey = 0xA11CE;
-        address owner = vm.addr(ownerPrivateKey);
-
-        // Generate a permission for the owner using the permitHelper and the private key
-        Permission memory permission = permitHelper.generatePermission(ownerPrivateKey);
-
-        // Call function with permission
-        uint256 result = permissions.someFunctionWithOnlyPermitted(owner, permission);
-    }
-}
+# Deploy demo contracts
+forge script script/Demo.s.sol --rpc-url $HELIUM_RPC --broadcast
 ```
 
-Note that the `PermissionHelper` contract is initialized only after we know the address of the contract being tested.
-The reason is that the permission generated by the `PermissionHelper` contract is tied to the address of the contract
-that is being tested.
+## Project Structure
 
-## Differences from Real FHE Operations
-
-FHE operations in this template simulate the behavior of a real FHE network. Instead of processing encrypted data,
-operations are performed on plaintext data, which enables seamless development and testing without the need for a fully
-operational FHE network. However, there are important differences between these mocked FHE operations and actual FHE
-operations:
-
-- Gas Costs – Gas costs associated with the mocked FHE operations do not accurately reflect those of real FHE
-  operations. Instead, they are based on gas costs of equivalent non-FHE operations.
-- Security Zones – In this mocked environment, security zones are not enforced. Thus, any user can perform operations
-  between ciphertexts, which would otherwise fail in a real FHE setting.
-- Ciphertext Access – The mocked FHE operations do not enforce access control restrictions on ciphertexts, which allows
-  any user to access any mocked "ciphertext." On a real network, such operations could fail.
-- Decrypts during Gas Estimations: When performing a decrypt (or other data revealing operations) during gas estimation
-  on the Helium testnet or Localfhenix, the operation returns a default value, as the gas estimation process does not
-  have access to the precise decrypted data. This can cause the transaction to fail at this stage, if the decrypted data
-  is used in a way that would trigger a transaction revert (e.g., when a require statement depends on it).
-- Security – The security provided by the mocked FHE operations does not represent the high level of security offered by
-  real FHE operations. The mocked operations do not involve actual encryption or decryption.
-- Performance – The performance of mocked FHE operations is not indicative of the real FHE operation speed. Mocked
-  operations will be significantly faster due to their simplified nature.
+```
+fhe-agent-shield/
+├── src/
+│   ├── contracts/          # Solidity smart contracts
+│   │   ├── AgentVault.sol
+│   │   ├── AgentMemory.sol
+│   │   ├── SkillRegistry.sol
+│   │   ├── ActionSealer.sol
+│   │   └── FHERC20.sol
+│   ├── hooks/              # React hooks
+│   │   ├── useFHEClient.ts
+│   │   ├── useEncryptedAgent.ts
+│   │   ├── useAgentVault.ts
+│   │   └── useSealedAction.ts
+│   ├── openclaw/           # OpenClaw integration
+│   │   ├── fhe-skill-decorator.ts
+│   │   ├── fhe-memory-provider.ts
+│   │   └── fhe-credential-vault.ts
+│   └── utils/
+│       └── types.ts
+├── skills/                 # Example FHE-protected skills
+│   ├── email/
+│   ├── browser/
+│   └── file/
+├── test/                   # Test suite
+│   ├── AgentVault.t.sol
+│   ├── AgentMemory.t.sol
+│   ├── SkillRegistry.t.sol
+│   ├── ActionSealer.t.sol
+│   └── fork/               # Fork tests
+├── docs/                    # Documentation
+│   ├── architecture.md
+│   ├── api-reference.md
+│   └── security-model.md
+├── script/                  # Deployment scripts
+│   ├── Deploy.s.sol
+│   ├── DeployAll.s.sol
+│   └── Demo.s.sol
+└── foundry.toml
+```
 
 ## Usage
 
-The following list contains the most frequently used commands.
+### Smart Contracts
 
-### Build
+```solidity
+// Store encrypted credential
+bytes32 handle = agentVault.storeCredential(
+    agentId,
+    encryptedApiKey
+);
 
-Compile and build the contracts:
+// Initialize encrypted agent
+address agentId = agentMemory.initializeAgent();
 
-```sh
-$ forge build
+// Append encrypted context
+uint256 newLength = agentMemory.appendContext(
+    agentId,
+    encryptedChunk
+);
+
+// Seal an action
+address actionId = actionSealer.sealAction(
+    agentId,
+    encryptedPayload
+);
 ```
 
-### Clean
+### TypeScript / React
 
-Delete the build artifacts and cache directories:
+```typescript
+import { FHESkillDecorator } from './openclaw/fhe-skill-decorator';
+import { useEncryptedAgent } from './hooks/useEncryptedAgent';
+import { useAgentVault } from './hooks/useAgentVault';
 
-```sh
-$ forge clean
+// Create FHE-protected skill
+const secureEmailSkill = FHESkillDecorator.wrap(emailSkill, {
+  inputEncryption: true,
+  outputEncryption: true,
+  credentialVault: vaultAddress,
+  requirePermits: ['read_email', 'send_email'],
+});
+
+// Store encrypted credential
+const { storeCredential } = useAgentVault(agentId);
+await storeCredential('OPENAI_API_KEY', 'sk-...');
+
+// Append encrypted context
+const { appendContext } = useEncryptedAgent(agentId);
+await appendContext('User wants to schedule a meeting...');
 ```
 
-### Compile
+### OpenClaw Integration
 
-Compile the contracts:
+```typescript
+import { createAgent } from 'openclaw-sdk';
+import { 
+  FHESkillDecorator, 
+  FHEAgentMemoryProvider, 
+  FHECredentialVault 
+} from '@fhe-agent-shield/openclaw';
 
-```sh
-$ forge build
+const agent = createAgent({
+  name: 'SecureAgent',
+  memoryProvider: new FHEAgentMemoryProvider({
+    contractAddress: process.env.AGENT_MEMORY_ADDRESS,
+    thresholdNetworkUrl: process.env.THRESHOLD_RPC,
+  }),
+  skills: [secureEmailSkill, secureFileSkill],
+});
 ```
 
-### Coverage
+## Testnet Information
 
-Get a test coverage report:
+| Network | Chain ID | RPC URL | Explorer |
+|---------|----------|---------|----------|
+| Fhenix Helium | 8008135 | `https://api.helium.fhenix.zone` | [explorer.fhenix.zone](https://explorer.fhenix.zone) |
+| Fhenix Nitrogen | 8008148 | `https://api.nitrogen.fhenix.zone` | [explorer.nitrogen.fhenix.zone](https://explorer.nitrogen.fhenix.zone) |
+| Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | [sepolia.arbiscan.io](https://sepolia.arbiscan.io) |
+| Base Sepolia | 84532 | `https://sepolia.base.org` | [sepolia.basescan.org](https://sepolia.basescan.org) |
 
-```sh
-$ forge coverage
+## SDKs (In Development)
+
+| SDK | Language | Status | Package |
+|-----|----------|--------|---------|
+| **TypeScript** | TypeScript | 🔄 Building | `@fhe-agent-shield/sdk` |
+| **Python** | Python | 🔄 Building | `fhe-agent-shield` |
+| **Rust** | Rust | 🔄 Building | `fhe-agent-shield` |
+
+### Framework Integrations
+
+| Framework | Language | Status | Type |
+|-----------|----------|--------|------|
+| **ElizaOS** | TypeScript | 🔄 Building | Plugin |
+| **Nanobot** | Python | 🔄 Building | Integration |
+
+### Demo Deployment
+
+Demo contracts are deployed at:
+- `AgentVault`: Check `script/Demo.s.sol` after deployment
+- `AgentMemory`: Check `script/Demo.s.sol` after deployment
+
+Run the demo:
+```bash
+./demo.sh
 ```
 
-### Deploy
+## Documentation
 
-**Note:** Anvil does not currently support FHE operations. Stay tuned for future updates on Anvil support.
+- [Architecture](docs/architecture.md) - System architecture and component interactions
+- [API Reference](docs/api-reference.md) - Complete API documentation
+- [Security Model](docs/security-model.md) - Security architecture and threat analysis
+- [FHE Testing Guide](docs/fhe-testing.md) - Comprehensive FHE testing documentation
+- [Multi-Chain DevX](docs/multi-chain-devx.md) - Multi-network deployment guide
+- [Competitor Roadmap](docs/competitor-roadmap.md) - OpenClaw alternatives integration
+- [ElizaOS & Nanobot Roadmap](docs/elizaos-nanobot-roadmap.md) - Framework integrations
+- [TDD Test Suite](docs/tdd-test-suite.md) - SDK verification framework
+- [Demo Guide](DEMO.md) - Step-by-step demo instructions
 
-Deploy to Anvil:
+## Security
 
-```sh
-$ forge script script/Deploy.s.sol --broadcast --fork-url http://localhost:8545
+### Threat Mitigation
+
+| Threat | Mitigation |
+|--------|------------|
+| Credential Theft | Encrypted storage + threshold decryption |
+| Prompt Injection | FHE input encryption |
+| Data Exfiltration | Encrypted agent memory |
+| Malicious Skills | FHE skill verification |
+
+### Access Control Layers
+
+1. **Permit Authentication** - EIP-712 signed permits
+2. **Threshold Decryption** - M-of-N key holders
+3. **FHE Access Control** - Contract-level ACL on encrypted data
+4. **Selective Disclosure** - Explicit permission grants
+
+### Security Audits
+
+- [Aderyn](report.md) - Static analysis completed
+- [Slither](report.md) - Static analysis completed
+
+## Development
+
+### Available Commands
+
+```bash
+# Build contracts
+forge build
+
+# Run tests
+forge test
+
+# Format code
+forge fmt
+
+# Run linter
+bun run lint
+
+# Gas report
+forge test --gas-report
+
+# Coverage report
+forge coverage
 ```
 
-For this script to work, it is necessary to have a MNEMONIC environment variable set to a valid
-[BIP39 mnemonic](https://iancoleman.io/bip39/).
+### Adding New Skills
 
-For instructions on how to deploy to a testnet or mainnet, refer to the
-[Solidity Scripting](https://book.getfoundry.sh/tutorials/solidity-scripting.html) tutorial.
+1. Create skill contract in `skills/{skillName}/`
+2. Implement FHE encryption/decryption
+3. Add tests in `test/{SkillName}.t.sol`
+4. Register in SkillRegistry
 
-### Format
+## License
 
-Format the contracts:
+MIT License - see [LICENSE.md](LICENSE.md)
 
-```sh
-$ forge fmt
-```
+## Acknowledgments
 
-### Gas Usage
+- [Fhenix](https://fhenix.io) - FHE-enabled blockchain
+- [OpenZeppelin](https://openzeppelin.com/) - Smart contract libraries
+- [Foundry](https://getfoundry.sh/) - Development toolkit
+- [OpenClaw](https://github.com/openclaw/openclaw) - AI agent framework
 
-**Note:** Gas usage for FHE operations will be inaccurate due to the mocked nature of these operations. To see the
-gas-per-operation for FHE operations, refer to the
-[Gas Costs](https://docs.fhenix.zone/docs/devdocs/Writing%20Smart%20Contracts/Gas-and-Benchmarks) section in our
-documentation.
+## Links
 
-Get a gas report:
+- [Fhenix Documentation](https://docs.fhenix.zone/)
+- [CoFHE Documentation](https://docs.fhenix.zone/docs/devdocs/CoFHE/Overview)
+- [OpenClaw GitHub](https://github.com/openclaw/openclaw)
+- [Buildathon Info](https://fhenix.io/buildathon)
 
-```sh
-$ forge test --gas-report
-```
+---
 
-### Lint
-
-Lint the contracts:
-
-```sh
-$ bun run lint
-```
-
-### Test
-
-Run the tests:
-
-```sh
-$ forge test
-```
-
-Generate test coverage and output result to the terminal:
-
-```sh
-$ bun run test:coverage
-```
-
-Generate test coverage with lcov report (you have to open the `./coverage/index.html` file in your browser, to do so
-simply copy paste the path):
-
-```sh
-$ bun run test:coverage:report
-```
-
-## License & Credits
-
-- This project is licensed under MIT.
-- This project is based on the [Foundry Template](https://github.com/PaulRBerg/foundry-template)
-
-Copyright (c) 2024 Paul Razvan Berg License (MIT) https://github.com/PaulRBerg/foundry-template/blob/main/LICENSE.md
+**Built for the Fhenix Privacy-by-Design Buildathon 2026**

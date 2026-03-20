@@ -1,3 +1,7 @@
 @openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
 forge-std/=lib/forge-std/
 @fhenixprotocol/contracts/=lib/fhenix-contracts/contracts/
+@encrypted-types/=lib/forge-fhevm/dependencies/@encrypted-types-0.0.4/
+@fhevm/host-contracts/=lib/forge-fhevm/src/fhevm-host/
+@fhevm/solidity/=lib/forge-fhevm/dependencies/fhevm-0.11.1/library-solidity/
+forge-fhevm/=lib/forge-fhevm/src/
