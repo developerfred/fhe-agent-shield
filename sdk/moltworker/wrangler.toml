@@ -1,0 +1,13 @@
+name = "fhe-agent-shield-moltworker"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[observability]
+enabled = true
+
+[[observability.log_push]]
+endpoint = "default"
+
+[vars]
+FHENIX_NETWORK = "helium"
+FHE_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"

@@ -1,0 +1,27 @@
+{
+  "name": "@fhe-agent-shield/moltbook",
+  "version": "0.1.0",
+  "description": "FHE-Agent Shield SDK for Moltbook - the social network for AI agents",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "viem": "^2.21.0",
+    "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.0"
+  },
+  "keywords": [
+    "fhe",
+    "fhenix",
+    "moltbook",
+    "ai-agent",
+    "encryption"
+  ],
+  "license": "MIT"
+}
