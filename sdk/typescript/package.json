@@ -1,0 +1,37 @@
+{
+  "name": "@fhe-agent-shield/sdk",
+  "version": "1.0.0",
+  "description": "FHE privacy SDK for AI agents - TypeScript/JavaScript",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "viem": "^2.21.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "keywords": [
+    "fhe",
+    "fully-homomorphic-encryption",
+    "ethereum",
+    "privacy",
+    "ai-agents",
+    "fhenix"
+  ],
+  "author": "FHE-Agent Shield Team",
+  "license": "MIT"
+}

@@ -1,0 +1,14 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+RUN apk add --no-cache git
+
+COPY package.json package-lock.json* ./
+RUN npm install
+
+COPY vitest.config.ts tsconfig.json ./
+COPY src src
+COPY test test
+
+CMD ["npx", "vitest", "run"]

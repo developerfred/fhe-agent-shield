@@ -1,0 +1,12 @@
+FROM ghcr.io/foundry-rs/foundry:latest
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm install
+
+COPY . .
+
+RUN forge build
+
+CMD ["sleep", "infinity"]

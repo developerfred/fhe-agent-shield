@@ -1,0 +1,25 @@
+[project]
+name = "fhe-agent-shield"
+version = "1.0.0"
+description = "FHE privacy SDK for AI agents - Python"
+requires-python = ">=3.10"
+dependencies = [
+    "web3>=6.0.0",
+    "eth-account>=0.5.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "httpx>=0.24.0",
+    "eth-tester>=0.13.0b1,<0.14.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

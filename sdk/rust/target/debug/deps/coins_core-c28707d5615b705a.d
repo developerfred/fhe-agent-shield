@@ -1,0 +1,10 @@
+/Volumes/MASS/lab-codingsh/fhenix-ecossystem/fhe-agent-shield/sdk/rust/target/debug/deps/coins_core-c28707d5615b705a.d: /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/lib.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/macros.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/enc.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/hashes.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/prelude.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/ser.rs
+
+/Volumes/MASS/lab-codingsh/fhenix-ecossystem/fhe-agent-shield/sdk/rust/target/debug/deps/libcoins_core-c28707d5615b705a.rmeta: /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/lib.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/macros.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/enc.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/hashes.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/prelude.rs /Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/ser.rs
+
+/Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/lib.rs:
+/Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/macros.rs:
+/Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/enc.rs:
+/Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/hashes.rs:
+/Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/prelude.rs:
+/Users/fredericksilva/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/coins-core-0.8.7/src/ser.rs:
