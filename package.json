@@ -12,13 +12,13 @@
     "viem": "^2.21.0"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
+    "bun": "^1.1.22",
     "forge-std": "github:foundry-rs/forge-std#v1.8.1",
     "prettier": "^3.3.3",
     "solhint": "^3.6.2",
-    "bun": "^1.1.22",
-    "vitest": "^2.1.0",
     "typescript": "^5.6.0",
-    "@types/node": "^22.0.0"
+    "vitest": "^4.1.0"
   },
   "keywords": [
     "blockchain",
@@ -47,8 +47,22 @@
     "testTimeout": 30000,
     "coverage": {
       "provider": "v8",
-      "reporter": ["text", "json", "html"],
-      "exclude": ["node_modules/", "lib/", "out/", "dist/"]
+      "reporter": [
+        "text",
+        "json",
+        "html"
+      ],
+      "exclude": [
+        "node_modules/",
+        "lib/",
+        "out/",
+        "dist/"
+      ]
+    }
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": ">=0.25.0"
     }
   }
 }
