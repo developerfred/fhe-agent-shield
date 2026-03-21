@@ -1,0 +1,32 @@
+# directories
+cache
+coverage
+node_modules
+out
+
+# build artifacts
+target/
+.zig-cache/
+*.toml.tdz
+.build/
+*.build/
+.swiftpm/
+*.xcodeproj/
+*.xcworkspace/
+
+# files
+*.env
+*.log
+.DS_Store
+.pnp.*
+lcov.info
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# broadcasts
+!broadcast
+broadcast/*
+broadcast/*/31337/
+frontend/dist
+frontend/node_modules

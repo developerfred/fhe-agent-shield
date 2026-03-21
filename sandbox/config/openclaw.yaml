@@ -1,0 +1,44 @@
+# FHE-Agent Shield OpenClaw Configuration
+
+gateway:
+  port: 18789
+  host: 0.0.0.0
+
+agent:
+  name: fhe-protected-agent
+  model: claude-3-5-sonnet
+
+memory:
+  provider: fhe
+  contract: ${FHE_MEMORY_ADDRESS}
+  rpc: ${ANVIL_RPC:-http://localhost:8545}
+  snapshots:
+    enabled: true
+    autoSnapshot: true
+
+credentials:
+  vault: ${FHE_VAULT_ADDRESS}
+  rpc: ${ANVIL_RPC:-http://localhost:8545}
+  threshold:
+    required: 1
+    timeout: 3600
+
+skills:
+  fheProtection:
+    enabled: true
+    encryptInputs: true
+    encryptOutputs: true
+  defaultPermissions:
+    - read_memory
+    - write_memory
+
+contracts:
+  agentVault: ${FHE_VAULT_ADDRESS}
+  agentMemory: ${FHE_MEMORY_ADDRESS}
+  skillRegistry: ${FHE_SKILL_REGISTRY_ADDRESS}
+  actionSealer: ${FHE_ACTION_SEALER_ADDRESS}
+
+security:
+  promptInjectionProtection: true
+  encryptedContextOnly: true
+  permitRequiredForCredentials: true
