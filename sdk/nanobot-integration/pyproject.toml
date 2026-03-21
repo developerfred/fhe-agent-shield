@@ -1,0 +1,15 @@
+[project]
+name = "nanobot-fhe"
+version = "1.0.0"
+description = "FHE privacy integration for Nanobot AI agent"
+requires-python = ">=3.10"
+dependencies = [
+    "fhe-agent-shield",
+    "web3>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0"]
+
+[build-system]
+requires = ["hatchling"]

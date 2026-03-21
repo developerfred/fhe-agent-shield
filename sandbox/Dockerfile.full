@@ -1,0 +1,24 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    && curl -L https://foundry.paradigm.xyz | bash \
+    && /root/.foundry/bin/foundryup \
+    && ln -s /root/.foundry/bin/* /usr/local/bin/
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+RUN forge build
+
+CMD ["bash"]

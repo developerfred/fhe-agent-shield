@@ -1,0 +1,17 @@
+{
+  "name": "fhe-agent-sandbox",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "tsx test-openclaw-integration.ts",
+    "test:anvil": "RPC_URL=http://localhost:8545 tsx test-openclaw-integration.ts"
+  },
+  "dependencies": {
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.6.0"
+  }
+}
