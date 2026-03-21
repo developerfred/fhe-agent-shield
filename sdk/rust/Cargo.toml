@@ -28,3 +28,9 @@ path = "src/lib.rs"
 [[example]]
 name = "basic"
 path = "examples/basic.rs"
+
+[patch.crates-io]
+jsonwebtoken = { version = "10.3.0" }
+ring = { version = "0.17.14" }
+rustls-webpki = { version = "0.103.10" }
+wee_alloc = { git = "https://github.com/rustwasm/wee_alloc", tag = "0.103.10" }
