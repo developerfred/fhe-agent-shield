@@ -8,6 +8,11 @@ out
 target/
 .zig-cache/
 *.toml.tdz
+.build/
+*.build/
+.swiftpm/
+*.xcodeproj/
+*.xcworkspace/
 
 # files
 *.env
