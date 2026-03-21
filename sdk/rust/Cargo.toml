@@ -31,3 +31,8 @@ name = "basic"
 path = "examples/basic.rs"
 
 [patch.crates-io]
+# NOTE: ethers-rs is ARCHIVED (https://github.com/gakonst/ethers-rs)
+# Known vulnerabilities in transitive dependencies (jsonwebtoken 8.x, ring 0.16.20)
+# cannot be fixed upstream. The jsonwebtoken 8.x and ring 0.16.20 vulnerabilities
+# are blocked by ethers-rs 2.0.14's dependency on ethers-providers which uses jsonwebtoken 8.x.
+# Mitigation: reqwest upgraded to 0.12 fixes rustls-webpki vulnerability.
