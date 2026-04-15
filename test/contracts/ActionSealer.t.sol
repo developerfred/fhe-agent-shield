@@ -10,6 +10,7 @@ error ThresholdNotMet();
 error ActionExpired();
 error ActionAlreadyReleased();
 error ConditionAlreadyRegistered();
+error InvalidThreshold();
 
 /**
  * @title TestableActionSealer
@@ -67,6 +68,11 @@ contract TestableActionSealer {
     }
 
     function registerReleaseCondition(address actionId, uint8 threshold, uint256 timeout) external {
+        // Kept in sync with src/contracts/ActionSealer.sol — threat-model P0 #2.
+        if (threshold == 0) {
+            revert InvalidThreshold();
+        }
+
         if (_actions[actionId].owner == address(0)) {
             revert ActionNotFound();
         }
@@ -265,6 +271,27 @@ contract ActionSealerTest is Test {
         vm.prank(bob);
         vm.expectRevert(NotActionOwner.selector);
         sealer.registerReleaseCondition(actionId, 2, 3600);
+    }
+
+    /// @dev Regression test for threat-model P0 #2: threshold=0 would allow
+    ///      immediate release with zero approvals.
+    function test_registerReleaseCondition_revertIfThresholdZero() public {
+        vm.prank(alice);
+        address actionId = sealer.sealAction(alice, "payload");
+
+        vm.prank(alice);
+        vm.expectRevert(InvalidThreshold.selector);
+        sealer.registerReleaseCondition(actionId, 0, 3600);
+    }
+
+    /// @dev threshold=0 must be rejected BEFORE the ActionNotFound check —
+    ///      signalling bad input takes precedence over other errors.
+    function test_registerReleaseCondition_rejectsZeroEvenForMissingAction() public {
+        address fakeAction = address(0x999);
+
+        vm.prank(alice);
+        vm.expectRevert(InvalidThreshold.selector);
+        sealer.registerReleaseCondition(fakeAction, 0, 3600);
     }
 
     // =============================================================================
