@@ -162,10 +162,10 @@ contract PrivateVoting {
     function castVote(bytes32 proposalId, inEuint32 memory voteValue) public {
         // Prevent double voting
         require(FHE.eq(hasVoted[msg.sender], FHE.asEbool(false)));
-        
+
         votes[proposalId] = FHE.add(votes[proposalId], voteValue);
         hasVoted[msg.sender] = FHE.asEbool(true);
-        
+
         FHE.allowThis(votes[proposalId]);
     }
 }
@@ -182,7 +182,7 @@ contract SealedBidAuction {
     function submitBid(inEuint256 memory encryptedBid) public {
         sealedBids[msg.sender] = encryptedBid;
         FHE.allowThis(sealedBids[msg.sender]);
-        
+
         // Compare with current highest (on-chain comparison)
         ebool isHigher = FHE.gt(encryptedBid, highestBid);
         // Note: Real implementation needs threshold decryption to reveal winner
@@ -201,12 +201,12 @@ contract SealedBidAuction {
 
 ## Troubleshooting
 
-| Error | Solution |
-|-------|----------|
+| Error                        | Solution                                   |
+| ---------------------------- | ------------------------------------------ |
 | `Type error: cannot convert` | Use `FHE.asEuintXX()` to convert plaintext |
-| `FHE operations require...` | Import FHE.sol correctly |
-| `Invalid handle` | Input type must be `inEXXX`, not `eXXX` |
-| `Gas too high` | Consider moving computation off-chain |
+| `FHE operations require...`  | Import FHE.sol correctly                   |
+| `Invalid handle`             | Input type must be `inEXXX`, not `eXXX`    |
+| `Gas too high`               | Consider moving computation off-chain      |
 
 ## References
 

@@ -20,7 +20,8 @@
 
 ## System Overview
 
-FHE-Agent Shield is a privacy-preserving middleware layer that protects AI agents (specifically OpenClaw agents) from credential theft, prompt injection, and data exfiltration attacks using Fully Homomorphic Encryption (FHE).
+FHE-Agent Shield is a privacy-preserving middleware layer that protects AI agents (specifically OpenClaw agents) from
+credential theft, prompt injection, and data exfiltration attacks using Fully Homomorphic Encryption (FHE).
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -59,24 +60,24 @@ FHE-Agent Shield is a privacy-preserving middleware layer that protects AI agent
 
 ### Core Components
 
-| Component | Purpose | Technology |
-|-----------|---------|------------|
-| **AgentVault** | Encrypted credential storage with threshold decryption | Solidity + FHE |
-| **AgentMemory** | Encrypted agent context with snapshot/restore | Solidity + FHE |
-| **SkillRegistry** | FHE-verified skill marketplace | Solidity + FHE |
-| **ActionSealer** | Threshold-released sealed actions | Solidity + FHE |
-| **FHESkillDecorator** | OpenClaw skill wrapper with FHE protection | TypeScript |
-| **FHEAgentMemoryProvider** | OpenClaw memory provider with encryption | TypeScript |
-| **FHECredentialVault** | OpenClaw credential manager | TypeScript |
+| Component                  | Purpose                                                | Technology     |
+| -------------------------- | ------------------------------------------------------ | -------------- |
+| **AgentVault**             | Encrypted credential storage with threshold decryption | Solidity + FHE |
+| **AgentMemory**            | Encrypted agent context with snapshot/restore          | Solidity + FHE |
+| **SkillRegistry**          | FHE-verified skill marketplace                         | Solidity + FHE |
+| **ActionSealer**           | Threshold-released sealed actions                      | Solidity + FHE |
+| **FHESkillDecorator**      | OpenClaw skill wrapper with FHE protection             | TypeScript     |
+| **FHEAgentMemoryProvider** | OpenClaw memory provider with encryption               | TypeScript     |
+| **FHECredentialVault**     | OpenClaw credential manager                            | TypeScript     |
 
 ### Supporting Components
 
-| Component | Purpose | Technology |
-|-----------|---------|------------|
-| **useFHEClient** | Core FHE encryption/decryption client | TypeScript/React |
-| **useEncryptedAgent** | Encrypted agent state management hook | React |
-| **useAgentVault** | Credential storage hook | React |
-| **useSealedAction** | Sealed action management hook | React |
+| Component             | Purpose                               | Technology       |
+| --------------------- | ------------------------------------- | ---------------- |
+| **useFHEClient**      | Core FHE encryption/decryption client | TypeScript/React |
+| **useEncryptedAgent** | Encrypted agent state management hook | React            |
+| **useAgentVault**     | Credential storage hook               | React            |
+| **useSealedAction**   | Sealed action management hook         | React            |
 
 ---
 
@@ -115,6 +116,7 @@ Encrypted credential storage with threshold-based access control.
 ```
 
 **Key Security Properties:**
+
 - All credentials stored as encrypted values (euint256)
 - Access requires valid EIP-712 permit
 - Threshold decryption prevents single-point-of-failure
@@ -152,6 +154,7 @@ Encrypted agent state with snapshot/restore capabilities.
 ```
 
 **Key Security Properties:**
+
 - Context never leaves encrypted form on-chain
 - Snapshots preserve encrypted state
 - Only threshold-decrypted with proper permits
@@ -187,6 +190,7 @@ FHE-verified marketplace for AI agent skills.
 ```
 
 **Key Security Properties:**
+
 - All skill metadata encrypted until verification
 - Ratings aggregated on-chain without plaintext exposure
 - Reputation computed without revealing individual votes
@@ -224,6 +228,7 @@ Sealed actions with threshold release conditions.
 ```
 
 **Key Security Properties:**
+
 - Actions sealed until threshold approvals
 - Timeout prevents indefinite pending actions
 - Owner can cancel before threshold met
@@ -253,24 +258,24 @@ type inEuint256 is bytes;
 
 ### Supported Operations
 
-| Operation | Description | Example |
-|-----------|-------------|---------|
-| `FHE.asEuint256()` | Create encrypted uint256 | `euint256 val = FHE.asEuint256(encryptedInput);` |
-| `FHE.add()` | Add two encrypted values | `euint256 result = FHE.add(a, b);` |
-| `FHE.sub()` | Subtract encrypted values | `euint256 result = FHE.sub(a, b);` |
-| `FHE.eq()` | Compare encrypted equality | `ebool result = FHE.eq(a, b);` |
-| `FHE.gt()` | Compare encrypted greater than | `ebool result = FHE.gt(a, b);` |
-| `FHE.lt()` | Compare encrypted less than | `ebool result = FHE.lt(a, b);` |
-| `FHE.and()` | Bitwise AND | `euint256 result = FHE.and(a, b);` |
-| `FHE.or()` | Bitwise OR | `euint256 result = FHE.or(a, b);` |
-| `FHE.decrypt()` | Threshold decryption | `uint256 result = FHE.decrypt(encrypted);` |
+| Operation          | Description                    | Example                                          |
+| ------------------ | ------------------------------ | ------------------------------------------------ |
+| `FHE.asEuint256()` | Create encrypted uint256       | `euint256 val = FHE.asEuint256(encryptedInput);` |
+| `FHE.add()`        | Add two encrypted values       | `euint256 result = FHE.add(a, b);`               |
+| `FHE.sub()`        | Subtract encrypted values      | `euint256 result = FHE.sub(a, b);`               |
+| `FHE.eq()`         | Compare encrypted equality     | `ebool result = FHE.eq(a, b);`                   |
+| `FHE.gt()`         | Compare encrypted greater than | `ebool result = FHE.gt(a, b);`                   |
+| `FHE.lt()`         | Compare encrypted less than    | `ebool result = FHE.lt(a, b);`                   |
+| `FHE.and()`        | Bitwise AND                    | `euint256 result = FHE.and(a, b);`               |
+| `FHE.or()`         | Bitwise OR                     | `euint256 result = FHE.or(a, b);`                |
+| `FHE.decrypt()`    | Threshold decryption           | `uint256 result = FHE.decrypt(encrypted);`       |
 
 ### Input/Output Handling
 
 ```solidity
 // Input: Encrypted parameter (calldata)
-function storeCredential(inEuint256 calldata encryptedValue) 
-    external 
+function storeCredential(inEuint256 calldata encryptedValue)
+    external
     returns (bytes32)
 {
     // Convert to internal encrypted type
@@ -325,12 +330,12 @@ event CredentialStored(
 
 ### Hook Responsibilities
 
-| Hook | Responsibility | Key Methods |
-|------|----------------|-------------|
-| **useFHEClient** | Core encryption/decryption, FHE client management | `encrypt()`, `decrypt()`, `verifyPermission()` |
-| **useEncryptedAgent** | Agent state management, context operations | `initialize()`, `appendContext()`, `snapshot()`, `restore()` |
-| **useAgentVault** | Credential storage and retrieval | `store()`, `retrieve()`, `grantAccess()`, `revokeAccess()` |
-| **useSealedAction** | Sealed action lifecycle | `seal()`, `approve()`, `release()`, `cancel()` |
+| Hook                  | Responsibility                                    | Key Methods                                                  |
+| --------------------- | ------------------------------------------------- | ------------------------------------------------------------ |
+| **useFHEClient**      | Core encryption/decryption, FHE client management | `encrypt()`, `decrypt()`, `verifyPermission()`               |
+| **useEncryptedAgent** | Agent state management, context operations        | `initialize()`, `appendContext()`, `snapshot()`, `restore()` |
+| **useAgentVault**     | Credential storage and retrieval                  | `store()`, `retrieve()`, `grantAccess()`, `revokeAccess()`   |
+| **useSealedAction**   | Sealed action lifecycle                           | `seal()`, `approve()`, `release()`, `cancel()`               |
 
 ---
 
@@ -338,7 +343,8 @@ event CredentialStored(
 
 ### Integration Pattern
 
-FHE-Agent Shield uses the **Decorator Pattern** to wrap OpenClaw skills with FHE protection without modifying the underlying OpenClaw runtime.
+FHE-Agent Shield uses the **Decorator Pattern** to wrap OpenClaw skills with FHE protection without modifying the
+underlying OpenClaw runtime.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -364,10 +370,10 @@ The `FHESkillDecorator` wraps any OpenClaw skill with FHE protection:
 
 ```typescript
 interface FHESkillDecoratorConfig {
-  inputEncryption: boolean;      // Encrypt skill inputs
-  outputEncryption: boolean;     // Encrypt skill outputs
-  credentialVault?: string;      // Vault contract address
-  requirePermits?: string[];      // Required permit types
+  inputEncryption: boolean; // Encrypt skill inputs
+  outputEncryption: boolean; // Encrypt skill outputs
+  credentialVault?: string; // Vault contract address
+  requirePermits?: string[]; // Required permit types
   flags?: {
     sealInput?: boolean;
     sealOutput?: boolean;
@@ -383,9 +389,9 @@ Memory provider that stores agent context encrypted on-chain:
 
 ```typescript
 interface FHEAgentMemoryProviderConfig {
-  contractAddress: string;       // AgentMemory.sol address
-  thresholdNetworkUrl: string;   // Threshold RPC
-  minApprovals: bigint;          // Minimum approvals for decryption
+  contractAddress: string; // AgentMemory.sol address
+  thresholdNetworkUrl: string; // Threshold RPC
+  minApprovals: bigint; // Minimum approvals for decryption
 }
 ```
 
@@ -395,9 +401,9 @@ Credential manager that stores API keys encrypted:
 
 ```typescript
 interface FHECredentialVaultConfig {
-  contractAddress: string;       // AgentVault.sol address
-  thresholdNetworkUrl: string;   // Threshold RPC
-  defaultThreshold: bigint;       // Default threshold for access
+  contractAddress: string; // AgentVault.sol address
+  thresholdNetworkUrl: string; // Threshold RPC
+  defaultThreshold: bigint; // Default threshold for access
 }
 ```
 
@@ -457,17 +463,17 @@ Encrypted Result
 
 ```
 Agent Memory Operations:
-                                                    
+
 ┌─────────────┐     appendContext()      ┌─────────────┐
 │   Agent     │────────────────────────▶│  AgentMem   │
 │   Runtime   │◀─────────────────────────│    ory      │
 └─────────────┘     encrypted handle     └─────────────┘
-                                                    
+
                     snapshotContext()                  ┌─────────────┐
 ┌─────────────┐────────────────────────▶│  AgentMem   │────▶│  Snapshot   │
 │   Agent     │◀─────────────────────────│    ory      │◀────│   Stored    │
 └─────────────┘         snapshotId       └─────────────┘     └─────────────┘
-                                                    
+
                     restoreFromSnapshot()               ┌─────────────┐
 ┌─────────────┐────────────────────────▶│  AgentMem   │────▶│  Context    │
 │   Agent     │◀─────────────────────────│    ory      │◀────│  Restored   │
@@ -569,13 +575,13 @@ Agent Memory Operations:
 
 ### Threat Mitigation Matrix
 
-| Threat | Without FHE-Agent Shield | With FHE-Agent Shield |
-|--------|--------------------------|----------------------|
-| Credential Theft | API keys in plaintext env files | Encrypted in AgentVault, threshold decryption required |
-| Prompt Injection | Direct execution of injected commands | Input encrypted, cannot be interpreted as commands |
-| Data Exfiltration | Agent reads local files, sends to attacker | AgentMemory encrypted, requires permit + threshold |
-| Malicious Skills | Skills can access any credential | Skills via FHESkillDecorator, permits required |
-| Replay Attacks | No protection | Permits have expiration and nonces |
+| Threat            | Without FHE-Agent Shield                   | With FHE-Agent Shield                                  |
+| ----------------- | ------------------------------------------ | ------------------------------------------------------ |
+| Credential Theft  | API keys in plaintext env files            | Encrypted in AgentVault, threshold decryption required |
+| Prompt Injection  | Direct execution of injected commands      | Input encrypted, cannot be interpreted as commands     |
+| Data Exfiltration | Agent reads local files, sends to attacker | AgentMemory encrypted, requires permit + threshold     |
+| Malicious Skills  | Skills can access any credential           | Skills via FHESkillDecorator, permits required         |
+| Replay Attacks    | No protection                              | Permits have expiration and nonces                     |
 
 ### Access Control Flow
 
@@ -672,13 +678,13 @@ Agent Memory Operations:
 
 ### On-Chain vs Off-Chain Computation
 
-| Operation | Location | Gas Cost | Notes |
-|-----------|----------|----------|-------|
-| FHE Storage | On-chain | High | Minimize encrypted data stored |
-| FHE Comparison | On-chain | Medium | Use for access control only |
-| FHE Arithmetic | On-chain | High | Batch operations when possible |
-| Decryption | Off-chain | N/A | Threshold network handles |
-| Context Append | On-chain | Medium | Depends on ciphertext size |
+| Operation      | Location  | Gas Cost | Notes                          |
+| -------------- | --------- | -------- | ------------------------------ |
+| FHE Storage    | On-chain  | High     | Minimize encrypted data stored |
+| FHE Comparison | On-chain  | Medium   | Use for access control only    |
+| FHE Arithmetic | On-chain  | High     | Batch operations when possible |
+| Decryption     | Off-chain | N/A      | Threshold network handles      |
+| Context Append | On-chain  | Medium   | Depends on ciphertext size     |
 
 ### Best Practices
 
@@ -747,5 +753,4 @@ fhe-agent-shield/
 
 ---
 
-*Last Updated: March 2026*
-*Version: 1.0*
+_Last Updated: March 2026_ _Version: 1.0_

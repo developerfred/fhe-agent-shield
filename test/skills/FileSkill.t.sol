@@ -24,9 +24,8 @@ contract FileSkillTest is Test {
         vm.prank(user1);
         fileSkill.createFile(FILE1, "Hello, World!");
 
-        (address owner, uint256 createdAt, , bool isEncrypted, ) = 
-            fileSkill.getFileInfo(FILE1);
-        
+        (address owner, uint256 createdAt,, bool isEncrypted,) = fileSkill.getFileInfo(FILE1);
+
         assertEq(owner, user1);
         assertTrue(createdAt > 0);
         assertFalse(isEncrypted);
@@ -42,9 +41,8 @@ contract FileSkillTest is Test {
         fileSkill.createFile(FILE3, "Initial content");
         fileSkill.writeFile(FILE3, "Updated content");
 
-        (, uint256 size, , bool isEncrypted) = 
-            fileSkill.readFile(FILE3);
-        
+        (, uint256 size,, bool isEncrypted) = fileSkill.readFile(FILE3);
+
         assertEq(size, 15);
         assertFalse(isEncrypted);
         vm.stopPrank();
@@ -54,9 +52,8 @@ contract FileSkillTest is Test {
         vm.startPrank(user1);
         fileSkill.createFile(FILE4, "Hello, World!");
 
-        (bytes32 contentHash, uint256 size, , bool isEncrypted) = 
-            fileSkill.readFile(FILE4);
-        
+        (bytes32 contentHash, uint256 size,, bool isEncrypted) = fileSkill.readFile(FILE4);
+
         assertTrue(contentHash != bytes32(0));
         assertEq(size, 13);
         assertFalse(isEncrypted);

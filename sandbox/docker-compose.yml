@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Local Fhenix/Anvil node for contract deployment
@@ -31,7 +31,8 @@ services:
       - ./deployments:/app/deployments
     networks:
       - fhe-agent-net
-    command: sleep 5 && forge script script/ForkIntegration.s.sol:ForkIntegrationTest --rpc-url http://anvil:8545 --broadcast
+    command:
+      sleep 5 && forge script script/ForkIntegration.s.sol:ForkIntegrationTest --rpc-url http://anvil:8545 --broadcast
 
   # OpenClaw Gateway
   openclaw:

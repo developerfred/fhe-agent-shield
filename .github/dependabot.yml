@@ -1,34 +1,124 @@
+# Dependabot configuration.
+#
+# Covers every ecosystem that actually exists in this repo. We intentionally
+# skip the `lib/` submodules (external Foundry dependencies) and submodule
+# composer configs (there is no composer.json here).
+#
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
+  # ---------------------------------------------------------------------------
+  # GitHub Actions — keep workflow actions up to date, especially for security
+  # fixes in third-party actions.
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ci"
+
+  # ---------------------------------------------------------------------------
+  # npm — root (Foundry template tooling + prettier/solhint)
+  # Only scan our actual source code; Foundry lib/ submodules handle their own.
+  # ---------------------------------------------------------------------------
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 5
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-    # Only scan our actual source code, not external lib/ dependencies
     allow:
       - dependency-name: "@fhenixprotocol/*"
+      - dependency-name: "@cofhe/*"
       - dependency-name: "viem"
       - dependency-name: "vitest"
       - dependency-name: "@openzeppelin/*"
       - dependency-name: "typescript"
+      - dependency-name: "prettier"
+      - dependency-name: "solhint"
 
+  # ---------------------------------------------------------------------------
+  # npm — frontend (Vite + React dashboard)
+  # ---------------------------------------------------------------------------
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
+  # ---------------------------------------------------------------------------
+  # npm — TypeScript SDK
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "npm"
+    directory: "/sdk/typescript"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+
+  # ---------------------------------------------------------------------------
+  # npm — ElizaOS plugin SDK
+  # ---------------------------------------------------------------------------
   - package-ecosystem: "npm"
     directory: "/sdk/elizaos-plugin"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 3
 
-  - package-ecosystem: "composer"
-    directory: "/"
+  # ---------------------------------------------------------------------------
+  # npm — Moltbook / Moltworker / Moltworker-KV SDKs
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "npm"
+    directory: "/sdk/moltbook"
     schedule:
       interval: "weekly"
-    # Ignore lib/ submodules - these are external Foundry dependencies
+    open-pull-requests-limit: 3
+
+  - package-ecosystem: "npm"
+    directory: "/sdk/moltworker"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+
+  - package-ecosystem: "npm"
+    directory: "/sdk/moltworker-kv"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+
+  # ---------------------------------------------------------------------------
+  # Cargo — Rust SDK
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "cargo"
+    directory: "/sdk/rust"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
     ignore:
       - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # ---------------------------------------------------------------------------
+  # pip — Python SDK
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "pip"
+    directory: "/sdk/python"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  # ---------------------------------------------------------------------------
+  # gomod — Go SDK
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "gomod"
+    directory: "/sdk/go"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

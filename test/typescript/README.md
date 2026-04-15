@@ -80,50 +80,68 @@ cp -r skills/* ~/.openclaw/workspace/skills/
 #### Email Skill with FHE
 
 ```typescript
-const emailSkill = FHESkillDecorator.createEmailSkill({
-  inputEncryption: true,
-  outputEncryption: true,
-  credentialVault: vaultAddress,
-  requirePermits: ['send_email'],
-}, fheClient);
+const emailSkill = FHESkillDecorator.createEmailSkill(
+  {
+    inputEncryption: true,
+    outputEncryption: true,
+    credentialVault: vaultAddress,
+    requirePermits: ["send_email"],
+  },
+  fheClient,
+);
 
-await emailSkill.execute({
-  to: 'recipient@example.com',
-  subject: 'Encrypted Message',
-  body: 'Secret content',
-}, permit);
+await emailSkill.execute(
+  {
+    to: "recipient@example.com",
+    subject: "Encrypted Message",
+    body: "Secret content",
+  },
+  permit,
+);
 ```
 
 #### Browser Skill with FHE
 
 ```typescript
-const browserSkill = FHESkillDecorator.createBrowserSkill({
-  inputEncryption: true,
-  outputEncryption: false,
-  credentialVault: vaultAddress,
-  requirePermits: ['browser_access'],
-}, fheClient);
+const browserSkill = FHESkillDecorator.createBrowserSkill(
+  {
+    inputEncryption: true,
+    outputEncryption: false,
+    credentialVault: vaultAddress,
+    requirePermits: ["browser_access"],
+  },
+  fheClient,
+);
 
-await browserSkill.execute({
-  url: 'https://secure-bank.com',
-  action: 'navigate',
-}, permit);
+await browserSkill.execute(
+  {
+    url: "https://secure-bank.com",
+    action: "navigate",
+  },
+  permit,
+);
 ```
 
 #### File Skill with FHE
 
 ```typescript
-const fileSkill = FHESkillDecorator.createFileSkill({
-  inputEncryption: true,
-  outputEncryption: true,
-  credentialVault: vaultAddress,
-  requirePermits: ['read_files', 'write_files'],
-}, fheClient);
+const fileSkill = FHESkillDecorator.createFileSkill(
+  {
+    inputEncryption: true,
+    outputEncryption: true,
+    credentialVault: vaultAddress,
+    requirePermits: ["read_files", "write_files"],
+  },
+  fheClient,
+);
 
-await fileSkill.execute({
-  path: '/secure/documents/contract.pdf',
-  operation: 'read',
-}, permit);
+await fileSkill.execute(
+  {
+    path: "/secure/documents/contract.pdf",
+    operation: "read",
+  },
+  permit,
+);
 ```
 
 ## Security Test Scenarios

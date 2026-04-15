@@ -9,15 +9,16 @@
 
 ## 1. Problem Statement
 
-OpenClaw (formerly Moltbot/Clawdbot) is the fastest-growing AI agent framework (250K+ GitHub stars), but suffers from **critical privacy vulnerabilities**:
+OpenClaw (formerly Moltbot/Clawdbot) is the fastest-growing AI agent framework (250K+ GitHub stars), but suffers from
+**critical privacy vulnerabilities**:
 
-| Vulnerability | Impact | FHE-Agent Shield Solution |
-|--------------|--------|---------------------------|
-| **Credential Exposure** | 135K+ instances with plaintext API keys on Shodan | Encrypted credential vault with threshold decryption |
-| **Prompt Injection** | 91% attack success rate; 2.6% of Moltbook posts are attacks | FHE-protected input processing — injection can't read/write encrypted prompts |
-| **Data Exfiltration** | Agent reads local files, exfiltrates to attackers | Encrypted agent memory — data never plaintext in transit |
-| **ClawHavoc Supply Chain** | 1,184+ malicious skills in marketplace | FHE-verified skill execution + selective disclosure |
-| **"Naked Agent" Problem** | Agent operates in plaintext, exposing all data | Privacy-by-design: everything encrypted by default |
+| Vulnerability              | Impact                                                      | FHE-Agent Shield Solution                                                     |
+| -------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Credential Exposure**    | 135K+ instances with plaintext API keys on Shodan           | Encrypted credential vault with threshold decryption                          |
+| **Prompt Injection**       | 91% attack success rate; 2.6% of Moltbook posts are attacks | FHE-protected input processing — injection can't read/write encrypted prompts |
+| **Data Exfiltration**      | Agent reads local files, exfiltrates to attackers           | Encrypted agent memory — data never plaintext in transit                      |
+| **ClawHavoc Supply Chain** | 1,184+ malicious skills in marketplace                      | FHE-verified skill execution + selective disclosure                           |
+| **"Naked Agent" Problem**  | Agent operates in plaintext, exposing all data              | Privacy-by-design: everything encrypted by default                            |
 
 ---
 
@@ -171,7 +172,7 @@ OpenClaw (formerly Moltbot/Clawdbot) is the fastest-growing AI agent framework (
 interface EncryptedAgentState {
   agentId: string;
   isInitialized: boolean;
-  contextHandle: string;      // Handle to encrypted context
+  contextHandle: string; // Handle to encrypted context
   credentialCount: number;
   lastActivity: Date;
 }
@@ -183,7 +184,7 @@ function useEncryptedAgent(agentId: string): {
   getDecryptedContext: (handle: string) => Promise<any>;
   snapshot: () => Promise<string>;
   restore: (snapshotId: string) => Promise<void>;
-}
+};
 ```
 
 ### `useAgentVault()`
@@ -192,10 +193,10 @@ function useEncryptedAgent(agentId: string): {
 function useAgentVault(): {
   storeCredential: (agentId: string, credential: EncryptedValue) => Promise<string>;
   requestCredential: (handle: string, permit: Permit) => Promise<EncryptedValue>;
-  decryptCredential: (handle: string) => Promise<string>;  // Only with proper permit
+  decryptCredential: (handle: string) => Promise<string>; // Only with proper permit
   updatePermissions: (agentId: string, permissions: EncryptedPermissions) => Promise<void>;
   getCredentialHandle: (agentId: string) => Promise<string>;
-}
+};
 ```
 
 ### `useSealedAction()`
@@ -205,7 +206,7 @@ interface SealedAction {
   actionId: string;
   encryptedPayload: string;
   conditions: ReleaseConditions;
-  status: 'sealed' | 'released' | 'cancelled' | 'expired';
+  status: "sealed" | "released" | "cancelled" | "expired";
   createdAt: Date;
   expiresAt?: Date;
 }
@@ -216,7 +217,7 @@ function useSealedAction(): {
   release: (actionId: string, permit: Permit) => Promise<any>;
   cancel: (actionId: string, permit: Permit) => Promise<void>;
   getStatus: (actionId: string) => Promise<SealedAction>;
-}
+};
 ```
 
 ---
@@ -227,13 +228,13 @@ function useSealedAction(): {
 
 ```typescript
 // Wraps any OpenClaw skill with FHE protection
-import { FHESkillDecorator } from '@fhe-agent-shield/openclaw';
+import { FHESkillDecorator } from "@fhe-agent-shield/openclaw";
 
 const secureEmailSkill = FHESkillDecorator.wrap(emailSkill, {
   inputEncryption: true,
   outputEncryption: true,
-  credentialVault: 'agent-vault-address',
-  requirePermit: ['read_email', 'send_email'],
+  credentialVault: "agent-vault-address",
+  requirePermit: ["read_email", "send_email"],
 });
 
 // Usage in OpenClaw
@@ -243,11 +244,11 @@ agent.registerSkill(secureEmailSkill);
 ### Encrypted Memory Provider
 
 ```typescript
-import { FHEAgentMemoryProvider } from '@fhe-agent-shield/openclaw';
+import { FHEAgentMemoryProvider } from "@fhe-agent-shield/openclaw";
 
 const memoryProvider = new FHEAgentMemoryProvider({
-  contractAddress: 'agent-memory-address',
-  thresholdNetwork: 'threshold-rpc-url',
+  contractAddress: "agent-memory-address",
+  thresholdNetwork: "threshold-rpc-url",
 });
 
 agent.useMemoryProvider(memoryProvider);
@@ -259,14 +260,14 @@ agent.useMemoryProvider(memoryProvider);
 
 ### Threat Model
 
-| Threat | Mitigation |
-|--------|------------|
-| Credential theft | Encrypted at rest + threshold decryption |
-| Prompt injection via untrusted content | All prompts encrypted before processing |
-| Malicious skills in marketplace | FHE-verified execution, ratings aggregated encrypted |
-| Data exfiltration | Agent memory never plaintext in transit |
-| Timing attacks | Decryption timing normalized via threshold network |
-|Replay attacks | Permits with expiration and usage counters |
+| Threat                                 | Mitigation                                           |
+| -------------------------------------- | ---------------------------------------------------- |
+| Credential theft                       | Encrypted at rest + threshold decryption             |
+| Prompt injection via untrusted content | All prompts encrypted before processing              |
+| Malicious skills in marketplace        | FHE-verified execution, ratings aggregated encrypted |
+| Data exfiltration                      | Agent memory never plaintext in transit              |
+| Timing attacks                         | Decryption timing normalized via threshold network   |
+| Replay attacks                         | Permits with expiration and usage counters           |
 
 ### Access Control Layers
 
@@ -339,6 +340,7 @@ fhe-agent-shield/
 **Choice:** BFV for integer operations, CKKS for approximate computation (future)
 
 **Rationale:**
+
 - BFV: Efficient for encrypted credentials and ratings (discrete values)
 - CKKS: Future-proofing for ML inference on encrypted agent context
 - Fhenix CoFHE (the FHE coprocessor running alongside the host chain) supports both natively
@@ -348,15 +350,18 @@ fhe-agent-shield/
 **Choice:** Use Fhenix Threshold Network for all decryption
 
 **Rationale:**
+
 - No single point of failure for key management
 - Decryption requires M-of-N consensus
-- Already supported on the CoFHE testnets: Ethereum Sepolia, Arbitrum Sepolia, Base Sepolia (no separate Fhenix chain required)
+- Already supported on the CoFHE testnets: Ethereum Sepolia, Arbitrum Sepolia, Base Sepolia (no separate Fhenix chain
+  required)
 
 ### Decision 3: OpenClaw Compatibility
 
 **Choice:** Wrapper/decorator pattern, not fork
 
 **Rationale:**
+
 - Leverages OpenClaw's 250K stars and community momentum
 - FHE protection layer is opt-in per skill
 - Easier to maintain and update
@@ -366,6 +371,7 @@ fhe-agent-shield/
 **Choice:** Define test contracts/specs first, implement to pass
 
 **Rationale:**
+
 - FHE is complex — tests clarify expected behavior
 - Easier to catch bugs in encrypted operations
 - Documentation by example
@@ -377,17 +383,17 @@ fhe-agent-shield/
 ### Unit Tests (per contract)
 
 ```typescript
-describe('AgentVault', () => {
-  describe('storeCredential', () => {
-    it('should store encrypted credential and return handle');
-    it('should emit CredentialStored event');
-    it('should revert if not called by authorized agent');
+describe("AgentVault", () => {
+  describe("storeCredential", () => {
+    it("should store encrypted credential and return handle");
+    it("should emit CredentialStored event");
+    it("should revert if not called by authorized agent");
   });
-  
-  describe('retrieveCredential', () => {
-    it('should return encrypted value to permitted accessor');
-    it('should revert if caller lacks permit');
-    it('should handle threshold decryption correctly');
+
+  describe("retrieveCredential", () => {
+    it("should return encrypted value to permitted accessor");
+    it("should revert if caller lacks permit");
+    it("should handle threshold decryption correctly");
   });
 });
 ```
@@ -395,20 +401,20 @@ describe('AgentVault', () => {
 ### Integration Tests (cross-contract)
 
 ```typescript
-describe('FHE-Agent Shield Integration', () => {
-  it('should: initialize agent → store credential → append context → seal action');
-  it('should: fail if action released without proper threshold');
-  it('should: correctly aggregate encrypted ratings without plaintext exposure');
+describe("FHE-Agent Shield Integration", () => {
+  it("should: initialize agent → store credential → append context → seal action");
+  it("should: fail if action released without proper threshold");
+  it("should: correctly aggregate encrypted ratings without plaintext exposure");
 });
 ```
 
 ### End-to-End Tests (with OpenClaw)
 
 ```typescript
-describe('OpenClaw Integration', () => {
-  it('should execute FHE-decorated skill with encrypted inputs');
-  it('should store/retrieve agent memory without plaintext exposure');
-  it('should handle credential rotation securely');
+describe("OpenClaw Integration", () => {
+  it("should execute FHE-decorated skill with encrypted inputs");
+  it("should store/retrieve agent memory without plaintext exposure");
+  it("should handle credential rotation securely");
 });
 ```
 
@@ -416,27 +422,27 @@ describe('OpenClaw Integration', () => {
 
 ## 10. Milestones
 
-| Milestone | Deliverable | Timeline |
-|-----------|-------------|----------|
-| M1: Foundation | Project setup, mock contracts, basic tests | Day 1-2 |
-| M2: Core Contracts | AgentVault + AgentMemory + tests | Day 3-5 |
-| M3: Advanced Contracts | SkillRegistry + ActionSealer + tests | Day 6-8 |
-| M4: React Integration | Hooks implementation + storybook | Day 9-11 |
-| M5: OpenClaw Integration | Skill decorator + memory provider | Day 12-14 |
-| M6: Demo | Working demo with OpenClaw + FHE protection | Day 15-18 |
-| M7: Polish | README, docs, final testing | Day 19-20 |
+| Milestone                | Deliverable                                 | Timeline  |
+| ------------------------ | ------------------------------------------- | --------- |
+| M1: Foundation           | Project setup, mock contracts, basic tests  | Day 1-2   |
+| M2: Core Contracts       | AgentVault + AgentMemory + tests            | Day 3-5   |
+| M3: Advanced Contracts   | SkillRegistry + ActionSealer + tests        | Day 6-8   |
+| M4: React Integration    | Hooks implementation + storybook            | Day 9-11  |
+| M5: OpenClaw Integration | Skill decorator + memory provider           | Day 12-14 |
+| M6: Demo                 | Working demo with OpenClaw + FHE protection | Day 15-18 |
+| M7: Polish               | README, docs, final testing                 | Day 19-20 |
 
 ---
 
 ## 11. Success Metrics
 
-| Metric | Target |
-|--------|--------|
-| Test Coverage | >90% on smart contracts |
-| Encrypted Operations | All credential/memory ops use FHE |
-| OpenClaw Skills Protected | Demo with 3+ FHE-decorated skills |
-| Hackathon Demo | Live demo showing prompt injection blocked |
-| Documentation | Complete API reference + quick start |
+| Metric                    | Target                                     |
+| ------------------------- | ------------------------------------------ |
+| Test Coverage             | >90% on smart contracts                    |
+| Encrypted Operations      | All credential/memory ops use FHE          |
+| OpenClaw Skills Protected | Demo with 3+ FHE-decorated skills          |
+| Hackathon Demo            | Live demo showing prompt injection blocked |
+| Documentation             | Complete API reference + quick start       |
 
 ---
 
@@ -451,4 +457,4 @@ describe('OpenClaw Integration', () => {
 
 ---
 
-*FHE-Agent Shield: Building the privacy layer that AI agents deserve.*
+_FHE-Agent Shield: Building the privacy layer that AI agents deserve._

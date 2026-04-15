@@ -1,1 +1,18 @@
-{"rustc":16243257175721966122,"features":"[\"default\", \"getrandom\", \"serde\", \"std\", \"v4\"]","declared_features":"[\"default\", \"getrandom\", \"guid\", \"md5\", \"serde\", \"sha1\", \"slog\", \"std\", \"stdweb\", \"v1\", \"v3\", \"v4\", \"v5\", \"wasm-bindgen\", \"winapi\"]","target":9241350843932013491,"profile":5347358027863023418,"path":1560337180862789293,"deps":[[11023519408959114924,"getrandom",false,4066792719933066550],[13548984313718623784,"serde",false,10488237158223899787]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/uuid-2d4722c3493462e0/dep-lib-uuid","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"default\", \"getrandom\", \"serde\", \"std\", \"v4\"]",
+  "declared_features": "[\"default\", \"getrandom\", \"guid\", \"md5\", \"serde\", \"sha1\", \"slog\", \"std\", \"stdweb\", \"v1\", \"v3\", \"v4\", \"v5\", \"wasm-bindgen\", \"winapi\"]",
+  "target": 9241350843932013491,
+  "profile": 5347358027863023418,
+  "path": 1560337180862789293,
+  "deps": [
+    [11023519408959114924, "getrandom", false, 4066792719933066550],
+    [13548984313718623784, "serde", false, 10488237158223899787]
+  ],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/uuid-2d4722c3493462e0/dep-lib-uuid", "checksum": false } }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

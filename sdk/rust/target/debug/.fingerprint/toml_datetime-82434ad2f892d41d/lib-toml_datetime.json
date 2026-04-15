@@ -1,1 +1,20 @@
-{"rustc":16243257175721966122,"features":"[\"alloc\", \"default\", \"std\"]","declared_features":"[\"alloc\", \"default\", \"serde\", \"std\"]","target":17332020374355320730,"profile":14936199607174398750,"path":15507437912380441640,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/toml_datetime-82434ad2f892d41d/dep-lib-toml_datetime","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"alloc\", \"default\", \"std\"]",
+  "declared_features": "[\"alloc\", \"default\", \"serde\", \"std\"]",
+  "target": 17332020374355320730,
+  "profile": 14936199607174398750,
+  "path": 15507437912380441640,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/toml_datetime-82434ad2f892d41d/dep-lib-toml_datetime",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

@@ -6,15 +6,18 @@
 
 ## Overview
 
-Fhenix CoFHE is a **coprocessor**, not a chain. FHE-Agent Shield contracts deploy on existing EVM host chains and call CoFHE through `FHE.sol` for encrypted computation. The legacy Fhenix L2 testnets (Helium, Nitrogen) have been retired.
+Fhenix CoFHE is a **coprocessor**, not a chain. FHE-Agent Shield contracts deploy on existing EVM host chains and call
+CoFHE through `FHE.sol` for encrypted computation. The legacy Fhenix L2 testnets (Helium, Nitrogen) have been retired.
 
-The currently supported testnets — per the [official compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility) — are:
+The currently supported testnets — per the
+[official compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility) — are:
 
 - **Ethereum Sepolia** — host chain for CoFHE (`eth-sepolia`)
 - **Arbitrum Sepolia** — host chain for CoFHE (`arb-sepolia`)
 - **Base Sepolia** — host chain for CoFHE (`base-sepolia`)
 
-This document outlines our strategy for making deployment and development **effortless across every CoFHE-supported chain**.
+This document outlines our strategy for making deployment and development **effortless across every CoFHE-supported
+chain**.
 
 ---
 
@@ -22,11 +25,11 @@ This document outlines our strategy for making deployment and development **effo
 
 ### Supported Networks
 
-| Network | Chain ID | RPC URL | Explorer | Faucet |
-|---------|----------|---------|----------|--------|
-| **Ethereum Sepolia** | 11155111 | `https://rpc.sepolia.org` | `https://sepolia.etherscan.io` | [Alchemy](https://www.alchemy.com/faucets/ethereum-sepolia) |
-| **Arbitrum Sepolia** | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | `https://sepolia.arbiscan.io` | [QuickNode](https://faucet.quicknode.com/arbitrum/sepolia) |
-| **Base Sepolia** | 84532 | `https://sepolia.base.org` | `https://sepolia.basescan.org` | [Coinbase](https://www.coinbase.com/faucets/base-ethereum-sepolia-faucet) |
+| Network              | Chain ID | RPC URL                                  | Explorer                       | Faucet                                                                    |
+| -------------------- | -------- | ---------------------------------------- | ------------------------------ | ------------------------------------------------------------------------- |
+| **Ethereum Sepolia** | 11155111 | `https://rpc.sepolia.org`                | `https://sepolia.etherscan.io` | [Alchemy](https://www.alchemy.com/faucets/ethereum-sepolia)               |
+| **Arbitrum Sepolia** | 421614   | `https://sepolia-rollup.arbitrum.io/rpc` | `https://sepolia.arbiscan.io`  | [QuickNode](https://faucet.quicknode.com/arbitrum/sepolia)                |
+| **Base Sepolia**     | 84532    | `https://sepolia.base.org`               | `https://sepolia.basescan.org` | [Coinbase](https://www.coinbase.com/faucets/base-ethereum-sepolia-faucet) |
 
 ### Foundry Configuration
 
@@ -272,47 +275,47 @@ struct Deployment {
 }
 
 contract MultiChainDeploy is Script {
-    
+
     // Supported CoFHE host chains
     enum Network {
         EthereumSepolia,
         ArbitrumSepolia,
         BaseSepolia
     }
-    
+
     mapping(Network => string) public networkNames;
     mapping(Network => uint256) public chainIds;
-    
+
     Deployment[] public deployments;
-    
+
     function run() external returns (Deployment[] memory) {
         delete deployments;
-        
+
         // Get network from environment
         Network targetNetwork = getNetworkFromEnv();
-        
+
         console2.log("Deploying to network:", networkNames[targetNetwork]);
         console2.log("Chain ID:", chainIds[targetNetwork]);
-        
+
         vm.startBroadcast();
-        
+
         AgentVault agentVault = new AgentVault();
         console2.log("AgentVault deployed at:", address(agentVault));
-        
+
         AgentMemory agentMemory = new AgentMemory();
         console2.log("AgentMemory deployed at:", address(agentMemory));
-        
+
         SkillRegistry skillRegistry = new SkillRegistry();
         console2.log("SkillRegistry deployed at:", address(skillRegistry));
-        
+
         ActionSealer actionSealer = new ActionSealer();
         console2.log("ActionSealer deployed at:", address(actionSealer));
-        
+
         ExampleToken exampleToken = new ExampleToken("FHE Agent Token", "FHET", 1000000);
         console2.log("ExampleToken deployed at:", address(exampleToken));
-        
+
         vm.stopBroadcast();
-        
+
         // Record deployment
         deployments.push(Deployment({
             network: networkNames[targetNetwork],
@@ -323,13 +326,13 @@ contract MultiChainDeploy is Script {
             exampleToken: address(exampleToken),
             blockNumber: block.number
         }));
-        
+
         return deployments;
     }
-    
+
     function getNetworkFromEnv() internal returns (Network) {
         string memory networkStr = vm.envString("NETWORK");
-        
+
         if (keccak256(abi.encodePacked(networkStr)) == keccak256(abi.encodePacked("sepolia"))) {
             return Network.EthereumSepolia;
         } else if (keccak256(abi.encodePacked(networkStr)) == keccak256(abi.encodePacked("arbitrum-sepolia"))) {
@@ -353,26 +356,26 @@ Create `src/config/networks.ts`:
 
 ```typescript
 export const NETWORKS = {
-  'ethereum-sepolia': {
-    name: 'Ethereum Sepolia',
-    rpcUrl: 'https://rpc.sepolia.org',
+  "ethereum-sepolia": {
+    name: "Ethereum Sepolia",
+    rpcUrl: "https://rpc.sepolia.org",
     chainId: 11155111,
-    explorer: 'https://sepolia.etherscan.io',
-    explorerApi: 'https://api-sepolia.etherscan.io/api',
+    explorer: "https://sepolia.etherscan.io",
+    explorerApi: "https://api-sepolia.etherscan.io/api",
   },
-  'arbitrum-sepolia': {
-    name: 'Arbitrum Sepolia',
-    rpcUrl: 'https://sepolia-rollup.arbitrum.io/rpc',
+  "arbitrum-sepolia": {
+    name: "Arbitrum Sepolia",
+    rpcUrl: "https://sepolia-rollup.arbitrum.io/rpc",
     chainId: 421614,
-    explorer: 'https://sepolia.arbiscan.io',
-    explorerApi: 'https://api-sepolia.arbiscan.io/api',
+    explorer: "https://sepolia.arbiscan.io",
+    explorerApi: "https://api-sepolia.arbiscan.io/api",
   },
-  'base-sepolia': {
-    name: 'Base Sepolia',
-    rpcUrl: 'https://sepolia.base.org',
+  "base-sepolia": {
+    name: "Base Sepolia",
+    rpcUrl: "https://sepolia.base.org",
     chainId: 84532,
-    explorer: 'https://sepolia.basescan.org',
-    explorerApi: 'https://api-sepolia.basescan.org/api',
+    explorer: "https://sepolia.basescan.org",
+    explorerApi: "https://api-sepolia.basescan.org/api",
   },
 } as const;
 
@@ -382,11 +385,11 @@ export type NetworkName = keyof typeof NETWORKS;
 ### SDK Initialization
 
 ```typescript
-import { createPublicClient, createWalletClient, http, custom } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { NETWORKS, NetworkName } from './config/networks';
-import { AgentVault } from './contracts/AgentVault';
-import { AgentMemory } from './contracts/AgentMemory';
+import { createPublicClient, createWalletClient, http, custom } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { NETWORKS, NetworkName } from "./config/networks";
+import { AgentVault } from "./contracts/AgentVault";
+import { AgentMemory } from "./contracts/AgentMemory";
 
 export interface FHEAgentSDK {
   network: NetworkName;
@@ -396,10 +399,7 @@ export interface FHEAgentSDK {
   agentMemory: AgentMemory;
 }
 
-export function createFHEAgentSDK(
-  network: NetworkName,
-  privateKey: `0x${string}`
-): FHEAgentSDK {
+export function createFHEAgentSDK(network: NetworkName, privateKey: `0x${string}`): FHEAgentSDK {
   const config = NETWORKS[network];
   const account = privateKeyToAccount(privateKey);
 
@@ -448,13 +448,13 @@ make fork:test:base-sepolia
 
 ### Test Coverage Matrix
 
-| Contract | Ethereum Sepolia | Arbitrum Sepolia | Base Sepolia |
-|----------|------------------|------------------|--------------|
-| AgentVault | ✅ | ✅ | ✅ |
-| AgentMemory | ✅ | ✅ | ✅ |
-| SkillRegistry | ✅ | ✅ | ✅ |
-| ActionSealer | ✅ | ✅ | ✅ |
-| FHERC20 | ✅ | ✅ | ✅ |
+| Contract      | Ethereum Sepolia | Arbitrum Sepolia | Base Sepolia |
+| ------------- | ---------------- | ---------------- | ------------ |
+| AgentVault    | ✅               | ✅               | ✅           |
+| AgentMemory   | ✅               | ✅               | ✅           |
+| SkillRegistry | ✅               | ✅               | ✅           |
+| ActionSealer  | ✅               | ✅               | ✅           |
+| FHERC20       | ✅               | ✅               | ✅           |
 
 ---
 
@@ -479,28 +479,28 @@ jobs:
     strategy:
       matrix:
         network: [sepolia, arbitrum-sepolia, base-sepolia]
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build contracts
         run: forge build
-      
+
       - name: Run tests
         run: forge test --fork-url ${{ matrix.network }}
-      
+
       - name: Run coverage
         if: matrix.network == 'sepolia'
         run: forge coverage
@@ -520,13 +520,13 @@ jobs:
             rpc: https://sepolia-rollup.arbitrum.io/rpc
           - network: base-sepolia
             rpc: https://sepolia.base.org
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-      
+
       - name: Deploy
         run: |
           forge script script/DeployAll.s.sol \
@@ -544,33 +544,33 @@ jobs:
 
 ### Ethereum Sepolia (Chain ID: 11155111)
 
-| Contract | Address | TX Hash |
-|----------|---------|---------|
-| AgentVault | `TBD` | `TBD` |
-| AgentMemory | `TBD` | `TBD` |
-| SkillRegistry | `TBD` | `TBD` |
-| ActionSealer | `TBD` | `TBD` |
-| ExampleToken | `TBD` | `TBD` |
+| Contract      | Address | TX Hash |
+| ------------- | ------- | ------- |
+| AgentVault    | `TBD`   | `TBD`   |
+| AgentMemory   | `TBD`   | `TBD`   |
+| SkillRegistry | `TBD`   | `TBD`   |
+| ActionSealer  | `TBD`   | `TBD`   |
+| ExampleToken  | `TBD`   | `TBD`   |
 
 ### Arbitrum Sepolia (Chain ID: 421614)
 
-| Contract | Address | TX Hash |
-|----------|---------|---------|
-| AgentVault | `TBD` | `TBD` |
-| AgentMemory | `TBD` | `TBD` |
-| SkillRegistry | `TBD` | `TBD` |
-| ActionSealer | `TBD` | `TBD` |
-| ExampleToken | `TBD` | `TBD` |
+| Contract      | Address | TX Hash |
+| ------------- | ------- | ------- |
+| AgentVault    | `TBD`   | `TBD`   |
+| AgentMemory   | `TBD`   | `TBD`   |
+| SkillRegistry | `TBD`   | `TBD`   |
+| ActionSealer  | `TBD`   | `TBD`   |
+| ExampleToken  | `TBD`   | `TBD`   |
 
 ### Base Sepolia (Chain ID: 84532)
 
-| Contract | Address | TX Hash |
-|----------|---------|---------|
-| AgentVault | `TBD` | `TBD` |
-| AgentMemory | `TBD` | `TBD` |
-| SkillRegistry | `TBD` | `TBD` |
-| ActionSealer | `TBD` | `TBD` |
-| ExampleToken | `TBD` | `TBD` |
+| Contract      | Address | TX Hash |
+| ------------- | ------- | ------- |
+| AgentVault    | `TBD`   | `TBD`   |
+| AgentMemory   | `TBD`   | `TBD`   |
+| SkillRegistry | `TBD`   | `TBD`   |
+| ActionSealer  | `TBD`   | `TBD`   |
+| ExampleToken  | `TBD`   | `TBD`   |
 
 ---
 
@@ -624,13 +624,13 @@ Create `scripts/switchNetwork.js`:
 
 ```javascript
 #!/usr/bin/env node
-const NETWORKS = require('../src/config/networks.json');
+const NETWORKS = require("../src/config/networks.json");
 
 const network = process.argv[2];
 
 if (!NETWORKS[network]) {
   console.error(`Unknown network: ${network}`);
-  console.log('Available networks:', Object.keys(NETWORKS).join(', '));
+  console.log("Available networks:", Object.keys(NETWORKS).join(", "));
   process.exit(1);
 }
 
@@ -640,7 +640,7 @@ console.log(`Chain ID: ${NETWORKS[network].chainId}`);
 console.log(`Explorer: ${NETWORKS[network].explorer}`);
 
 // Write to .env or display instructions
-console.log('\nSet these environment variables:');
+console.log("\nSet these environment variables:");
 console.log(`NETWORK=${network}`);
 console.log(`CHAIN_ID=${NETWORKS[network].chainId}`);
 console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
@@ -651,6 +651,7 @@ console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
 ## Roadmap Timeline
 
 ### Phase 1: Foundation (Week 1)
+
 - [ ] Update foundry.toml with all network RPCs
 - [ ] Create MultiChainDeploy.s.sol script
 - [ ] Add network configuration to TypeScript SDK
@@ -658,6 +659,7 @@ console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
 - [ ] Update .env.example with all variables
 
 ### Phase 2: CLI Enhancement (Week 2)
+
 - [ ] `fhe-agent deploy --network sepolia`
 - [ ] `fhe-agent console --network arbitrum-sepolia`
 - [ ] `fhe-agent verify --network base-sepolia`
@@ -665,6 +667,7 @@ console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
 - [ ] Network switcher script
 
 ### Phase 3: Documentation (Week 3)
+
 - [ ] Multi-chain deployment guide
 - [ ] Network comparison docs
 - [ ] Gas optimization guide per network
@@ -672,6 +675,7 @@ console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
 - [ ] Video tutorial series
 
 ### Phase 4: CI/CD (Week 4)
+
 - [ ] GitHub Actions workflow for all networks
 - [ ] Automated verification on all chains
 - [ ] Deployment address registry
@@ -679,6 +683,7 @@ console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
 - [ ] Multi-network test matrix
 
 ### Phase 5: Advanced (Week 5-6)
+
 - [ ] Cross-chain messaging (LayerZero/Anvil)
 - [ ] Unified dashboard
 - [ ] Gas tank / multi-chain relay

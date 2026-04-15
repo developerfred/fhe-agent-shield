@@ -1,9 +1,6 @@
 name: "CI"
 
-env:
-  API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
-  FOUNDRY_PROFILE: "ci"
-
+# Trigger on PRs and pushes to main. Also allow manual runs.
 on:
   workflow_dispatch:
   pull_request:
@@ -11,82 +8,127 @@ on:
     branches:
       - "main"
 
+# Cancel in-progress runs for the same ref when a new push arrives — saves CI
+# minutes on rapid iteration.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Principle of least privilege. Individual jobs opt into more if needed.
+permissions:
+  contents: read
+
+env:
+  API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
+  FOUNDRY_PROFILE: "ci"
+
 jobs:
+  # ---------------------------------------------------------------------------
+  # Lint: forge fmt + solhint + prettier. Fast — runs on every PR.
+  # ---------------------------------------------------------------------------
   lint:
+    name: "Lint (solidity + prettier)"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Check out the repo"
         uses: "actions/checkout@v4"
+        with:
+          submodules: "recursive"
 
       - name: "Install Foundry"
         uses: "foundry-rs/foundry-toolchain@v1"
 
       - name: "Install Bun"
-        uses: "oven-sh/setup-bun@v1"
+        uses: "oven-sh/setup-bun@v2"
 
-      - name: "Install the Node.js dependencies"
-        run: "bun install"
+      - name: "Install dependencies"
+        run: "bun install --frozen-lockfile"
 
-      - name: "Lint the code"
+      - name: "Lint"
         run: "bun run lint"
 
-      - name: "Add lint summary"
+      - name: "Lint summary"
+        if: always()
         run: |
-          echo "## Lint result" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "## Lint result" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "✅ Passed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "❌ Failed" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
+  # ---------------------------------------------------------------------------
+  # Build: compile Solidity contracts and emit code size report.
+  # ---------------------------------------------------------------------------
   build:
+    name: "Build (forge)"
     runs-on: "ubuntu-latest"
     steps:
       - name: "Check out the repo"
         uses: "actions/checkout@v4"
+        with:
+          submodules: "recursive"
 
       - name: "Install Foundry"
         uses: "foundry-rs/foundry-toolchain@v1"
 
       - name: "Install Bun"
-        uses: "oven-sh/setup-bun@v1"
+        uses: "oven-sh/setup-bun@v2"
 
-      - name: "Install the Node.js dependencies"
-        run: "bun install"
+      - name: "Install dependencies"
+        run: "bun install --frozen-lockfile"
 
-      - name: "Build the contracts and print their size"
+      - name: "Build contracts (with sizes)"
         run: "forge build --sizes"
 
-      - name: "Add build summary"
+      - name: "Build summary"
+        if: always()
         run: |
-          echo "## Build result" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "## Build result" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "✅ Passed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "❌ Failed" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
+  # ---------------------------------------------------------------------------
+  # Test: forge test with a weekly-changing fuzz seed.
+  # ---------------------------------------------------------------------------
   test:
+    name: "Test (forge)"
     needs: ["lint", "build"]
     runs-on: "ubuntu-latest"
     steps:
       - name: "Check out the repo"
         uses: "actions/checkout@v4"
+        with:
+          submodules: "recursive"
 
       - name: "Install Foundry"
         uses: "foundry-rs/foundry-toolchain@v1"
 
       - name: "Install Bun"
-        uses: "oven-sh/setup-bun@v1"
+        uses: "oven-sh/setup-bun@v2"
 
-      - name: "Install the Node.js dependencies"
-        run: "bun install"
+      - name: "Install dependencies"
+        run: "bun install --frozen-lockfile"
 
       - name: "Show the Foundry config"
         run: "forge config"
 
       - name: "Generate a fuzz seed that changes weekly to avoid burning through RPC allowance"
-        run: >
-          echo "FOUNDRY_FUZZ_SEED=$(
-            echo $(($EPOCHSECONDS - $EPOCHSECONDS % 604800))
-          )" >> $GITHUB_ENV
+        run: |
+          echo "FOUNDRY_FUZZ_SEED=$(echo $(($EPOCHSECONDS - $EPOCHSECONDS % 604800)))" >> "$GITHUB_ENV"
 
-      - name: "Run the tests"
+      - name: "Run tests"
         run: "forge test"
 
-      - name: "Add test summary"
+      - name: "Test summary"
+        if: always()
         run: |
-          echo "## Tests result" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "## Test result" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${{ job.status }}" == "success" ]]; then
+            echo "✅ Passed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "❌ Failed" >> "$GITHUB_STEP_SUMMARY"
+          fi

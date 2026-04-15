@@ -1,1 +1,23 @@
-{"rustc":16243257175721966122,"features":"[]","declared_features":"[\"default\", \"tokio\"]","target":9282825058505914207,"profile":5347358027863023418,"path":12053999400092406772,"deps":[[9128867168860799549,"futures_channel",false,16429110117894837050],[12256881686772805731,"futures_task",false,12630707294528513838]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/futures-locks-a6ce29cad8f97d2f/dep-lib-futures_locks","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[]",
+  "declared_features": "[\"default\", \"tokio\"]",
+  "target": 9282825058505914207,
+  "profile": 5347358027863023418,
+  "path": 12053999400092406772,
+  "deps": [
+    [9128867168860799549, "futures_channel", false, 16429110117894837050],
+    [12256881686772805731, "futures_task", false, 12630707294528513838]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/futures-locks-a6ce29cad8f97d2f/dep-lib-futures_locks",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

@@ -29,9 +29,9 @@ contract BrowserSkillTest is Test {
         vm.prank(user1);
         browserSkill.navigateTo(sessionId, "https://example.com");
 
-        (address owner, string memory url, uint256 createdAt, bool isActive, uint256 actionCount) = 
+        (address owner, string memory url, uint256 createdAt, bool isActive, uint256 actionCount) =
             browserSkill.getSession(sessionId);
-        
+
         assertEq(owner, user1);
         assertEq(url, "https://example.com");
         assertTrue(isActive);
@@ -45,7 +45,7 @@ contract BrowserSkillTest is Test {
         vm.prank(user1);
         browserSkill.performClick(sessionId, "#submit-button");
 
-        (, , , , uint256 actionCount) = browserSkill.getSession(sessionId);
+        (,,,, uint256 actionCount) = browserSkill.getSession(sessionId);
         assertEq(actionCount, 1);
     }
 
@@ -56,7 +56,7 @@ contract BrowserSkillTest is Test {
         vm.prank(user1);
         browserSkill.fillForm(sessionId, "#email", "test@example.com");
 
-        (, , , , uint256 actionCount) = browserSkill.getSession(sessionId);
+        (,,,, uint256 actionCount) = browserSkill.getSession(sessionId);
         assertEq(actionCount, 1);
     }
 
@@ -67,7 +67,7 @@ contract BrowserSkillTest is Test {
         vm.prank(user1);
         browserSkill.submitForm(sessionId);
 
-        (, , , , uint256 actionCount) = browserSkill.getSession(sessionId);
+        (,,,, uint256 actionCount) = browserSkill.getSession(sessionId);
         assertEq(actionCount, 1);
     }
 
@@ -78,7 +78,7 @@ contract BrowserSkillTest is Test {
         vm.prank(user1);
         browserSkill.closeSession(sessionId);
 
-        (, , , bool isActive, ) = browserSkill.getSession(sessionId);
+        (,,, bool isActive,) = browserSkill.getSession(sessionId);
         assertFalse(isActive);
     }
 

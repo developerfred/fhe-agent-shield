@@ -5,6 +5,7 @@ This directory contains the Remotion component for generating the demo video.
 ## Video Script
 
 The video covers:
+
 1. **Title** (3s) - FHE-Agent Shield intro
 2. **The Problem** (4s) - Plaintext vulnerability
 3. **The Solution** (4s) - FHE encryption
@@ -17,6 +18,7 @@ The video covers:
 ## Generate Video
 
 ### Prerequisites
+
 ```bash
 # Install inference.sh CLI
 curl -sL https://raw.githubusercontent.com/inference-sh/skills/refs/heads/main/cli-install.md | bash
@@ -26,6 +28,7 @@ infsh login
 ```
 
 ### Render
+
 ```bash
 cd video
 
@@ -40,6 +43,7 @@ infsh app run infsh/remotion-render --input '{
 ```
 
 Or with Python:
+
 ```python
 from inferencesh import inference
 
@@ -62,11 +66,13 @@ print(result["output"]["video"])
 ## Manual Recording Alternative
 
 Instead of generating programmatically, you can:
+
 1. Run `cd frontend && npm run dev`
 2. Record screen using Loom, QuickTime, or OBS
 3. Walk through the 5 demo steps
 4. Stop recording
 
 ## Output Location
+
 - Programmatic: Downloads from infsh to current directory
 - Manual: Save recording as `demo-video.mp4`

@@ -16,11 +16,7 @@ contract EmailSkillTest is Test {
 
     function testSendEmail() external {
         vm.prank(user1);
-        bytes32 emailId = emailSkill.sendEmail(
-            user2,
-            "Hello",
-            "This is a test email"
-        );
+        bytes32 emailId = emailSkill.sendEmail(user2, "Hello", "This is a test email");
 
         assertTrue(emailId != bytes32(0));
         assertEq(emailSkill.getSentCount(user1), 1);
@@ -35,16 +31,12 @@ contract EmailSkillTest is Test {
 
     function testGetEmailAsSender() external {
         vm.prank(user1);
-        bytes32 emailId = emailSkill.sendEmail(
-            user2,
-            "Subject",
-            "Body"
-        );
+        bytes32 emailId = emailSkill.sendEmail(user2, "Subject", "Body");
 
         vm.prank(user1);
-        (address from, address to, string memory subject, string memory body, uint256 ts, bool encrypted) = 
+        (address from, address to, string memory subject, string memory body, uint256 ts, bool encrypted) =
             emailSkill.getEmail(emailId);
-        
+
         assertEq(from, user1);
         assertEq(to, user2);
         assertEq(subject, "Subject");
@@ -54,16 +46,12 @@ contract EmailSkillTest is Test {
 
     function testGetEmailAsRecipient() external {
         vm.prank(user1);
-        bytes32 emailId = emailSkill.sendEmail(
-            user2,
-            "Subject",
-            "Body"
-        );
+        bytes32 emailId = emailSkill.sendEmail(user2, "Subject", "Body");
 
         vm.prank(user2);
-        (address from, address to, string memory subject, string memory body, uint256 ts, bool encrypted) = 
+        (address from, address to, string memory subject, string memory body, uint256 ts, bool encrypted) =
             emailSkill.getEmail(emailId);
-        
+
         assertEq(from, user1);
         assertEq(to, user2);
         assertEq(subject, "Subject");
@@ -73,11 +61,7 @@ contract EmailSkillTest is Test {
 
     function testGetEmailNotAuthorized() external {
         vm.prank(user1);
-        bytes32 emailId = emailSkill.sendEmail(
-            user2,
-            "Subject",
-            "Body"
-        );
+        bytes32 emailId = emailSkill.sendEmail(user2, "Subject", "Body");
 
         vm.prank(address(0x99));
         vm.expectRevert();

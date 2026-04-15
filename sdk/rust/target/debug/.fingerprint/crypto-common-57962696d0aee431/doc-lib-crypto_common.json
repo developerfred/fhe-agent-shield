@@ -1,1 +1,18 @@
-{"rustc":16243257175721966122,"features":"[\"std\"]","declared_features":"[\"getrandom\", \"rand_core\", \"std\"]","target":12082577455412410174,"profile":18121581068564224145,"path":15344742001584147260,"deps":[[857979250431893282,"typenum",false,5626433433566740337],[857979250431893282,"typenum",false,3961932288982451850],[10520923840501062997,"generic_array",false,2718705585170758053],[10520923840501062997,"generic_array",false,4936418408661805093]],"local":[{"Precalculated":"0.1.7"}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"std\"]",
+  "declared_features": "[\"getrandom\", \"rand_core\", \"std\"]",
+  "target": 12082577455412410174,
+  "profile": 18121581068564224145,
+  "path": 15344742001584147260,
+  "deps": [
+    [857979250431893282, "typenum", false, 5626433433566740337],
+    [857979250431893282, "typenum", false, 3961932288982451850],
+    [10520923840501062997, "generic_array", false, 2718705585170758053],
+    [10520923840501062997, "generic_array", false, 4936418408661805093]
+  ],
+  "local": [{ "Precalculated": "0.1.7" }],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

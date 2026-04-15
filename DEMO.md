@@ -16,6 +16,7 @@ export PRIVATE_KEY=your_private_key_here
 ### 2. Deploy Contracts
 
 #### Option A: Deploy All at Once (Recommended)
+
 ```bash
 # Fhenix CoFHE is a coprocessor — deploy to any supported host chain
 # (Ethereum Sepolia, Arbitrum Sepolia, or Base Sepolia).
@@ -41,7 +42,7 @@ forge create src/contracts/AgentVault.sol:AgentVault \
   --rpc-url $RPC \
   --private-key $PRIVATE_KEY
 
-# Deploy AgentMemory  
+# Deploy AgentMemory
 forge create src/contracts/AgentMemory.sol:AgentMemory \
   --rpc-url $RPC \
   --private-key $PRIVATE_KEY
@@ -127,12 +128,12 @@ forge script script/Demo.s.sol:RunDemo --rpc-url $SEPOLIA_RPC --private-key $DEP
 
 ## Contract Addresses (Update after deployment)
 
-| Contract | Address | TX Hash |
-|---------|---------|---------|
-| AgentVault | `0x...` | `0x...` |
-| AgentMemory | `0x...` | `0x...` |
+| Contract      | Address | TX Hash |
+| ------------- | ------- | ------- |
+| AgentVault    | `0x...` | `0x...` |
+| AgentMemory   | `0x...` | `0x...` |
 | SkillRegistry | `0x...` | `0x...` |
-| ActionSealer | `0x...` | `0x...` |
+| ActionSealer  | `0x...` | `0x...` |
 
 ## Verify Deployment
 

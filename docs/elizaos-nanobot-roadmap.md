@@ -8,10 +8,10 @@
 
 FHE-Agent Shield will expand its privacy protection to two major AI agent frameworks:
 
-| Framework | Language | Stars | Type | Priority |
-|-----------|----------|-------|------|----------|
-| **ElizaOS** | TypeScript | 35K+ | Agent OS | 🔴 HIGH |
-| **Nanobot** | Python | 35K+ | Lightweight | 🔴 HIGH |
+| Framework   | Language   | Stars | Type        | Priority |
+| ----------- | ---------- | ----- | ----------- | -------- |
+| **ElizaOS** | TypeScript | 35K+  | Agent OS    | 🔴 HIGH  |
+| **Nanobot** | Python     | 35K+  | Lightweight | 🔴 HIGH  |
 
 ---
 
@@ -19,7 +19,9 @@ FHE-Agent Shield will expand its privacy protection to two major AI agent framew
 
 ### What is ElizaOS?
 
-ElizaOS is an open-source framework for building autonomous AI agents - an "operating system for AI personalities." It supports:
+ElizaOS is an open-source framework for building autonomous AI agents - an "operating system for AI personalities." It
+supports:
+
 - Multi-chain EVM (30+ networks)
 - Solana integration
 - Plugin system for extensibility
@@ -47,13 +49,13 @@ ElizaOS is an open-source framework for building autonomous AI agents - an "oper
 
 ### Security Gaps in ElizaOS
 
-| Issue | Severity | Description |
-|-------|----------|-------------|
-| Plaintext Credentials | 🔴 HIGH | API keys stored in character config |
-| Memory Exposure | 🔴 HIGH | Agent memory visible to node operator |
-| Transaction Signing | 🟡 MEDIUM | Private keys in agent wallet |
-| Plugin Trust | 🟡 MEDIUM | Third-party plugins have full access |
-| No Encryption | 🔴 HIGH | All data visible on-chain |
+| Issue                 | Severity  | Description                           |
+| --------------------- | --------- | ------------------------------------- |
+| Plaintext Credentials | 🔴 HIGH   | API keys stored in character config   |
+| Memory Exposure       | 🔴 HIGH   | Agent memory visible to node operator |
+| Transaction Signing   | 🟡 MEDIUM | Private keys in agent wallet          |
+| Plugin Trust          | 🟡 MEDIUM | Third-party plugins have full access  |
+| No Encryption         | 🔴 HIGH   | All data visible on-chain             |
 
 ### ElizaOS Plugin Integration
 
@@ -61,12 +63,12 @@ Create `@elizaos/plugin-fhe-shield`:
 
 ```typescript
 // @elizaos/plugin-fhe-shield
-import { Plugin, IAgentRuntime, Memory, Provider } from '@elizaos/core';
-import { FHEAgentShield, EncryptedCredential, ThresholdConfig } from '@fhe-agent-shield/sdk';
+import { Plugin, IAgentRuntime, Memory, Provider } from "@elizaos/core";
+import { FHEAgentShield, EncryptedCredential, ThresholdConfig } from "@fhe-agent-shield/sdk";
 
 export class FHEShieldPlugin implements Plugin {
-  name = 'fhe-shield';
-  description = 'FHE-encrypted credentials and memory for ElizaOS agents';
+  name = "fhe-shield";
+  description = "FHE-encrypted credentials and memory for ElizaOS agents";
 
   private shield: FHEAgentShield;
   private runtime: IAgentRuntime;
@@ -84,15 +86,12 @@ export class FHEShieldPlugin implements Plugin {
 
   async initialize(runtime: IAgentRuntime) {
     this.runtime = runtime;
-    
+
     // Encrypt existing credentials
     await this.encryptCredentials();
-    
+
     // Replace memory provider with encrypted version
-    runtime.memoryProvider = new FHEEncryptedMemoryProvider(
-      this.shield,
-      runtime.memoryProvider
-    );
+    runtime.memoryProvider = new FHEEncryptedMemoryProvider(this.shield, runtime.memoryProvider);
   }
 
   // =============================================================================
@@ -101,69 +100,60 @@ export class FHEShieldPlugin implements Plugin {
 
   actions = [
     {
-      name: 'FHE_STORE_CREDENTIAL',
-      description: 'Store encrypted credential with FHE',
+      name: "FHE_STORE_CREDENTIAL",
+      description: "Store encrypted credential with FHE",
       params: [
-        { name: 'key', type: 'string', required: true },
-        { name: 'value', type: 'string', required: true },
+        { name: "key", type: "string", required: true },
+        { name: "value", type: "string", required: true },
       ],
       handler: async (params: { key: string; value: string }) => {
-        const encrypted = await this.shield.storeCredential(
-          this.runtime.agentId,
-          params.key,
-          params.value
-        );
+        const encrypted = await this.shield.storeCredential(this.runtime.agentId, params.key, params.value);
         return { success: true, handle: encrypted.handle };
       },
     },
 
     {
-      name: 'FHE_RETRIEVE_CREDENTIAL',
-      description: 'Retrieve encrypted credential with threshold',
+      name: "FHE_RETRIEVE_CREDENTIAL",
+      description: "Retrieve encrypted credential with threshold",
       params: [
-        { name: 'key', type: 'string', required: true },
-        { name: 'approvers', type: 'address[]', required: false },
+        { name: "key", type: "string", required: true },
+        { name: "approvers", type: "address[]", required: false },
       ],
       handler: async (params: { key: string; approvers?: Address[] }) => {
         const value = await this.shield.retrieveCredential(
           this.runtime.agentId,
           params.key,
-          params.approvers || [this.runtime.walletAddress]
+          params.approvers || [this.runtime.walletAddress],
         );
         return { success: true, value };
       },
     },
 
     {
-      name: 'FHE_SEAL_ACTION',
-      description: 'Seal action requiring threshold approval',
+      name: "FHE_SEAL_ACTION",
+      description: "Seal action requiring threshold approval",
       params: [
-        { name: 'action', type: 'string', required: true },
-        { name: 'payload', type: 'object', required: true },
-        { name: 'threshold', type: 'number', required: false },
+        { name: "action", type: "string", required: true },
+        { name: "payload", type: "object", required: true },
+        { name: "threshold", type: "number", required: false },
       ],
       handler: async (params: { action: string; payload: any; threshold?: number }) => {
         const sealed = await this.shield.sealAction(
           this.runtime.agentId,
           params.action,
           params.payload,
-          params.threshold || 2
+          params.threshold || 2,
         );
         return { success: true, actionId: sealed.id };
       },
     },
 
     {
-      name: 'FHE_APPROVE_ACTION',
-      description: 'Approve a sealed action',
-      params: [
-        { name: 'actionId', type: 'string', required: true },
-      ],
+      name: "FHE_APPROVE_ACTION",
+      description: "Approve a sealed action",
+      params: [{ name: "actionId", type: "string", required: true }],
       handler: async (params: { actionId: string }) => {
-        await this.shield.approveAction(
-          params.actionId,
-          this.runtime.walletAddress
-        );
+        await this.shield.approveAction(params.actionId, this.runtime.walletAddress);
         return { success: true };
       },
     },
@@ -175,12 +165,12 @@ export class FHEShieldPlugin implements Plugin {
 
   providers = [
     {
-      name: 'fhe-credential-provider',
+      name: "fhe-credential-provider",
       get: async () => {
         // Return encrypted credential summaries (not actual values)
         const credentials = await this.shield.listCredentials(this.runtime.agentId);
         return {
-          encrypted_credentials: credentials.map(c => ({
+          encrypted_credentials: credentials.map((c) => ({
             key: c.key,
             handle: c.handle,
             threshold: c.threshold,
@@ -197,10 +187,7 @@ export class FHEShieldPlugin implements Plugin {
 ```json
 {
   "name": "SecureAgent",
-  "plugins": [
-    "@elizaos/plugin-sql",
-    "@elizaos/plugin-fhe-shield"
-  ],
+  "plugins": ["@elizaos/plugin-sql", "@elizaos/plugin-fhe-shield"],
   "settings": {
     "fheShield": {
       "contracts": {
@@ -217,14 +204,14 @@ export class FHEShieldPlugin implements Plugin {
 
 ### Timeline: ElizaOS Integration
 
-| Week | Task | Deliverable |
-|------|-------|--------------|
-| 1 | Create SDK package | `@fhe-agent-shield/sdk` TypeScript SDK |
-| 2 | Develop plugin scaffold | `@elizaos/plugin-fhe-shield` |
-| 3 | Implement credential encryption | FHE credential store |
-| 4 | Implement memory encryption | FHE memory provider |
-| 5 | Implement action sealing | Threshold-released actions |
-| 6 | Test and document | Working plugin + docs |
+| Week | Task                            | Deliverable                            |
+| ---- | ------------------------------- | -------------------------------------- |
+| 1    | Create SDK package              | `@fhe-agent-shield/sdk` TypeScript SDK |
+| 2    | Develop plugin scaffold         | `@elizaos/plugin-fhe-shield`           |
+| 3    | Implement credential encryption | FHE credential store                   |
+| 4    | Implement memory encryption     | FHE memory provider                    |
+| 5    | Implement action sealing        | Threshold-released actions             |
+| 6    | Test and document               | Working plugin + docs                  |
 
 ---
 
@@ -232,9 +219,11 @@ export class FHEShieldPlugin implements Plugin {
 
 ### What is Nanobot?
 
-Nanobot is an ultra-lightweight AI assistant inspired by OpenClaw, delivering core agent functionality with **99% fewer lines of code** (only ~4K lines vs 400K+).
+Nanobot is an ultra-lightweight AI assistant inspired by OpenClaw, delivering core agent functionality with **99% fewer
+lines of code** (only ~4K lines vs 400K+).
 
 **Key Features:**
+
 - Model agnostic (OpenAI, Anthropic, Gemini, local Ollama)
 - Multi-platform (Discord, Slack, Telegram, WhatsApp, DingTalk, WeCom, Feishu)
 - Stateful memory with local graph
@@ -262,13 +251,13 @@ Nanobot is an ultra-lightweight AI assistant inspired by OpenClaw, delivering co
 
 ### Security Gaps in Nanobot
 
-| Issue | Severity | Description |
-|-------|----------|-------------|
-| Credential Storage | 🔴 HIGH | API keys in config files |
-| Memory Visibility | 🔴 HIGH | Local files readable |
-| No Encryption | 🔴 HIGH | Plaintext storage |
-| Minimal ACL | 🟡 MEDIUM | Single user assumed |
-| MCP Trust | 🟡 MEDIUM | Plugins have system access |
+| Issue              | Severity  | Description                |
+| ------------------ | --------- | -------------------------- |
+| Credential Storage | 🔴 HIGH   | API keys in config files   |
+| Memory Visibility  | 🔴 HIGH   | Local files readable       |
+| No Encryption      | 🔴 HIGH   | Plaintext storage          |
+| Minimal ACL        | 🟡 MEDIUM | Single user assumed        |
+| MCP Trust          | 🟡 MEDIUM | Plugins have system access |
 
 ### Nanobot FHE Integration
 
@@ -292,62 +281,62 @@ class FHEConfig:
 class FHECredentialStore:
     """
     FHE-encrypted credential storage for Nanobot.
-    
+
     Replaces plaintext API keys with encrypted handles stored on-chain.
     """
-    
+
     def __init__(self, config: FHEConfig):
         self.config = config
         self.account = Account.from_key(config.private_key)
         self.credentials: Dict[str, str] = {}  # key -> encrypted_handle
-        
+
     async def store(self, key: str, value: str) -> str:
         """
         Store credential with FHE encryption.
-        
+
         Args:
             key: Credential identifier (e.g., 'OPENAI_API_KEY')
             value: Plaintext credential value
-            
+
         Returns:
             Encrypted handle for later retrieval
         """
         # Encrypt value using FHE contract
         encrypted = await self._encrypt_value(value)
-        
+
         # Store on-chain with FHE
         tx_hash = await self._send_transaction(
             'storeCredential',
             [encrypted]
         )
-        
+
         handle = self._derive_handle(key, tx_hash)
         self.credentials[key] = handle
-        
+
         return handle
-    
+
     async def retrieve(self, key: str, approvers: List[str]) -> str:
         """
         Retrieve credential with threshold approval.
-        
+
         Args:
             key: Credential identifier
             approvers: List of approver addresses (threshold must be met)
-            
+
         Returns:
             Decrypted credential value
         """
         handle = self.credentials[key]
-        
+
         # Request decryption with approvals
         decrypted = await self._request_decryption(
             handle,
             approvers,
             self.config.threshold
         )
-        
+
         return decrypted
-    
+
     async def list_credentials(self) -> List[Dict[str, Any]]:
         """List stored credentials (handles only, not values)."""
         return [
@@ -359,45 +348,45 @@ class FHECredentialStore:
 class FHEMemoryProvider:
     """
     FHE-encrypted memory provider for Nanobot.
-    
+
     Encrypts agent memory before storage.
     """
-    
+
     def __init__(self, config: FHEConfig, memory_path: str):
         self.config = config
         self.memory_path = memory_path
         self.encrypted_chunks: List[str] = []
-        
+
     async def append(self, content: str) -> int:
         """
         Append encrypted memory chunk.
-        
+
         Returns:
             New memory length
         """
         encrypted = await self._encrypt_chunk(content)
-        
+
         tx_hash = await self._send_transaction(
             'appendContext',
             [self.config.agent_id, encrypted]
         )
-        
+
         self.encrypted_chunks.append(self._derive_handle(content, tx_hash))
         return len(self.encrypted_chunks)
-    
+
     async def get_context(self, start: int, end: int) -> List[str]:
         """
         Retrieve decrypted memory slice.
-        
+
         Args:
             start: Start index
             end: End index
-            
+
         Returns:
             List of decrypted memory chunks
         """
         handles = self.encrypted_chunks[start:end]
-        
+
         chunks = []
         for handle in handles:
             decrypted = await self._request_decryption(
@@ -406,21 +395,21 @@ class FHEMemoryProvider:
                 1
             )
             chunks.append(decrypted)
-        
+
         return chunks
 
 
 class FHESealManager:
     """
     Threshold-released action sealing for Nanobot.
-    
+
     Critical actions require multi-approver approval before execution.
     """
-    
+
     def __init__(self, config: FHEConfig):
         self.config = config
         self.pending_actions: Dict[str, dict] = {}
-        
+
     async def seal_action(
         self,
         action_type: str,
@@ -429,78 +418,78 @@ class FHESealManager:
     ) -> str:
         """
         Seal an action requiring threshold approvals.
-        
+
         Args:
             action_type: Type of action (e.g., 'send_email', 'transfer')
             params: Action parameters
             threshold: Number of approvals required
-            
+
         Returns:
             Action ID for tracking
         """
         encrypted_payload = await self._encrypt_json(params)
-        
+
         tx_hash = await self._send_transaction(
             'sealAction',
             [self.config.agent_id, encrypted_payload, threshold]
         )
-        
+
         action_id = self._derive_action_id(action_type, tx_hash)
-        
+
         self.pending_actions[action_id] = {
             'type': action_type,
             'params': params,
             'threshold': threshold,
             'approvals': []
         }
-        
+
         return action_id
-    
+
     async def approve(self, action_id: str, approver: str) -> bool:
         """
         Approve a pending action.
-        
+
         Returns:
             True if threshold met and action can proceed
         """
         action = self.pending_actions[action_id]
-        
+
         await self._send_transaction(
             'approveRelease',
             [action_id]
         )
-        
+
         action['approvals'].append(approver)
-        
+
         if len(action['approvals']) >= action['threshold']:
             return True  # Action can proceed
-            
+
         return False
-    
+
     async def execute(self, action_id: str) -> Dict[str, Any]:
         """
         Execute an approved action.
-        
+
         Requires threshold approvals already collected.
         """
         action = self.pending_actions[action_id]
-        
+
         if len(action['approvals']) < action['threshold']:
             raise ValueError(
                 f"Insufficient approvals: {len(action['approvals'])}/{action['threshold']}"
             )
-        
+
         decrypted = await self._request_decryption(
             action_id,
             action['approvers'],
             action['threshold']
         )
-        
+
         result = await self._execute_action(
             action['type'],
             decrypted
         )
-        
+
         del self.pending_actions[action_id]
         return result
 ```
@@ -533,41 +522,41 @@ await fhe_shield.store("SENDGRID_KEY", "SG....")
 async def send_email(to: str, content: str):
     # Retrieve API key with self-approval
     api_key = await fhe_shield.retrieve("SENDGRID_KEY", [my_address])
-    
+
     # Seal the email sending action
     action_id = await fhe_sealer.seal_action(
         "send_email",
         {"to": to, "content": content},
         threshold=1
     )
-    
+
     # Execute (immediate for low-threshold actions)
     return await fhe_sealer.execute(action_id)
 ```
 
 ### Timeline: Nanobot Integration
 
-| Week | Task | Deliverable |
-|------|-------|--------------|
-| 1 | Python SDK | `fhe-agent-shield-python` package |
-| 2 | Credential Store | `FHECredentialStore` class |
-| 3 | Memory Provider | `FHEMemoryProvider` class |
-| 4 | Action Sealer | `FHESealManager` class |
-| 5 | Integration testing | Nanobot + FHE working |
-| 6 | Documentation | Usage guide + examples |
+| Week | Task                | Deliverable                       |
+| ---- | ------------------- | --------------------------------- |
+| 1    | Python SDK          | `fhe-agent-shield-python` package |
+| 2    | Credential Store    | `FHECredentialStore` class        |
+| 3    | Memory Provider     | `FHEMemoryProvider` class         |
+| 4    | Action Sealer       | `FHESealManager` class            |
+| 5    | Integration testing | Nanobot + FHE working             |
+| 6    | Documentation       | Usage guide + examples            |
 
 ---
 
 ## Comparative Analysis
 
-| Feature | ElizaOS | Nanobot | OpenClaw |
-|---------|---------|---------|----------|
-| Language | TypeScript | Python | TypeScript |
-| Size | Medium (~50K) | Tiny (~4K) | Huge (400K+) |
-| Plugin System | Native | MCP | Custom |
-| Memory | RAG-based | Token-based | Full memory |
-| **FHE Priority** | 🔴 HIGH | 🔴 HIGH | ✅ DONE |
-| **Estimated Effort** | 6 weeks | 6 weeks | - |
+| Feature              | ElizaOS       | Nanobot     | OpenClaw     |
+| -------------------- | ------------- | ----------- | ------------ |
+| Language             | TypeScript    | Python      | TypeScript   |
+| Size                 | Medium (~50K) | Tiny (~4K)  | Huge (400K+) |
+| Plugin System        | Native        | MCP         | Custom       |
+| Memory               | RAG-based     | Token-based | Full memory  |
+| **FHE Priority**     | 🔴 HIGH       | 🔴 HIGH     | ✅ DONE      |
+| **Estimated Effort** | 6 weeks       | 6 weeks     | -            |
 
 ---
 
@@ -604,11 +593,13 @@ async def send_email(to: str, content: str):
 ### Phase 1: Core SDKs (Weeks 1-4)
 
 **TypeScript SDK:**
+
 ```bash
 npm init @fhe-agent-shield/sdk
 ```
 
 **Python SDK:**
+
 ```bash
 pip install fhe-agent-shield
 ```
@@ -636,14 +627,14 @@ pip install fhe-agent-shield
 
 ## Success Metrics
 
-| Metric | Target |
-|--------|--------|
-| ElizaOS Plugin Installations | 500+ |
-| Nanobot Integration Downloads | 1000+ |
-| Encrypted Credentials Stored | 10,000+ |
-| Protected Agent Contexts | 5,000+ |
-| Threshold Actions Sealed | 1,000+ |
-| Community Contributors | 20+ |
+| Metric                        | Target  |
+| ----------------------------- | ------- |
+| ElizaOS Plugin Installations  | 500+    |
+| Nanobot Integration Downloads | 1000+   |
+| Encrypted Credentials Stored  | 10,000+ |
+| Protected Agent Contexts      | 5,000+  |
+| Threshold Actions Sealed      | 1,000+  |
+| Community Contributors        | 20+     |
 
 ---
 
@@ -651,29 +642,29 @@ pip install fhe-agent-shield
 
 ### Smart Contracts (Same for all frameworks)
 
-| Contract | Purpose |
-|----------|---------|
-| AgentVault | Encrypted credential storage |
-| AgentMemory | Encrypted agent context |
-| ActionSealer | Threshold-released actions |
+| Contract     | Purpose                      |
+| ------------ | ---------------------------- |
+| AgentVault   | Encrypted credential storage |
+| AgentMemory  | Encrypted agent context      |
+| ActionSealer | Threshold-released actions   |
 
 ### Blockchain Networks
 
-| Network | Use Case |
-|---------|---------|
+| Network          | Use Case            |
+| ---------------- | ------------------- |
 | Ethereum Sepolia | Primary FHE network |
 | Arbitrum Sepolia | Latest FHE features |
-| Arbitrum Sepolia | L2 integration |
-| Base Sepolia | L2 integration |
+| Arbitrum Sepolia | L2 integration      |
+| Base Sepolia     | L2 integration      |
 
 ### SDK Requirements
 
-| SDK | Language | Package Manager |
-|-----|----------|---------------|
-| Core | Solidity | - |
-| TypeScript | TypeScript | npm |
-| Python | Python | pip |
-| Go | Go | go mod |
+| SDK        | Language   | Package Manager |
+| ---------- | ---------- | --------------- |
+| Core       | Solidity   | -               |
+| TypeScript | TypeScript | npm             |
+| Python     | Python     | pip             |
+| Go         | Go         | go mod          |
 
 ---
 

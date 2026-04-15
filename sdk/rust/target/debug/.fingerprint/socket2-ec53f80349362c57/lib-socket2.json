@@ -1,1 +1,15 @@
-{"rustc":16243257175721966122,"features":"[\"all\"]","declared_features":"[\"all\"]","target":2270514485357617025,"profile":5347358027863023418,"path":10006590061997851404,"deps":[[17159683253194042242,"libc",false,9943709035222746906]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/socket2-ec53f80349362c57/dep-lib-socket2","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"all\"]",
+  "declared_features": "[\"all\"]",
+  "target": 2270514485357617025,
+  "profile": 5347358027863023418,
+  "path": 10006590061997851404,
+  "deps": [[17159683253194042242, "libc", false, 9943709035222746906]],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/socket2-ec53f80349362c57/dep-lib-socket2", "checksum": false } }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

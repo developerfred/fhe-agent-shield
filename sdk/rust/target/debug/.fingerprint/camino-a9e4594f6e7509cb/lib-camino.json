@@ -1,1 +1,18 @@
-{"rustc":16243257175721966122,"features":"[\"serde1\"]","declared_features":"[\"proptest1\", \"serde1\"]","target":4916930958703370761,"profile":8276155916380437441,"path":2078421577013992620,"deps":[[11463991340766958661,"build_script_build",false,8260184503132204373],[11899261697793765154,"serde_core",false,12251230374162510908]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/camino-a9e4594f6e7509cb/dep-lib-camino","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"serde1\"]",
+  "declared_features": "[\"proptest1\", \"serde1\"]",
+  "target": 4916930958703370761,
+  "profile": 8276155916380437441,
+  "path": 2078421577013992620,
+  "deps": [
+    [11463991340766958661, "build_script_build", false, 8260184503132204373],
+    [11899261697793765154, "serde_core", false, 12251230374162510908]
+  ],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/camino-a9e4594f6e7509cb/dep-lib-camino", "checksum": false } }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

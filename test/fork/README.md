@@ -5,11 +5,13 @@ This directory contains fork tests for testing FHE-Agent Shield contracts on liv
 ## Setup
 
 1. Set your Fhenix RPC URL:
+
 ```bash
 export SEPOLIA_RPC_URL="https://rpc.sepolia.org"
 ```
 
 2. Run fork tests:
+
 ```bash
 forge test --match-path "test/fork/*" -vvv
 ```
@@ -17,11 +19,13 @@ forge test --match-path "test/fork/*" -vvv
 ## Running Specific Fork Tests
 
 Test deployment to fork:
+
 ```bash
 forge test --match-test "testFork.*Deployment" -vvv
 ```
 
 Test chain connectivity:
+
 ```bash
 forge test --match-test "testForkCanRead*" -vvv
 ```
