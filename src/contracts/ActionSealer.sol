@@ -28,6 +28,10 @@ contract ActionSealer {
     error ActionExpired();
     error ActionAlreadyReleased();
     error ConditionAlreadyRegistered();
+    /// @notice Reverted when `registerReleaseCondition` is called with
+    /// `threshold = 0`, which would allow immediate release without any
+    /// approvals. See docs/threat-model.md P0 #2.
+    error InvalidThreshold();
 
     // =============================================================================
     // Events
@@ -133,6 +137,12 @@ contract ActionSealer {
      * @param timeout Time in seconds until action expires (0 = no expiry)
      */
     function registerReleaseCondition(address actionId, uint8 threshold, uint256 timeout) external {
+        // Reject threshold = 0 — otherwise `releaseAction` would succeed with
+        // zero approvals, defeating the point of sealing. (threat-model P0 #2)
+        if (threshold == 0) {
+            revert InvalidThreshold();
+        }
+
         // Verify action exists
         if (_actions[actionId].owner == address(0)) {
             revert ActionNotFound();
