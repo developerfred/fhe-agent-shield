@@ -38,14 +38,16 @@ OpenClaw (formerly Moltbot/Clawdbot) is the fastest-growing AI agent framework (
 │  └──────────┼─────────────────┼─────────────────┼────────────────┼──────────┘   │
 │             │                 │                 │                │              │
 │  ┌──────────▼─────────────────▼─────────────────▼────────────────▼──────────┐   │
-│  │                          CoFHE Layer                                   │   │
+│  │              CoFHE Coprocessor (off-chain + on host chain)             │   │
 │  │  ┌─────────────────────────────────────────────────────────────────┐   │   │
-│  │  │  FHE.sol  │  Threshold Network  │  Ciphertext Registry  │      │   │   │
+│  │  │  FHE.sol  │  Task Manager  │  Threshold Network  │  Registry  │   │   │
+│  │  │  (on-chain library)         (off-chain MPC)     (on-chain)    │   │   │
 │  │  └─────────────────────────────────────────────────────────────────┘   │   │
 │  └─────────────────────────────────────────────────────────────────────────┘   │
 │                                      │                                          │
 │  ┌───────────────────────────────────▼─────────────────────────────────────┐   │
-│  │                      Smart Contracts (L2/L1)                           │   │
+│  │           Shield Smart Contracts (deployed on host EVM chain)          │   │
+│  │           — Ethereum Sepolia / Arbitrum Sepolia / Base Sepolia —        │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌────────────┐  │   │
 │  │  │  AgentVault  │  │ AgentMemory  │  │SkillRegistry │  │ActionSealer│  │   │
 │  │  └──────────────┘  └──────────────┘  └──────────────┘  └────────────┘  │   │
@@ -339,7 +341,7 @@ fhe-agent-shield/
 **Rationale:**
 - BFV: Efficient for encrypted credentials and ratings (discrete values)
 - CKKS: Future-proofing for ML inference on encrypted agent context
-- Fhenix CoFHE supports both natively
+- Fhenix CoFHE (the FHE coprocessor running alongside the host chain) supports both natively
 
 ### Decision 2: Threshold Network Integration
 
@@ -348,7 +350,7 @@ fhe-agent-shield/
 **Rationale:**
 - No single point of failure for key management
 - Decryption requires M-of-N consensus
-- Already production-ready on Sepolia/Arbitrum/Base
+- Already supported on the CoFHE testnets: Ethereum Sepolia, Arbitrum Sepolia, Base Sepolia (no separate Fhenix chain required)
 
 ### Decision 3: OpenClaw Compatibility
 

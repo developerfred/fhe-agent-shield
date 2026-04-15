@@ -17,18 +17,24 @@ export PRIVATE_KEY=your_private_key_here
 
 #### Option A: Deploy All at Once (Recommended)
 ```bash
-# Deploys to Fhenix Helium testnet by default
-forge script script/DeployAll.s.sol:Deploy --rpc-url fhenixHelium -vvv
+# Fhenix CoFHE is a coprocessor — deploy to any supported host chain
+# (Ethereum Sepolia, Arbitrum Sepolia, or Base Sepolia).
+
+# Deploy to Ethereum Sepolia (default)
+forge script script/DeployAll.s.sol:Deploy --rpc-url sepolia -vvv
 
 # Or deploy to Arbitrum Sepolia
 forge script script/DeployAll.s.sol:Deploy --rpc-url arbitrumSepolia -vvv
+
+# Or deploy to Base Sepolia
+forge script script/DeployAll.s.sol:Deploy --rpc-url baseSepolia -vvv
 ```
 
 #### Option B: Deploy Individual Contracts
 
 ```bash
-# Deploy to Fhenix Helium (Chain ID: 8008135)
-export RPC=https://api.helium.fhenix.zone
+# Deploy to Ethereum Sepolia (Chain ID: 11155111)
+export RPC=${SEPOLIA_RPC:-https://rpc.sepolia.org}
 
 # Deploy AgentVault
 forge create src/contracts/AgentVault.sol:AgentVault \
@@ -60,7 +66,7 @@ export VAULT=0x... # AgentVault address
 export MEMORY=0x... # AgentMemory address
 export SKILLS=0x... # SkillRegistry address
 export SEALER=0x... # ActionSealer address
-export RPC=https://api.helium.fhenix.zone
+export RPC=${SEPOLIA_RPC:-https://rpc.sepolia.org}  # or arbitrumSepolia / baseSepolia RPC
 
 # ---- AGENT MEMORY DEMO ----
 echo "=== Initialize Agent ==="
@@ -116,7 +122,7 @@ cast call $SEALER "getActionStatus(address)" \
 Run the automated demo:
 
 ```bash
-forge script script/Demo.s.sol:RunDemo --rpc-url $FHENIX_RPC --private-key $DEPLOYER_PRIVATE_KEY -vvv
+forge script script/Demo.s.sol:RunDemo --rpc-url $SEPOLIA_RPC --private-key $DEPLOYER_PRIVATE_KEY -vvv
 ```
 
 ## Contract Addresses (Update after deployment)

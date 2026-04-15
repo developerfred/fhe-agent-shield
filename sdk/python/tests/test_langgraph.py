@@ -22,7 +22,7 @@ def mock_fhe_config():
     """Create a mock FHE configuration."""
     with patch("fhe_agent_shield.langgraph.FHEConfig") as mock_config:
         config = Mock(spec=FHEConfig)
-        config.network = NetworkName.FHENIX_HELIUM
+        config.network = NetworkName.SEPOLIA
         config.address = "0x" + "11" * 20
         config.private_key = "0x" + "22" * 32
         yield config

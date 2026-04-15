@@ -1,18 +1,20 @@
 # FHE-Agent Shield: Multi-Chain DevX Roadmap
 
-> **Developer Experience for Fhenix, Arbitrum Sepolia, and Base Sepolia**
+> **Developer Experience for the CoFHE-supported host chains: Ethereum Sepolia, Arbitrum Sepolia, Base Sepolia**
 
 ---
 
 ## Overview
 
-FHE-Agent Shield is designed to work seamlessly across **all Fhenix-supported networks**:
-- **Fhenix Helium** - Native FHE L1 (Testnet)
-- **Fhenix Nitrogen** - Latest FHE L1 (Testnet)
-- **Arbitrum Sepolia** - FHE L2 Rollup (Testnet)
-- **Base Sepolia** - FHE L2 Rollup (Testnet)
+Fhenix CoFHE is a **coprocessor**, not a chain. FHE-Agent Shield contracts deploy on existing EVM host chains and call CoFHE through `FHE.sol` for encrypted computation. The legacy Fhenix L2 testnets (Helium, Nitrogen) have been retired.
 
-This document outlines our strategy for making deployment and development **effortless across all chains**.
+The currently supported testnets — per the [official compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility) — are:
+
+- **Ethereum Sepolia** — host chain for CoFHE (`eth-sepolia`)
+- **Arbitrum Sepolia** — host chain for CoFHE (`arb-sepolia`)
+- **Base Sepolia** — host chain for CoFHE (`base-sepolia`)
+
+This document outlines our strategy for making deployment and development **effortless across every CoFHE-supported chain**.
 
 ---
 
@@ -22,30 +24,25 @@ This document outlines our strategy for making deployment and development **effo
 
 | Network | Chain ID | RPC URL | Explorer | Faucet |
 |---------|----------|---------|----------|--------|
-| **Fhenix Helium** | 8008135 | `https://api.helium.fhenix.zone` | `https://explorer.helium.fhenix.zone` | [Discord](https://discord.gg/fhenix) |
-| **Fhenix Nitrogen** | 8008148 | `https://api.nitrogen.fhenix.zone` | `https://explorer.nitrogen.fhenix.zone` | [Discord](https://discord.gg/fhenix) |
+| **Ethereum Sepolia** | 11155111 | `https://rpc.sepolia.org` | `https://sepolia.etherscan.io` | [Alchemy](https://www.alchemy.com/faucets/ethereum-sepolia) |
 | **Arbitrum Sepolia** | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | `https://sepolia.arbiscan.io` | [QuickNode](https://faucet.quicknode.com/arbitrum/sepolia) |
 | **Base Sepolia** | 84532 | `https://sepolia.base.org` | `https://sepolia.basescan.org` | [Coinbase](https://www.coinbase.com/faucets/base-ethereum-sepolia-faucet) |
 
 ### Foundry Configuration
 
-Update `foundry.toml` with all network configurations:
+Update `foundry.toml` with the CoFHE-supported host chains:
 
 ```toml
 [rpc_endpoints]
 # Local
 localhost = "http://localhost:8545"
 
-# Fhenix Networks
-fhenixHelium = "https://api.helium.fhenix.zone"
-fhenixNitrogen = "https://api.nitrogen.fhenix.zone"
-
-# L2 Rollups with FHE
+# CoFHE-supported host chains (testnets)
+sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
 arbitrumSepolia = "https://sepolia-rollup.arbitrum.io/rpc"
 baseSepolia = "https://sepolia.base.org"
 
-# Ethereum
-sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
+# Ethereum mainnet (CoFHE mainnet TBA)
 mainnet = "https://eth-mainnet.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
 ```
 
@@ -71,9 +68,9 @@ forge build
 # 4. Run tests
 forge test
 
-# 5. Deploy to ANY network
+# 5. Deploy to ANY supported host chain
 forge script script/DeployAll.s.sol \
-  --rpc-url $FHENIX_HELIUM_RPC \
+  --rpc-url $SEPOLIA_RPC \
   --broadcast \
   --verify
 ```
@@ -81,17 +78,14 @@ forge script script/DeployAll.s.sol \
 ### One-Command Deployment
 
 ```bash
-# Deploy to Fhenix Helium (default)
-make deploy-fhenix
-
-# Deploy to Fhenix Nitrogen
-make deploy-fhenix-nitrogen
+# Deploy to Ethereum Sepolia (default)
+make deploy:sepolia
 
 # Deploy to Arbitrum Sepolia
-make deploy-arbitrum-sepolia
+make deploy:arbitrum-sepolia
 
 # Deploy to Base Sepolia
-make deploy-base-sepolia
+make deploy:base-sepolia
 ```
 
 ### Environment Variables
@@ -102,17 +96,13 @@ Create `.env` with network-specific variables:
 # Private Key
 PRIVATE_KEY=0x...
 
-# Fhenix Networks
-FHENIX_HELIUM_RPC=https://api.helium.fhenix.zone
-FHENIX_NITROGEN_RPC=https://api.nitrogen.fhenix.zone
-FHENIX_HELIUM_CHAIN_ID=8008135
-FHENIX_NITROGEN_CHAIN_ID=8008148
+# CoFHE-supported host chains (testnets)
+SEPOLIA_RPC=https://sepolia.infura.io/v3/${API_KEY_INFURA}
+SEPOLIA_CHAIN_ID=11155111
 
-# Arbitrum Sepolia
-ARBITERUM_SEPOLIA_RPC=https://sepolia-rollup.arbitrum.io/rpc
-ARBITERUM_SEPOLIA_CHAIN_ID=421614
+ARBITRUM_SEPOLIA_RPC=https://sepolia-rollup.arbitrum.io/rpc
+ARBITRUM_SEPOLIA_CHAIN_ID=421614
 
-# Base Sepolia
 BASE_SEPOLIA_RPC=https://sepolia.base.org
 BASE_SEPOLIA_CHAIN_ID=84532
 
@@ -133,7 +123,7 @@ BASESCAN_API_KEY=...
 # NETWORK CONFIGURATION
 # ===========================================
 
-NETWORK ?= fhenix-helium
+NETWORK ?= sepolia
 RPC_URL = $(shell cat .env | grep $(NETWORK) | cut -d'=' -f2)
 
 # ===========================================
@@ -179,21 +169,14 @@ deploy:
 		--broadcast \
 		--verify
 
-deploy:fhenix-helium:
-	@NETWORK=fhenix-helium \
-	RPC_URL=https://api.helium.fhenix.zone \
+deploy:sepolia:
+	@NETWORK=sepolia \
 	forge script script/DeployAll.s.sol \
-		--rpc-url https://api.helium.fhenix.zone \
+		--rpc-url $${SEPOLIA_RPC:-https://rpc.sepolia.org} \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
-		--verify
-
-deploy:fhenix-nitrogen:
-	forge script script/DeployAll.s.sol \
-		--rpc-url https://api.nitrogen.fhenix.zone \
-		--private-key $(PRIVATE_KEY) \
-		--broadcast \
-		--verify
+		--verify \
+		--etherscan-api-key $(API_KEY_ETHERSCAN)
 
 deploy:arbitrum-sepolia:
 	forge script script/DeployAll.s.sol \
@@ -290,12 +273,11 @@ struct Deployment {
 
 contract MultiChainDeploy is Script {
     
-    // Supported networks
-    enum Network { 
-        FhenixHelium, 
-        FhenixNitrogen, 
-        ArbitrumSepolia, 
-        BaseSepolia 
+    // Supported CoFHE host chains
+    enum Network {
+        EthereumSepolia,
+        ArbitrumSepolia,
+        BaseSepolia
     }
     
     mapping(Network => string) public networkNames;
@@ -348,16 +330,14 @@ contract MultiChainDeploy is Script {
     function getNetworkFromEnv() internal returns (Network) {
         string memory networkStr = vm.envString("NETWORK");
         
-        if (keccak256(abi.encodePacked(networkStr)) == keccak256(abi.encodePacked("fhenix-helium"))) {
-            return Network.FhenixHelium;
-        } else if (keccak256(abi.encodePacked(networkStr)) == keccak256(abi.encodePacked("fhenix-nitrogen"))) {
-            return Network.FhenixNitrogen;
+        if (keccak256(abi.encodePacked(networkStr)) == keccak256(abi.encodePacked("sepolia"))) {
+            return Network.EthereumSepolia;
         } else if (keccak256(abi.encodePacked(networkStr)) == keccak256(abi.encodePacked("arbitrum-sepolia"))) {
             return Network.ArbitrumSepolia;
         } else if (keccak256(abi.encodePacked(networkStr)) == keccak256(abi.encodePacked("base-sepolia"))) {
             return Network.BaseSepolia;
         }
-        
+
         revert("Unknown network");
     }
 }
@@ -373,19 +353,12 @@ Create `src/config/networks.ts`:
 
 ```typescript
 export const NETWORKS = {
-  'fhenix-helium': {
-    name: 'Fhenix Helium',
-    rpcUrl: 'https://api.helium.fhenix.zone',
-    chainId: 8008135,
-    explorer: 'https://explorer.helium.fhenix.zone',
-    explorerApi: 'https://api.gateway.helium.fhenix.zone/api/v2',
-  },
-  'fhenix-nitrogen': {
-    name: 'Fhenix Nitrogen',
-    rpcUrl: 'https://api.nitrogen.fhenix.zone',
-    chainId: 8008148,
-    explorer: 'https://explorer.nitrogen.fhenix.zone',
-    explorerApi: 'https://api.gateway.nitrogen.fhenix.zone/api/v2',
+  'ethereum-sepolia': {
+    name: 'Ethereum Sepolia',
+    rpcUrl: 'https://rpc.sepolia.org',
+    chainId: 11155111,
+    explorer: 'https://sepolia.etherscan.io',
+    explorerApi: 'https://api-sepolia.etherscan.io/api',
   },
   'arbitrum-sepolia': {
     name: 'Arbitrum Sepolia',
@@ -463,26 +436,25 @@ export function createFHEAgentSDK(
 make test:allNetworks
 
 # Individual network tests
-make test:fhenix-helium    # NETWORK=fhenix-helium forge test
-make test:fhenix-nitrogen   # NETWORK=fhenix-nitrogen forge test
+make test:sepolia          # NETWORK=sepolia forge test
 make test:arbitrum-sepolia # NETWORK=arbitrum-sepolia forge test
 make test:base-sepolia     # NETWORK=base-sepolia forge test
 
 # Fork tests
-make fork:test:fhenix-helium
+make fork:test:sepolia
 make fork:test:arbitrum-sepolia
 make fork:test:base-sepolia
 ```
 
 ### Test Coverage Matrix
 
-| Contract | Fhenix Helium | Fhenix Nitrogen | Arbitrum Sepolia | Base Sepolia |
-|----------|--------------|-----------------|------------------|--------------|
-| AgentVault | ✅ | ✅ | ✅ | ✅ |
-| AgentMemory | ✅ | ✅ | ✅ | ✅ |
-| SkillRegistry | ✅ | ✅ | ✅ | ✅ |
-| ActionSealer | ✅ | ✅ | ✅ | ✅ |
-| FHERC20 | ✅ | ✅ | ✅ | ✅ |
+| Contract | Ethereum Sepolia | Arbitrum Sepolia | Base Sepolia |
+|----------|------------------|------------------|--------------|
+| AgentVault | ✅ | ✅ | ✅ |
+| AgentMemory | ✅ | ✅ | ✅ |
+| SkillRegistry | ✅ | ✅ | ✅ |
+| ActionSealer | ✅ | ✅ | ✅ |
+| FHERC20 | ✅ | ✅ | ✅ |
 
 ---
 
@@ -506,7 +478,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        network: [fhenix-helium, fhenix-nitrogen, arbitrum-sepolia, base-sepolia]
+        network: [sepolia, arbitrum-sepolia, base-sepolia]
     
     steps:
       - uses: actions/checkout@v4
@@ -530,7 +502,7 @@ jobs:
         run: forge test --fork-url ${{ matrix.network }}
       
       - name: Run coverage
-        if: matrix.network == 'fhenix-helium'
+        if: matrix.network == 'sepolia'
         run: forge coverage
 
   deploy:
@@ -539,14 +511,11 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: ${{ matrix.network }}
-      url: https://explorer.${{ matrix.network }}.fhenix.zone
     strategy:
       matrix:
         include:
-          - network: fhenix-helium
-            rpc: https://api.helium.fhenix.zone
-          - network: fhenix-nitrogen
-            rpc: https://api.nitrogen.fhenix.zone
+          - network: sepolia
+            rpc: https://rpc.sepolia.org
           - network: arbitrum-sepolia
             rpc: https://sepolia-rollup.arbitrum.io/rpc
           - network: base-sepolia
@@ -573,17 +542,7 @@ jobs:
 
 ## Deployment Addresses Registry
 
-### Fhenix Helium (Chain ID: 8008135)
-
-| Contract | Address | TX Hash |
-|----------|---------|---------|
-| AgentVault | `TBD` | `TBD` |
-| AgentMemory | `TBD` | `TBD` |
-| SkillRegistry | `TBD` | `TBD` |
-| ActionSealer | `TBD` | `TBD` |
-| ExampleToken | `TBD` | `TBD` |
-
-### Fhenix Nitrogen (Chain ID: 8008148)
+### Ethereum Sepolia (Chain ID: 11155111)
 
 | Contract | Address | TX Hash |
 |----------|---------|---------|
@@ -621,22 +580,15 @@ jobs:
 
 ```bash
 # ===========================================
-# FHENIX HELIUM
+# ETHEREUM SEPOLIA
 # ===========================================
 
-export RPC=https://api.helium.fhenix.zone
+export RPC=${SEPOLIA_RPC:-https://rpc.sepolia.org}
 export VAULT=<address>
 export PRIVATE_KEY=<key>
 
 # Agent Memory
 cast call $VAULT "getCredentialHandle(address)" --rpc-url $RPC
-
-# ===========================================
-# FHENIX NITROGEN
-# ===========================================
-
-export RPC=https://api.nitrogen.fhenix.zone
-# Same commands work with different RPC
 
 # ===========================================
 # ARBITRUM SEPOLIA
@@ -661,8 +613,7 @@ Add to `package.json`:
 {
   "scripts": {
     "network": "node scripts/switchNetwork.js",
-    "deploy:helium": "NETWORK=fhenix-helium forge script script/DeployAll.s.sol --broadcast --verify",
-    "deploy:nitrogen": "NETWORK=fhenix-nitrogen forge script script/DeployAll.s.sol --broadcast --verify",
+    "deploy:sepolia": "NETWORK=sepolia forge script script/DeployAll.s.sol --broadcast --verify",
     "deploy:arb-sepolia": "NETWORK=arbitrum-sepolia forge script script/DeployAll.s.sol --broadcast --verify",
     "deploy:base-sepolia": "NETWORK=base-sepolia forge script script/DeployAll.s.sol --broadcast --verify"
   }
@@ -707,7 +658,7 @@ console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
 - [ ] Update .env.example with all variables
 
 ### Phase 2: CLI Enhancement (Week 2)
-- [ ] `fhe-agent deploy --network helium`
+- [ ] `fhe-agent deploy --network sepolia`
 - [ ] `fhe-agent console --network arbitrum-sepolia`
 - [ ] `fhe-agent verify --network base-sepolia`
 - [ ] `fhe-agent status --network all`
@@ -741,11 +692,8 @@ console.log(`RPC_URL=${NETWORKS[network].rpcUrl}`);
 ### One-Line Deploys
 
 ```bash
-# Fhenix Helium
-forge script script/DeployAll.s.sol --rpc-url https://api.helium.fhenix.zone --broadcast --verify
-
-# Fhenix Nitrogen  
-forge script script/DeployAll.s.sol --rpc-url https://api.nitrogen.fhenix.zone --broadcast --verify
+# Ethereum Sepolia
+forge script script/DeployAll.s.sol --rpc-url $SEPOLIA_RPC --broadcast --verify
 
 # Arbitrum Sepolia
 forge script script/DeployAll.s.sol --rpc-url https://sepolia-rollup.arbitrum.io/rpc --broadcast --verify
@@ -767,7 +715,7 @@ vim .env
 source .env
 
 # Deploy
-forge script script/DeployAll.s.sol --rpc-url $FHENIX_HELIUM_RPC --broadcast --verify
+forge script script/DeployAll.s.sol --rpc-url $SEPOLIA_RPC --broadcast --verify
 ```
 
 ---

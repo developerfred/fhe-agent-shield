@@ -516,7 +516,7 @@ FHE_CONFIG = FHEConfig(
     memory_address="0x...",
     sealer_address="0x...",
     private_key="0x...",
-    rpc_url="https://api.helium.fhenix.zone",
+    rpc_url="https://rpc.sepolia.org",
     threshold=2
 )
 
@@ -661,8 +661,8 @@ pip install fhe-agent-shield
 
 | Network | Use Case |
 |---------|---------|
-| Fhenix Helium | Primary FHE network |
-| Fhenix Nitrogen | Latest FHE features |
+| Ethereum Sepolia | Primary FHE network |
+| Arbitrum Sepolia | Latest FHE features |
 | Arbitrum Sepolia | L2 integration |
 | Base Sepolia | L2 integration |
 

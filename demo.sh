@@ -11,7 +11,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Configuration
-RPC_URL="${FHENIX_RPC_URL:-https://api.helium.fhenix.zone}"
+RPC_URL="${SEPOLIA_RPC_URL:-https://rpc.sepolia.org}"
 CHAIN_ID=$(cast chain-id --rpc-url $RPC_URL 2>/dev/null || echo "unknown")
 
 echo -e "${YELLOW}========================================${NC}"
@@ -46,7 +46,7 @@ echo ""
 
 if [ "$BALANCE" = "0" ]; then
     echo -e "${RED}Error: Insufficient balance${NC}"
-    echo "Get testnet ETH at: https://faucet.helm.fhenix.zone/"
+    echo "Get testnet ETH at: https://faucet.sepolia.dev/"
     exit 1
 fi
 

@@ -4,15 +4,10 @@ defmodule FHEAgentShield.Config do
   """
 
   @networks %{
-    fhenix_helium: %{
-      chain_id: 42069,
-      rpc_url: "https://api.helium.fhenix.zone",
-      name: "Fhenix Helium"
-    },
-    fhenix_nitrogen: %{
-      chain_id: 42070,
-      rpc_url: "https://api.nitrogen.fhenix.zone",
-      name: "Fhenix Nitrogen"
+    ethereum_sepolia: %{
+      chain_id: 11155111,
+      rpc_url: "https://rpc.sepolia.org",
+      name: "Ethereum Sepolia"
     },
     arbitrum_sepolia: %{
       chain_id: 421_614,
@@ -62,7 +57,7 @@ defmodule FHEAgentShield.Config do
 
   ## Options
 
-  - `:network` - Network name (atom) - :fhenix_helium, :fhenix_nitrogen, :arbitrum_sepolia, :base_sepolia
+  - `:network` - Network name (atom) - :ethereum_sepolia, :arbitrum_sepolia, :base_sepolia
   - `:private_key` - Wallet private key
   - `:rpc_url` - Custom RPC URL (overrides network default)
   - `:contracts` - Custom contract addresses
@@ -70,13 +65,13 @@ defmodule FHEAgentShield.Config do
   ## Examples
 
       iex> config = FHEAgentShield.Config.new(
-      ...>   network: :fhenix_helium,
+      ...>   network: :ethereum_sepolia,
       ...>   private_key: "0x..."
       ...> )
   """
   @spec new(keyword()) :: t()
   def new(opts \\ []) do
-    network = Keyword.get(opts, :network, :fhenix_helium)
+    network = Keyword.get(opts, :network, :ethereum_sepolia)
     network_config = Map.fetch!(@networks, network)
 
     %__MODULE__{

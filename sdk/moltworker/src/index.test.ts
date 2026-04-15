@@ -11,7 +11,7 @@ describe('FHECredentialStore', () => {
 
   beforeEach(() => {
     store = new FHECredentialStore({
-      network: 'helium',
+      network: 'sepolia',
       contractAddress: '0x' + '0'.repeat(40),
     });
   });
@@ -60,8 +60,8 @@ describe('FHEProxy', () => {
 
   beforeEach(() => {
     proxy = new FHEProxy({
-      network: 'helium',
-      rpcUrl: 'https://api.helium.fhenix.zone',
+      network: 'sepolia',
+      rpcUrl: 'https://rpc.sepolia.org',
       contractAddress: '0x' + '0'.repeat(40),
     });
   });

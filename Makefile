@@ -1,19 +1,20 @@
 .PHONY: install build test test:coverage test:ts lint clean clean:all
-.PHONY: deploy deploy:fhenix-helium deploy:fhenix-nitrogen deploy:arbitrum-sepolia deploy:base-sepolia
+.PHONY: deploy deploy:sepolia deploy:arbitrum-sepolia deploy:base-sepolia
 .PHONY: fork:test fork:console console cast:call cast:send verify docs
 
 # ===========================================
 # CONFIGURATION
 # ===========================================
+# Fhenix CoFHE is a coprocessor — it runs on existing EVM host chains.
+# Supported testnets per https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility
 
-NETWORK ?= fhenix-helium
+NETWORK ?= sepolia
 RPC_URL := $(shell \
 	case $(NETWORK) in \
-		fhenix-helium) echo "https://api.helium.fhenix.zone" ;; \
-		fhenix-nitrogen) echo "https://api.nitrogen.fhenix.zone" ;; \
+		sepolia) echo "$${SEPOLIA_RPC:-https://rpc.sepolia.org}" ;; \
 		arbitrum-sepolia) echo "https://sepolia-rollup.arbitrum.io/rpc" ;; \
 		base-sepolia) echo "https://sepolia.base.org" ;; \
-		*) echo "https://api.helium.fhenix.zone" ;; \
+		*) echo "$${SEPOLIA_RPC:-https://rpc.sepolia.org}" ;; \
 	esac)
 
 # ===========================================
@@ -61,19 +62,13 @@ deploy:
 		--broadcast \
 		--verify
 
-deploy:fhenix-helium:
+deploy:sepolia:
 	forge script script/DeployAll.s.sol \
-		--rpc-url https://api.helium.fhenix.zone \
+		--rpc-url $${SEPOLIA_RPC:-https://rpc.sepolia.org} \
 		--private-key $(PRIVATE_KEY) \
 		--broadcast \
-		--verify
-
-deploy:fhenix-nitrogen:
-	forge script script/DeployAll.s.sol \
-		--rpc-url https://api.nitrogen.fhenix.zone \
-		--private-key $(PRIVATE_KEY) \
-		--broadcast \
-		--verify
+		--verify \
+		--etherscan-api-key $(API_KEY_ETHERSCAN)
 
 deploy:arbitrum-sepolia:
 	forge script script/DeployAll.s.sol \
@@ -159,16 +154,15 @@ help:
 	@echo "  make test:coverage  # Coverage report"
 	@echo "  make lint           # Format and lint"
 	@echo ""
-	@echo "Deployment:"
-	@echo "  make deploy                    # Deploy to NETWORK (default: fhenix-helium)"
-	@echo "  make deploy:fhenix-helium      # Deploy to Fhenix Helium"
-	@echo "  make deploy:fhenix-nitrogen    # Deploy to Fhenix Nitrogen"
+	@echo "Deployment (CoFHE-supported host chains):"
+	@echo "  make deploy                    # Deploy to NETWORK (default: sepolia)"
+	@echo "  make deploy:sepolia            # Deploy to Ethereum Sepolia"
 	@echo "  make deploy:arbitrum-sepolia   # Deploy to Arbitrum Sepolia"
 	@echo "  make deploy:base-sepolia       # Deploy to Base Sepolia"
 	@echo ""
 	@echo "Examples:"
-	@echo "  NETWORK=fhenix-nitrogen make deploy"
-	@echo "  make deploy:arbitrum-sepolia"
+	@echo "  NETWORK=arbitrum-sepolia make deploy"
+	@echo "  make deploy:base-sepolia"
 	@echo ""
 	@echo "Fork Testing:"
 	@echo "  make fork:test                  # Fork current network"

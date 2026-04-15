@@ -8,7 +8,7 @@ import type { Agent, Skill, Tool } from './types';
 
 // FHE Gateway configuration
 export interface FHEGatewayConfig {
-  network: 'helium' | 'nitrogen';
+  network: 'sepolia' | 'arbitrum-sepolia';
   vaultAddress: `0x${string}`;
   memoryAddress: `0x${string}`;
   threshold: number;

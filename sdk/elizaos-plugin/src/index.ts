@@ -9,7 +9,7 @@ export interface FHEShieldSettings {
     skillRegistry: Address;
     actionSealer: Address;
   };
-  network: 'fhenix-helium' | 'fhenix-nitrogen' | 'arbitrum-sepolia' | 'base-sepolia';
+  network: 'ethereum-sepolia' | 'arbitrum-sepolia' | 'arbitrum-sepolia' | 'base-sepolia';
   threshold: number;
 }
 

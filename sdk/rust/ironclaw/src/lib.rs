@@ -35,15 +35,15 @@ pub struct ZeroClawConfig {
 /// Network enum
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Network {
-    Helium,
-    Nitrogen,
+    Sepolia,
+    ArbitrumSepolia,
 }
 
 impl Network {
     pub fn rpc_url(&self) -> &'static str {
         match self {
-            Network::Helium => "https://api.helium.fhenix.zone",
-            Network::Nitrogen => "https://api.nitrogen.fhenix.zone",
+            Network::Sepolia => "https://rpc.sepolia.org",
+            Network::ArbitrumSepolia => "https://sepolia-rollup.arbitrum.io/rpc",
         }
     }
 }
@@ -54,14 +54,14 @@ mod tests {
 
     #[test]
     fn test_network_rpc_urls() {
-        assert_eq!(Network::Helium.rpc_url(), "https://api.helium.fhenix.zone");
-        assert_eq!(Network::Nitrogen.rpc_url(), "https://api.nitrogen.fhenix.zone");
+        assert_eq!(Network::Sepolia.rpc_url(), "https://rpc.sepolia.org");
+        assert_eq!(Network::ArbitrumSepolia.rpc_url(), "https://sepolia-rollup.arbitrum.io/rpc");
     }
 
     #[test]
     fn test_ironclaw_config() {
         let config = IronClawConfig {
-            network: Network::Helium,
+            network: Network::Sepolia,
             vault_address: [1u8; 20],
             threshold: 2,
             rpc_url: "http://localhost:8545".to_string(),
@@ -72,7 +72,7 @@ mod tests {
     #[test]
     fn test_zeroclaw_config() {
         let config = ZeroClawConfig {
-            network: Network::Helium,
+            network: Network::Sepolia,
             memory_address: [2u8; 20],
             rpc_url: "http://localhost:8545".to_string(),
         };

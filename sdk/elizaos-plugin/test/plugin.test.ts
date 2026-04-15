@@ -12,7 +12,7 @@ const mockSettings: FHEShieldSettings = {
     skillRegistry: '0x' + '44'.repeat(20),
     actionSealer: '0x' + '55'.repeat(20),
   },
-  network: 'fhenix-helium',
+  network: 'ethereum-sepolia',
   threshold: 2,
 };
 
@@ -232,7 +232,7 @@ describe('FHEShieldSettings Validation', () => {
         skillRegistry: '0x' + '33'.repeat(20),
         actionSealer: '0x' + '44'.repeat(20),
       },
-      network: 'fhenix-helium',
+      network: 'ethereum-sepolia',
       threshold: 2,
     };
 
@@ -244,8 +244,8 @@ describe('FHEShieldSettings Validation', () => {
 
   it('should support all 4 networks', () => {
     const networks: FHEShieldSettings['network'][] = [
-      'fhenix-helium',
-      'fhenix-nitrogen',
+      'ethereum-sepolia',
+      'arbitrum-sepolia',
       'arbitrum-sepolia',
       'base-sepolia',
     ];

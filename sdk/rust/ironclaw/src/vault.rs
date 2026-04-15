@@ -103,7 +103,7 @@ mod tests {
 
     fn create_test_config() -> FHEConfig {
         FHEConfig {
-            network: super::Network::Helium,
+            network: super::Network::Sepolia,
             vault_address: [1u8; 20],
             threshold: 2,
             rpc_url: "http://localhost:8545".to_string(),

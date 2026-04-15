@@ -14,13 +14,8 @@ func TestNewClient(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "Fhenix Helium",
-			network: fhe.FhenixHelium,
-			wantErr: false,
-		},
-		{
-			name:    "Fhenix Nitrogen",
-			network: fhe.FhenixNitrogen,
+			name:    "Ethereum Sepolia",
+			network: fhe.EthereumSepolia,
 			wantErr: false,
 		},
 		{
@@ -55,7 +50,7 @@ func TestNewClient(t *testing.T) {
 // TestClientAddress tests address derivation from private key
 func TestClientAddress(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -76,7 +71,7 @@ func TestClientAddress(t *testing.T) {
 // TestClientBalance tests balance retrieval
 func TestClientBalance(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -97,8 +92,7 @@ func TestNetworkRPCURL(t *testing.T) {
 		network fhe.Network
 		want    string
 	}{
-		{fhe.FhenixHelium, "https://api.helium.fhenix.zone"},
-		{fhe.FhenixNitrogen, "https://api.nitrogen.fhenix.zone"},
+		{fhe.EthereumSepolia, "https://rpc.sepolia.org"},
 		{fhe.ArbitrumSepolia, "https://sepolia-rollup.arbitrum.io/rpc"},
 		{fhe.BaseSepolia, "https://sepolia.base.org"},
 	}

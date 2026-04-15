@@ -7,7 +7,7 @@ export VAULT="0x..."        # AgentVault address
 export MEMORY="0x..."       # AgentMemory address  
 export SKILLS="0x..."       # SkillRegistry address
 export SEALER="0x..."       # ActionSealer address
-export RPC="https://api.helium.fhenix.zone"
+export RPC="https://rpc.sepolia.org"
 export PRIVATE_KEY="0x..."  # Your private key
 
 # Colors

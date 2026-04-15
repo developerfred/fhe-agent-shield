@@ -1,15 +1,9 @@
 export const NETWORKS = {
-    'fhenix-helium': {
-        name: 'fhenix-helium',
-        rpcUrl: 'https://api.helium.fhenix.zone',
-        chainId: 8008135,
-        explorerUrl: 'https://explorer.helium.fhenix.zone',
-    },
-    'fhenix-nitrogen': {
-        name: 'fhenix-nitrogen',
-        rpcUrl: 'https://api.nitrogen.fhenix.zone',
-        chainId: 8008148,
-        explorerUrl: 'https://explorer.nitrogen.fhenix.zone',
+    'ethereum-sepolia': {
+        name: 'ethereum-sepolia',
+        rpcUrl: 'https://rpc.sepolia.org',
+        chainId: 11155111,
+        explorerUrl: 'https://sepolia.etherscan.io',
     },
     'arbitrum-sepolia': {
         name: 'arbitrum-sepolia',

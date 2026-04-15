@@ -12,7 +12,7 @@ describe('FHECredentialManager', () => {
 
   beforeEach(() => {
     manager = new FHECredentialManager({
-      network: 'fhenix-helium',
+      network: 'ethereum-sepolia',
       privateKey: '0x' + 'a'.repeat(64),
       rpcUrl: 'http://localhost:8545',
       contracts: {
@@ -55,7 +55,7 @@ describe('FHEMemoryManager', () => {
 
   beforeEach(() => {
     manager = new FHEMemoryManager({
-      network: 'fhenix-helium',
+      network: 'ethereum-sepolia',
       privateKey: '0x' + 'a'.repeat(64),
       rpcUrl: 'http://localhost:8545',
       contracts: {
@@ -95,7 +95,7 @@ describe('FHEMemoryManager', () => {
 describe('MoltbookFHEClient', () => {
   it('should create client with config', () => {
     const client = new MoltbookFHEClient({
-      network: 'fhenix-helium',
+      network: 'ethereum-sepolia',
       privateKey: '0x' + 'a'.repeat(64),
       rpcUrl: 'http://localhost:8545',
       contracts: {

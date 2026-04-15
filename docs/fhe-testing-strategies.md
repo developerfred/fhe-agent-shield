@@ -201,22 +201,21 @@ forge-fhevm/=lib/forge-fhevm/src/
 
 ---
 
-## 4. Testnets Reais (Fhenix Helium/Nitrogen)
+## 4. Testnets Reais (Ethereum Sepolia/Arbitrum Sepolia)
 
 ### Redes Suportadas
 
 | Rede | Chain ID | RPC | Explorer |
 |------|----------|-----|----------|
-| Fhenix Helium | 8008135 | `https://api.helium.fhenix.zone` | `explorer.helium.fhenix.zone` |
-| Fhenix Nitrogen | 8008148 | `https://api.nitrogen.fhenix.zone` | `explorer.nitrogen.fhenix.zone` |
-| Base Sepolia | 84532 | `https://sepolia.base.org` | `sepolia.basescan.org` |
+| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org` | `sepolia.etherscan.io` |
 | Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | `sepolia.arbiscan.io` |
+| Base Sepolia | 84532 | `https://sepolia.base.org` | `sepolia.basescan.org` |
 
 ### Testes em Fork
 
 ```bash
 # Forkar testnet
-anvil --fork-url https://api.helium.fhenix.zone --port 8545
+anvil --fork-url https://rpc.sepolia.org --port 8545
 
 # Deploy e testar
 forge script script/Deploy.s.sol --rpc-url http://localhost:8545 --broadcast
@@ -268,7 +267,7 @@ forge script script/Deploy.s.sol --rpc-url http://localhost:8545 --broadcast
 |-------|--------|-----------|
 | Foundry (local) | ✅ 150 passing | MockFheOps |
 | Fork Arbitrum Sepolia | ✅ Working | `vm.etch` + contracts |
-| Fork Fhenix Helium | ⚠️ RPC issue | Aguardando |
+| Fork Ethereum Sepolia | ⚠️ RPC issue | Aguardando |
 | forge-fhevm | ❌ Not integrated | Próximo passo |
 
 ---
@@ -276,7 +275,7 @@ forge script script/Deploy.s.sol --rpc-url http://localhost:8545 --broadcast
 ## Próximos Passos
 
 1. **Integrar forge-fhevm** para testes mais realistas
-2. **Testar em Fhenix Nitrogen** quando RPC voltar
+2. **Testar em Arbitrum Sepolia** quando RPC voltar
 3. **Criar scripts de deploy** para cada testnet
 4. **Adicionar testes de ZK proofs**
 

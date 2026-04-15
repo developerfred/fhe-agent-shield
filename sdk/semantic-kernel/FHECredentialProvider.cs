@@ -8,10 +8,10 @@ namespace FHEAgentShield.SemanticKernel;
 /// </summary>
 public class FHEConfiguration
 {
-    public string Network { get; set; } = "helium";
+    public string Network { get; set; } = "sepolia";
     public string ContractAddress { get; set; } = "0x" + new string('0', 40);
     public int Threshold { get; set; } = 2;
-    public string RPCUrl { get; set; } = "https://api.helium.fhenix.zone";
+    public string RPCUrl { get; set; } = "https://rpc.sepolia.org";
 }
 
 /// <summary>

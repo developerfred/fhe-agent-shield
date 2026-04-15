@@ -4,8 +4,8 @@ const std = @import("std");
 
 /// Network enum
 pub const Network = enum {
-    helium,
-    nitrogen,
+    sepolia,
+    arbitrum_sepolia,
 };
 
 /// FHE Config for NullClaw
@@ -151,7 +151,7 @@ fn fheDecrypt(encrypted: [64]u8) []u8 {
 
 test "nullclaw_vault_store" {
     var config = FHEConfig{
-        .network = .helium,
+        .network = .sepolia,
         .contract_address = [_]u8{1} ** 20,
         .threshold = 2,
     };
@@ -165,7 +165,7 @@ test "nullclaw_vault_store" {
 
 test "nullclaw_memory_append" {
     var config = FHEConfig{
-        .network = .helium,
+        .network = .sepolia,
         .contract_address = [_]u8{1} ** 20,
         .threshold = 2,
     };

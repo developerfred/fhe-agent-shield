@@ -6,7 +6,7 @@ This directory contains fork tests for testing FHE-Agent Shield contracts on liv
 
 1. Set your Fhenix RPC URL:
 ```bash
-export FHENIX_RPC_URL="https://api.helium.fhenix.zone"
+export SEPOLIA_RPC_URL="https://rpc.sepolia.org"
 ```
 
 2. Run fork tests:

@@ -7,7 +7,7 @@
 import type { MemoryEntry } from './types.js';
 
 interface MemoryConfig {
-  network: 'fhenix-helium' | 'fhenix-nitrogen';
+  network: 'ethereum-sepolia' | 'arbitrum-sepolia';
   privateKey: `0x${string}`;
   rpcUrl: string;
   contracts: {

@@ -7,8 +7,8 @@ package claw
 type Network string
 
 const (
-	NetworkHelium   Network = "helium"
-	NetworkNitrogen Network = "nitrogen"
+	NetworkSepolia   Network = "sepolia"
+	NetworkArbitrumSepolia Network = "arbitrum-sepolia"
 )
 
 // Config for GoClaw FHE integration

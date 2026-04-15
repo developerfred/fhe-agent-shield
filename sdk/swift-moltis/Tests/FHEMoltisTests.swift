@@ -7,7 +7,7 @@ final class FHEMoltisTests: XCTestCase {
 
     override func setUp() async throws {
         let config = FHEConfig(
-            network: .helium,
+            network: .sepolia,
             contractAddress: Data(repeating: 0, count: 20),
             threshold: 2
         )

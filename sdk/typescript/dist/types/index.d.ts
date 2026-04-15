@@ -1,4 +1,11 @@
-export type NetworkName = 'fhenix-helium' | 'fhenix-nitrogen' | 'arbitrum-sepolia' | 'base-sepolia';
+/**
+ * CoFHE-supported host chains. Fhenix CoFHE is a coprocessor that runs on
+ * existing EVM chains rather than a dedicated L1/L2. The legacy Fhenix L2
+ * testnets (Helium, Nitrogen) have been retired.
+ *
+ * @see https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility
+ */
+export type NetworkName = 'ethereum-sepolia' | 'arbitrum-sepolia' | 'base-sepolia';
 export interface NetworkConfig {
     name: NetworkName;
     rpcUrl: string;

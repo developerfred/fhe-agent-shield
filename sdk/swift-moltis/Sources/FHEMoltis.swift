@@ -6,8 +6,8 @@ import Foundation
 
 /// Network configuration for Fhenix
 public enum FHENetwork: String, Codable, Sendable {
-    case helium = "helium"
-    case nitrogen = "nitrogen"
+    case sepolia = "sepolia"
+    case arbitrumSepolia = "arbitrum-sepolia"
 }
 
 /// Configuration for FHE Moltis Bridge
@@ -31,8 +31,8 @@ public struct FHEConfig: Sendable {
 
     private static func defaultRPC(for network: FHENetwork) -> String {
         switch network {
-        case .helium: return "https://api.helium.fhenix.zone"
-        case .nitrogen: return "https://api.nitrogen.fhenix.zone"
+        case .sepolia: return "https://rpc.sepolia.org"
+        case .arbitrumSepolia: return "https://sepolia-rollup.arbitrum.io/rpc"
         }
     }
 }

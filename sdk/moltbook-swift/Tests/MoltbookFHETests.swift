@@ -7,7 +7,7 @@ final class MoltbookFHETests: XCTestCase {
 
     override func setUp() async throws {
         let config = MoltbookConfig(
-            network: .helium,
+            network: .sepolia,
             vaultAddress: Data(repeating: 0, count: 20),
             memoryAddress: Data(repeating: 1, count: 20),
             threshold: 2

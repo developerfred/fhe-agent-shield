@@ -220,7 +220,7 @@ let protected_skill = vault.wrap_skill(base_skill, FHEConfig::default());
 ```elixir
 # ElixirClaw integration com FHE-Agent Shield
 {:ok, client} = FHEAgentShield.new(
-  network: :fhenix_helium,
+  network: :ethereum_sepolia,
   private_key: System.get_env("PRIVATE_KEY")
 )
 
@@ -325,7 +325,7 @@ const DOCKER_CONTAINER_NAME: &str = "jan-openclaw";
 ```
 langgraph.checkpointer = FHECheckpointSaver({
   contractAddress: '0x...',  // AgentMemory.sol
-  thresholdNetwork: 'https://api.helium.fhenix.zone',
+  thresholdNetwork: 'https://rpc.sepolia.org',
 });
 ```
 
@@ -349,7 +349,7 @@ langgraph.checkpointer = FHECheckpointSaver({
 from fhe_agent_shield import FHEAgentShield
 
 shield = FHEAgentShield(
-    network='fhenix-helium',
+    network='ethereum-sepolia',
     privateKey=os.getenv('PRIVATE_KEY'),
     contracts=contract_addresses,
 )
