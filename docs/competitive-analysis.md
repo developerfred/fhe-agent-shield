@@ -424,16 +424,19 @@ api_key = await vault.retrieve_credential(key='openai-api-key', permit='llm-acce
 ### Key Differentiators
 
 1. **Server Cannot Decrypt**
+
    - FHE allows computation on encrypted data
    - Even Fhenix nodes cannot see plaintext
    - Only threshold signature releases data
 
 2. **On-Chain State**
+
    - Credentials stored on Fhenix blockchain
    - No single database to breach
    - Decentralized trust model
 
 3. **Zero Trust Architecture**
+
    - Every credential access requires permit
    - Threshold decryption prevents single point of failure
    - Audit trail on-chain

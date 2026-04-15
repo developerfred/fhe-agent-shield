@@ -636,11 +636,13 @@ const types = {
 ### For Operators
 
 1. **Run diverse threshold nodes**
+
    - Use different hosting providers
    - Geographic distribution
    - Different key management systems
 
 2. **Monitor threshold network health**
+
    - Node availability
    - Decryption latency
    - Failed decryption attempts
@@ -662,6 +664,7 @@ const types = {
    ```
 
 2. **Never share permit private keys**
+
    - Hardware wallet storage
    - Never log or expose private keys
 
