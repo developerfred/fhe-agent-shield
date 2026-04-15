@@ -14,7 +14,7 @@
     "typescript": "^5.7.0"
   },
   "devDependencies": {
-    "vitest": "^2.0.0"
+    "vitest": "^4.1.4"
   },
   "keywords": [
     "fhe",
