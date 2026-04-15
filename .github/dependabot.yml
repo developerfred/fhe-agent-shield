@@ -1,15 +1,20 @@
 # Dependabot configuration.
 #
 # Covers every ecosystem that actually exists in this repo. We intentionally
-# skip the `lib/` submodules (external Foundry dependencies) and submodule
-# composer configs (there is no composer.json here).
+# skip the `lib/` submodules (external Foundry dependencies) and composer
+# (there is no composer.json here).
+#
+# Default policy: weekly cadence, ignore semver-major bumps everywhere.
+# Major upgrades (react 18→19, typescript 5→6, zod 3→4, etc.) require
+# manual coordination and a dedicated upgrade PR, so we don't let
+# Dependabot open them automatically.
 #
 # Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 version: 2
 updates:
   # ---------------------------------------------------------------------------
-  # GitHub Actions — keep workflow actions up to date, especially for security
-  # fixes in third-party actions.
+  # GitHub Actions — keep workflow actions up to date, especially for
+  # security fixes in third-party actions.
   # ---------------------------------------------------------------------------
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -19,6 +24,11 @@ updates:
     labels:
       - "dependencies"
       - "ci"
+    # Major version bumps of actions (e.g. actions/checkout@v4 → @v6) can
+    # silently change behaviour; hold them for a manual review.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # ---------------------------------------------------------------------------
   # npm — root (Foundry template tooling + prettier/solhint)
@@ -62,6 +72,9 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # ---------------------------------------------------------------------------
   # npm — ElizaOS plugin SDK
@@ -71,6 +84,9 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # ---------------------------------------------------------------------------
   # npm — Moltbook / Moltworker / Moltworker-KV SDKs
@@ -80,18 +96,27 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "npm"
     directory: "/sdk/moltworker"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "npm"
     directory: "/sdk/moltworker-kv"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # ---------------------------------------------------------------------------
   # Cargo — Rust SDK
@@ -113,6 +138,9 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   # ---------------------------------------------------------------------------
   # gomod — Go SDK
@@ -122,3 +150,6 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
