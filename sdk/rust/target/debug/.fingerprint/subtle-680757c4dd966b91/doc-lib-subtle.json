@@ -1,1 +1,13 @@
-{"rustc":16243257175721966122,"features":"[\"i128\"]","declared_features":"[\"const-generics\", \"core_hint_black_box\", \"default\", \"i128\", \"nightly\", \"std\"]","target":13005322332938347306,"profile":18121581068564224145,"path":6995915084009423430,"deps":[],"local":[{"Precalculated":"2.6.1"}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"i128\"]",
+  "declared_features": "[\"const-generics\", \"core_hint_black_box\", \"default\", \"i128\", \"nightly\", \"std\"]",
+  "target": 13005322332938347306,
+  "profile": 18121581068564224145,
+  "path": 6995915084009423430,
+  "deps": [],
+  "local": [{ "Precalculated": "2.6.1" }],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

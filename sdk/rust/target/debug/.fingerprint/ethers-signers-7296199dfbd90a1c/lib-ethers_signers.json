@@ -1,1 +1,32 @@
-{"rustc":16243257175721966122,"features":"[]","declared_features":"[\"aws\", \"celo\", \"coins-ledger\", \"futures\", \"futures-executor\", \"futures-util\", \"home\", \"ledger\", \"optimism\", \"rusoto_core\", \"rusoto_kms\", \"semver\", \"spki\", \"trezor\", \"trezor-client\", \"yubi\", \"yubihsm\"]","target":16909917776328476406,"profile":8276155916380437441,"path":12817570337198149645,"deps":[[5030409040180886167,"ethers_core",false,1159421771432122846],[5532490871506117733,"hex",false,3663706990774853644],[8008191657135824715,"thiserror",false,14446070140125964055],[8289734320466588414,"coins_bip32",false,5982459545727422337],[9052163989806427708,"eth_keystore",false,4850278602412333185],[9857275760291862238,"sha2",false,7078622377618208004],[10149501514950982522,"elliptic_curve",false,8622869748855529614],[10158026572194973967,"coins_bip39",false,16159541958792644934],[13208667028893622512,"rand",false,3298682112544331856],[14757622794040968908,"tracing",false,15318571111845137004],[16611674984963787466,"async_trait",false,7483656266569995011]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/ethers-signers-7296199dfbd90a1c/dep-lib-ethers_signers","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[]",
+  "declared_features": "[\"aws\", \"celo\", \"coins-ledger\", \"futures\", \"futures-executor\", \"futures-util\", \"home\", \"ledger\", \"optimism\", \"rusoto_core\", \"rusoto_kms\", \"semver\", \"spki\", \"trezor\", \"trezor-client\", \"yubi\", \"yubihsm\"]",
+  "target": 16909917776328476406,
+  "profile": 8276155916380437441,
+  "path": 12817570337198149645,
+  "deps": [
+    [5030409040180886167, "ethers_core", false, 1159421771432122846],
+    [5532490871506117733, "hex", false, 3663706990774853644],
+    [8008191657135824715, "thiserror", false, 14446070140125964055],
+    [8289734320466588414, "coins_bip32", false, 5982459545727422337],
+    [9052163989806427708, "eth_keystore", false, 4850278602412333185],
+    [9857275760291862238, "sha2", false, 7078622377618208004],
+    [10149501514950982522, "elliptic_curve", false, 8622869748855529614],
+    [10158026572194973967, "coins_bip39", false, 16159541958792644934],
+    [13208667028893622512, "rand", false, 3298682112544331856],
+    [14757622794040968908, "tracing", false, 15318571111845137004],
+    [16611674984963787466, "async_trait", false, 7483656266569995011]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/ethers-signers-7296199dfbd90a1c/dep-lib-ethers_signers",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

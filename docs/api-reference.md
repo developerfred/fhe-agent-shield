@@ -32,15 +32,13 @@ function storeCredential(
 ) external returns (bytes32)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | The agent ID to store the credential for |
-| `encryptedValue` | inEuint256 | Encrypted credential value (ciphertext handle) |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | The agent ID to
+store the credential for | | `encryptedValue` | inEuint256 | Encrypted credential value (ciphertext handle) |
 
 **Returns:** `bytes32` — Handle to the stored credential
 
 **Example:**
+
 ```solidity
 // Store encrypted API key
 bytes32 handle = agentVault.storeCredential(
@@ -62,11 +60,8 @@ function retrieveCredential(
 ) external view returns (bytes memory)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `handle` | bytes32 | Handle of the credential to retrieve |
-| `permit` | Permission | EIP-712 permit for access authorization |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `handle` | bytes32 | Handle of the
+credential to retrieve | | `permit` | Permission | EIP-712 permit for access authorization |
 
 **Returns:** `bytes` — Encrypted credential value
 
@@ -85,11 +80,8 @@ function grantRetrievePermission(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `grantee` | address | Address to grant permission to |
-| `handle` | bytes32 | Handle of the credential |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `grantee` | address | Address to grant
+permission to | | `handle` | bytes32 | Handle of the credential |
 
 ---
 
@@ -104,11 +96,8 @@ function revokePermission(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `grantee` | address | Address to revoke permission from |
-| `handle` | bytes32 | Handle of the credential |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `grantee` | address | Address to revoke
+permission from | | `handle` | bytes32 | Handle of the credential |
 
 ---
 
@@ -123,11 +112,8 @@ function updateThreshold(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent ID to update threshold for |
-| `newThreshold` | uint8 | New threshold value (1-255) |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent ID to update
+threshold for | | `newThreshold` | uint8 | New threshold value (1-255) |
 
 ---
 
@@ -141,10 +127,7 @@ function credentialExists(
 ) external view returns (bool)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `handle` | bytes32 | Handle to check |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `handle` | bytes32 | Handle to check |
 
 **Returns:** `bool` — True if credential exists
 
@@ -160,10 +143,8 @@ function getCredentialOwner(
 ) external view returns (address)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `handle` | bytes32 | Handle of the credential |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `handle` | bytes32 | Handle of the
+credential |
 
 **Returns:** `address` — Owner of the credential
 
@@ -184,6 +165,7 @@ function initializeAgent() external returns (address)
 **Returns:** `address` — Newly created agent ID
 
 **Example:**
+
 ```solidity
 address agentId = agentMemory.initializeAgent();
 ```
@@ -201,11 +183,8 @@ function appendContext(
 ) external returns (uint256)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent to append context to |
-| `encryptedChunk` | inEuint256 | Encrypted context chunk |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent to append
+context to | | `encryptedChunk` | inEuint256 | Encrypted context chunk |
 
 **Returns:** `uint256` — New context length
 
@@ -223,12 +202,8 @@ function getContextSlice(
 ) external view returns (bytes[] memory)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent to get context from |
-| `offset` | uint256 | Starting index |
-| `length` | uint256 | Number of chunks to retrieve |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent to get context
+from | | `offset` | uint256 | Starting index | | `length` | uint256 | Number of chunks to retrieve |
 
 **Returns:** `bytes[]` — Array of encrypted context chunks
 
@@ -244,10 +219,7 @@ function snapshotContext(
 ) external returns (bytes32)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent to snapshot |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent to snapshot |
 
 **Returns:** `bytes32` — Snapshot ID
 
@@ -264,11 +236,8 @@ function restoreFromSnapshot(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent to restore |
-| `snapshotId` | bytes32 | Snapshot to restore from |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent to restore | |
+`snapshotId` | bytes32 | Snapshot to restore from |
 
 ---
 
@@ -282,10 +251,7 @@ function getContextLength(
 ) external view returns (uint256)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent to query |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent to query |
 
 **Returns:** `uint256` — Current context length
 
@@ -301,10 +267,7 @@ function getAgentOwner(
 ) external view returns (address)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent to query |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent to query |
 
 **Returns:** `address` — Owner of the agent
 
@@ -325,11 +288,8 @@ function registerSkill(
 ) external returns (address)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `metadataHash` | bytes32 | Hash of encrypted skill metadata |
-| `codeHash` | bytes32 | Hash of skill code |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `metadataHash` | bytes32 | Hash of
+encrypted skill metadata | | `codeHash` | bytes32 | Hash of skill code |
 
 **Returns:** `address` — Registered skill ID
 
@@ -345,10 +305,7 @@ function verifySkill(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `skillId` | address | Skill to verify |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `skillId` | address | Skill to verify |
 
 ---
 
@@ -363,11 +320,8 @@ function rateSkill(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `skillId` | address | Skill to rate |
-| `encryptedRating` | inEuint256 | Encrypted rating value (1-5) |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `skillId` | address | Skill to rate | |
+`encryptedRating` | inEuint256 | Encrypted rating value (1-5) |
 
 ---
 
@@ -382,11 +336,8 @@ function executeSkill(
 ) external returns (bytes memory)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `skillId` | address | Skill to execute |
-| `input` | bytes | Encoded input data |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `skillId` | address | Skill to execute | |
+`input` | bytes | Encoded input data |
 
 **Returns:** `bytes` — Encoded output data
 
@@ -406,17 +357,10 @@ function getSkill(
 )
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `skillId` | address | Skill to query |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `skillId` | address | Skill to query |
 
-**Returns:**
-| Name | Type | Description |
-|------|------|-------------|
-| `publisher` | address | Skill publisher |
-| `isVerified` | bool | Whether skill is verified |
-| `ratingCount` | uint256 | Number of ratings |
+**Returns:** | Name | Type | Description | |------|------|-------------| | `publisher` | address | Skill publisher | |
+`isVerified` | bool | Whether skill is verified | | `ratingCount` | uint256 | Number of ratings |
 
 ---
 
@@ -435,11 +379,8 @@ function sealAction(
 ) external returns (address)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `agentId` | address | Agent ID creating the action |
-| `encryptedPayload` | bytes | Encrypted action payload |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `agentId` | address | Agent ID creating
+the action | | `encryptedPayload` | bytes | Encrypted action payload |
 
 **Returns:** `address` — Action ID
 
@@ -457,12 +398,8 @@ function registerReleaseCondition(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `actionId` | address | Action to register condition for |
-| `threshold` | uint8 | Number of approvals required |
-| `timeout` | uint256 | Timeout in seconds |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `actionId` | address | Action to register
+condition for | | `threshold` | uint8 | Number of approvals required | | `timeout` | uint256 | Timeout in seconds |
 
 ---
 
@@ -476,10 +413,7 @@ function approveRelease(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `actionId` | address | Action to approve |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `actionId` | address | Action to approve |
 
 ---
 
@@ -493,10 +427,7 @@ function releaseAction(
 ) external returns (bytes memory)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `permit` | bytes | Release permit |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `permit` | bytes | Release permit |
 
 **Returns:** `bytes` — Decrypted action payload
 
@@ -512,10 +443,7 @@ function cancelAction(
 ) external
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `actionId` | address | Action to cancel |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `actionId` | address | Action to cancel |
 
 ---
 
@@ -529,10 +457,7 @@ function getActionStatus(
 ) external view returns (ActionStatus)
 ```
 
-**Parameters:**
-| Name | Type | Description |
-|------|------|-------------|
-| `actionId` | address | Action to query |
+**Parameters:** | Name | Type | Description | |------|------|-------------| | `actionId` | address | Action to query |
 
 **Returns:** `ActionStatus` — Current status (Sealed, Approved, Released, Cancelled, Expired)
 
@@ -545,17 +470,17 @@ function getActionStatus(
 Core FHE encryption/decryption client.
 
 ```typescript
-import { useFHEClient } from './hooks/useFHEClient';
+import { useFHEClient } from "./hooks/useFHEClient";
 
 function MyComponent() {
-  const { 
-    client,           // FHE client instance
-    encrypt,          // Encrypt data for storage
-    decrypt,          // Decrypt data with permit
+  const {
+    client, // FHE client instance
+    encrypt, // Encrypt data for storage
+    decrypt, // Decrypt data with permit
     verifyPermission, // Verify an EIP-712 permit
-    isInitialized     // Client initialization status
+    isInitialized, // Client initialization status
   } = useFHEClient();
-  
+
   // ...
 }
 ```
@@ -594,19 +519,19 @@ const isValid = await verifyPermission(permit);
 Encrypted agent state management.
 
 ```typescript
-import { useEncryptedAgent } from './hooks/useEncryptedAgent';
+import { useEncryptedAgent } from "./hooks/useEncryptedAgent";
 
 function AgentComponent({ agentId }: { agentId: string }) {
   const {
-    state,              // EncryptedAgentState
-    initialize,         // Initialize agent
-    appendContext,      // Append encrypted context
+    state, // EncryptedAgentState
+    initialize, // Initialize agent
+    appendContext, // Append encrypted context
     getDecryptedContext, // Get and decrypt context
-    snapshot,           // Create context snapshot
-    restore,            // Restore from snapshot
-    isInitialized       // Agent initialized status
+    snapshot, // Create context snapshot
+    restore, // Restore from snapshot
+    isInitialized, // Agent initialized status
   } = useEncryptedAgent(agentId);
-  
+
   // ...
 }
 ```
@@ -673,18 +598,18 @@ await restore(snapshotId);
 Credential storage and retrieval.
 
 ```typescript
-import { useAgentVault } from './hooks/useAgentVault';
+import { useAgentVault } from "./hooks/useAgentVault";
 
 function VaultComponent({ agentId }: { agentId: string }) {
   const {
-    storeCredential,     // Store encrypted credential
-    retrieveCredential,  // Retrieve and decrypt credential
-    grantAccess,         // Grant access to another address
-    revokeAccess,        // Revoke access
-    hasCredential,       // Check if credential exists
-    getCredentialCount   // Get number of credentials
+    storeCredential, // Store encrypted credential
+    retrieveCredential, // Retrieve and decrypt credential
+    grantAccess, // Grant access to another address
+    revokeAccess, // Revoke access
+    hasCredential, // Check if credential exists
+    getCredentialCount, // Get number of credentials
   } = useAgentVault(agentId);
-  
+
   // ...
 }
 ```
@@ -730,19 +655,19 @@ await revokeAccess("OPENAI_API_KEY", "0x123...");
 Sealed action lifecycle management.
 
 ```typescript
-import { useSealedAction } from './hooks/useSealedAction';
+import { useSealedAction } from "./hooks/useSealedAction";
 
 function SealedActionComponent() {
   const {
-    sealAction,          // Create sealed action
-    registerCondition,   // Register release condition
-    approve,             // Approve release
-    release,             // Release and execute
-    cancel,              // Cancel action
-    getStatus,           // Get action status
-    actions              // List of user's actions
+    sealAction, // Create sealed action
+    registerCondition, // Register release condition
+    approve, // Approve release
+    release, // Release and execute
+    cancel, // Cancel action
+    getStatus, // Get action status
+    actions, // List of user's actions
   } = useSealedAction();
-  
+
   // ...
 }
 ```
@@ -807,13 +732,13 @@ const status = await getStatus(actionId);
 Wraps any OpenClaw skill with FHE protection.
 
 ```typescript
-import { FHESkillDecorator } from './openclaw/fhe-skill-decorator';
+import { FHESkillDecorator } from "./openclaw/fhe-skill-decorator";
 
 const secureSkill = FHESkillDecorator.wrap(baseSkill, {
   inputEncryption: true,
   outputEncryption: true,
   credentialVault: vaultAddress,
-  requirePermits: ['read_email', 'send_email'],
+  requirePermits: ["read_email", "send_email"],
   flags: {
     requireThreshold: true,
     thresholdValue: 3n,
@@ -861,15 +786,15 @@ Creates FHE-protected file skill.
 
 ```typescript
 interface FHESkillDecoratorConfig {
-  inputEncryption: boolean;        // Encrypt skill inputs
-  outputEncryption: boolean;       // Encrypt skill outputs
-  credentialVault?: address;        // Vault contract address
-  requirePermits?: string[];        // Required permit types
+  inputEncryption: boolean; // Encrypt skill inputs
+  outputEncryption: boolean; // Encrypt skill outputs
+  credentialVault?: address; // Vault contract address
+  requirePermits?: string[]; // Required permit types
   flags?: {
-    sealInput?: boolean;            // Seal input ciphertext
-    sealOutput?: boolean;           // Seal output ciphertext
-    requireThreshold?: boolean;     // Require threshold decryption
-    thresholdValue?: bigint;        // Threshold value
+    sealInput?: boolean; // Seal input ciphertext
+    sealOutput?: boolean; // Seal output ciphertext
+    requireThreshold?: boolean; // Require threshold decryption
+    thresholdValue?: bigint; // Threshold value
   };
 }
 ```
@@ -881,11 +806,11 @@ interface FHESkillDecoratorConfig {
 Memory provider for OpenClaw with encryption.
 
 ```typescript
-import { FHEAgentMemoryProvider } from './openclaw/fhe-memory-provider';
+import { FHEAgentMemoryProvider } from "./openclaw/fhe-memory-provider";
 
 const memoryProvider = await FHEAgentMemoryProvider.create({
   contractAddress: agentMemoryAddress,
-  thresholdNetworkUrl: 'https://rpc.sepolia.org',
+  thresholdNetworkUrl: "https://rpc.sepolia.org",
   minApprovals: 2n,
 });
 ```
@@ -937,11 +862,11 @@ Factory method to create and initialize.
 Credential manager for OpenClaw.
 
 ```typescript
-import { FHECredentialVault } from './openclaw/fhe-credential-vault';
+import { FHECredentialVault } from "./openclaw/fhe-credential-vault";
 
 const vault = await FHECredentialVault.create({
   contractAddress: agentVaultAddress,
-  thresholdNetworkUrl: 'https://rpc.sepolia.org',
+  thresholdNetworkUrl: "https://rpc.sepolia.org",
   defaultThreshold: 2n,
 });
 ```
@@ -1018,8 +943,8 @@ type bool = boolean;
 
 ```typescript
 interface EncryptedValue {
-  handle: string;  // Ciphertext handle
-  type: 'euint256' | 'euint128' | 'euint64' | 'euint32' | 'euint16' | 'euint8' | 'ebool';
+  handle: string; // Ciphertext handle
+  type: "euint256" | "euint128" | "euint64" | "euint32" | "euint16" | "euint8" | "ebool";
 }
 ```
 
@@ -1027,27 +952,27 @@ interface EncryptedValue {
 
 ```typescript
 interface Permit {
-  signer: address;      // Permit signer
-  user: address;        // User address
-  resource: address;    // Resource being accessed
-  expiresAt: bigint;    // Expiration timestamp
-  nonce: bigint;        // Nonce for replay protection
-  v: number;            // Signature v
-  r: string;            // Signature r
-  s: string;            // Signature s
+  signer: address; // Permit signer
+  user: address; // User address
+  resource: address; // Resource being accessed
+  expiresAt: bigint; // Expiration timestamp
+  nonce: bigint; // Nonce for replay protection
+  v: number; // Signature v
+  r: string; // Signature r
+  s: string; // Signature s
 }
 ```
 
 ### PermissionLevel
 
 ```typescript
-type PermissionLevel = 'none' | 'read' | 'write' | 'admin';
+type PermissionLevel = "none" | "read" | "write" | "admin";
 ```
 
 ### ActionStatus
 
 ```typescript
-type ActionStatus = 'Sealed' | 'Approved' | 'Released' | 'Cancelled' | 'Expired';
+type ActionStatus = "Sealed" | "Approved" | "Released" | "Cancelled" | "Expired";
 ```
 
 ### EncryptedAgentState
@@ -1201,42 +1126,42 @@ event ActionCancelled(
 
 ### AgentVault Errors
 
-| Error | Signature | Description |
-|-------|-----------|-------------|
-| `CredentialNotFound` | `0x...` | Credential handle does not exist |
-| `NotCredentialOwner` | `0x...` | Caller is not credential owner |
-| `PermissionDenied` | `0x...` | Permit validation failed |
-| `InvalidThreshold` | `0x...` | Threshold value out of range |
+| Error                | Signature | Description                      |
+| -------------------- | --------- | -------------------------------- |
+| `CredentialNotFound` | `0x...`   | Credential handle does not exist |
+| `NotCredentialOwner` | `0x...`   | Caller is not credential owner   |
+| `PermissionDenied`   | `0x...`   | Permit validation failed         |
+| `InvalidThreshold`   | `0x...`   | Threshold value out of range     |
 
 ### AgentMemory Errors
 
-| Error | Signature | Description |
-|-------|-----------|-------------|
-| `AgentNotInitialized` | `0x...` | Agent does not exist |
-| `NotAgentOwner` | `0x...` | Caller is not agent owner |
-| `SnapshotNotFound` | `0x...` | Snapshot does not exist |
-| `InvalidContextSlice` | `0x...` | Offset/length out of range |
+| Error                 | Signature | Description                |
+| --------------------- | --------- | -------------------------- |
+| `AgentNotInitialized` | `0x...`   | Agent does not exist       |
+| `NotAgentOwner`       | `0x...`   | Caller is not agent owner  |
+| `SnapshotNotFound`    | `0x...`   | Snapshot does not exist    |
+| `InvalidContextSlice` | `0x...`   | Offset/length out of range |
 
 ### SkillRegistry Errors
 
-| Error | Signature | Description |
-|-------|-----------|-------------|
-| `SkillNotFound` | `0x...` | Skill does not exist |
-| `AlreadyVerified` | `0x...` | Skill already verified |
-| `InvalidRating` | `0x...` | Rating out of valid range |
-| `PublisherMismatch` | `0x...` | Caller is not skill publisher |
+| Error               | Signature | Description                   |
+| ------------------- | --------- | ----------------------------- |
+| `SkillNotFound`     | `0x...`   | Skill does not exist          |
+| `AlreadyVerified`   | `0x...`   | Skill already verified        |
+| `InvalidRating`     | `0x...`   | Rating out of valid range     |
+| `PublisherMismatch` | `0x...`   | Caller is not skill publisher |
 
 ### ActionSealer Errors
 
-| Error | Signature | Description |
-|-------|-----------|-------------|
-| `ActionNotFound` | `0x...` | Action does not exist |
-| `ActionNotSealed` | `0x...` | Action is not in Sealed status |
-| `ThresholdNotMet` | `0x...` | Not enough approvals |
-| `ActionExpired` | `0x...` | Action timeout reached |
-| `AlreadyApproved` | `0x...` | Caller already approved |
-| `AlreadyReleased` | `0x...` | Action already released |
-| `AlreadyCancelled` | `0x...` | Action already cancelled |
+| Error              | Signature | Description                    |
+| ------------------ | --------- | ------------------------------ |
+| `ActionNotFound`   | `0x...`   | Action does not exist          |
+| `ActionNotSealed`  | `0x...`   | Action is not in Sealed status |
+| `ThresholdNotMet`  | `0x...`   | Not enough approvals           |
+| `ActionExpired`    | `0x...`   | Action timeout reached         |
+| `AlreadyApproved`  | `0x...`   | Caller already approved        |
+| `AlreadyReleased`  | `0x...`   | Action already released        |
+| `AlreadyCancelled` | `0x...`   | Action already cancelled       |
 
 ---
 
@@ -1245,9 +1170,9 @@ event ActionCancelled(
 ### Complete Flow: Agent with Credentials
 
 ```typescript
-import { useEncryptedAgent } from './hooks/useEncryptedAgent';
-import { useAgentVault } from './hooks/useAgentVault';
-import { FHESkillDecorator } from './openclaw/fhe-skill-decorator';
+import { useEncryptedAgent } from "./hooks/useEncryptedAgent";
+import { useAgentVault } from "./hooks/useAgentVault";
+import { FHESkillDecorator } from "./openclaw/fhe-skill-decorator";
 
 async function setupSecureAgent(agentId: string) {
   // 1. Initialize agent memory
@@ -1256,17 +1181,17 @@ async function setupSecureAgent(agentId: string) {
 
   // 2. Setup credential vault
   const { storeCredential, retrieveCredential } = useAgentVault(agentId);
-  
+
   // 3. Store encrypted credentials
-  await storeCredential('OPENAI_API_KEY', 'sk-...');
-  await storeCredential('SENDGRID_KEY', 'SG....');
+  await storeCredential("OPENAI_API_KEY", "sk-...");
+  await storeCredential("SENDGRID_KEY", "SG....");
 
   // 4. Create FHE-protected email skill
   const secureEmailSkill = FHESkillDecorator.wrap(emailSkill, {
     inputEncryption: true,
     outputEncryption: true,
     credentialVault: vaultAddress,
-    requirePermits: ['read_email', 'send_email'],
+    requirePermits: ["read_email", "send_email"],
   });
 
   return { secureEmailSkill };
@@ -1276,17 +1201,16 @@ async function setupSecureAgent(agentId: string) {
 ### Complete Flow: Sealed Action
 
 ```typescript
-import { useSealedAction } from './hooks/useSealedAction';
+import { useSealedAction } from "./hooks/useSealedAction";
 
 async function setupTimedTransfer(agentId: string) {
-  const { sealAction, registerCondition, approve, release, getStatus } = 
-    useSealedAction();
+  const { sealAction, registerCondition, approve, release, getStatus } = useSealedAction();
 
   // 1. Seal a transfer action
   const action = await sealAction(agentId, {
-    to: '0x...',
+    to: "0x...",
     amount: 1000,
-    token: 'USDC',
+    token: "USDC",
   });
 
   // 2. Require 3-of-5 approvals, 1 hour timeout
@@ -1308,5 +1232,4 @@ async function setupTimedTransfer(agentId: string) {
 
 ---
 
-*Last Updated: March 2026*
-*Version: 1.0*
+_Last Updated: March 2026_ _Version: 1.0_

@@ -12,7 +12,13 @@ contract ExampleToken is FHERC20, AccessControl {
 
     uint256 public immutable initialSupply;
 
-    constructor(string memory tokenName, string memory tokenSymbol, uint256 initialBalance) FHERC20(tokenName, tokenSymbol) {
+    constructor(
+        string memory tokenName,
+        string memory tokenSymbol,
+        uint256 initialBalance
+    )
+        FHERC20(tokenName, tokenSymbol)
+    {
         initialSupply = initialBalance;
         if (!_grantRole(MINTER_ROLE, msg.sender)) {
             revert RoleGrantFailed();

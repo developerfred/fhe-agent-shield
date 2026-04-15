@@ -1,1 +1,25 @@
-{"rustc":16243257175721966122,"features":"[]","declared_features":"[]","target":11741344646342529620,"profile":5347358027863023418,"path":14022057124692869859,"deps":[[5030409040180886167,"ethers_core",false,17196818534356899654],[5855319743879205494,"once_cell",false,490342755007604911],[13548984313718623784,"serde",false,10488237158223899787],[13795362694956882968,"serde_json",false,9076737265352573521]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/ethers-addressbook-28f7700c6a56e91c/dep-lib-ethers_addressbook","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[]",
+  "declared_features": "[]",
+  "target": 11741344646342529620,
+  "profile": 5347358027863023418,
+  "path": 14022057124692869859,
+  "deps": [
+    [5030409040180886167, "ethers_core", false, 17196818534356899654],
+    [5855319743879205494, "once_cell", false, 490342755007604911],
+    [13548984313718623784, "serde", false, 10488237158223899787],
+    [13795362694956882968, "serde_json", false, 9076737265352573521]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/ethers-addressbook-28f7700c6a56e91c/dep-lib-ethers_addressbook",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

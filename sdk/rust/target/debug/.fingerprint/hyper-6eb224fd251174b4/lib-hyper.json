@@ -1,1 +1,32 @@
-{"rustc":16243257175721966122,"features":"[\"client\", \"h2\", \"http1\", \"http2\", \"runtime\", \"socket2\", \"tcp\"]","declared_features":"[\"__internal_happy_eyeballs_tests\", \"backports\", \"client\", \"default\", \"deprecated\", \"ffi\", \"full\", \"h2\", \"http1\", \"http2\", \"libc\", \"nightly\", \"runtime\", \"server\", \"socket2\", \"stream\", \"tcp\"]","target":5299595107718448861,"profile":5347358027863023418,"path":7976096580569675884,"deps":[[302948626015856208,"futures_core",false,4012526152518910979],[784494742817713399,"tower_service",false,3607374842236170816],[1569313478171189446,"want",false,1018267345269182761],[2251399859588827949,"pin_project_lite",false,9651668255052435548],[3870702314125662939,"bytes",false,5786248899872891252],[4405182208873388884,"http",false,10746446156301647067],[5532778797167691009,"itoa",false,13194328784109938323],[5898568623609459682,"futures_util",false,851455120657389049],[6163892036024256188,"httparse",false,16469443907341377046],[6304235478050270880,"httpdate",false,10008982237118783054],[8915503303801890683,"http_body",false,4973940359679985979],[9128867168860799549,"futures_channel",false,16429110117894837050],[12614995553916589825,"socket2",false,1367866242981403520],[13298363700532491723,"tokio",false,2345281262647258956],[13763625454224483636,"h2",false,5947174726933740505],[14757622794040968908,"tracing",false,11493138197449252273]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/hyper-6eb224fd251174b4/dep-lib-hyper","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"client\", \"h2\", \"http1\", \"http2\", \"runtime\", \"socket2\", \"tcp\"]",
+  "declared_features": "[\"__internal_happy_eyeballs_tests\", \"backports\", \"client\", \"default\", \"deprecated\", \"ffi\", \"full\", \"h2\", \"http1\", \"http2\", \"libc\", \"nightly\", \"runtime\", \"server\", \"socket2\", \"stream\", \"tcp\"]",
+  "target": 5299595107718448861,
+  "profile": 5347358027863023418,
+  "path": 7976096580569675884,
+  "deps": [
+    [302948626015856208, "futures_core", false, 4012526152518910979],
+    [784494742817713399, "tower_service", false, 3607374842236170816],
+    [1569313478171189446, "want", false, 1018267345269182761],
+    [2251399859588827949, "pin_project_lite", false, 9651668255052435548],
+    [3870702314125662939, "bytes", false, 5786248899872891252],
+    [4405182208873388884, "http", false, 10746446156301647067],
+    [5532778797167691009, "itoa", false, 13194328784109938323],
+    [5898568623609459682, "futures_util", false, 851455120657389049],
+    [6163892036024256188, "httparse", false, 16469443907341377046],
+    [6304235478050270880, "httpdate", false, 10008982237118783054],
+    [8915503303801890683, "http_body", false, 4973940359679985979],
+    [9128867168860799549, "futures_channel", false, 16429110117894837050],
+    [12614995553916589825, "socket2", false, 1367866242981403520],
+    [13298363700532491723, "tokio", false, 2345281262647258956],
+    [13763625454224483636, "h2", false, 5947174726933740505],
+    [14757622794040968908, "tracing", false, 11493138197449252273]
+  ],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/hyper-6eb224fd251174b4/dep-lib-hyper", "checksum": false } }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

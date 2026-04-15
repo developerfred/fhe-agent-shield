@@ -75,28 +75,28 @@ contract InteractWithContracts is Script {
         ActionSealer actionSealer = new ActionSealer();
 
         console2.log("=== Testing AgentVault ===");
-        
+
         // Test storing a credential (simulated encrypted value)
         bytes32 testHandle = bytes32(uint256(1));
         console2.log("Storing credential with handle:", vm.toString(testHandle));
-        
+
         // For testing purposes, we'll use a simple handle
         // In production, this would be an encrypted value from FHE
-        
+
         console2.log("=== Testing AgentMemory ===");
-        
+
         // Initialize an agent
         console2.log("Initializing agent...");
-        
+
         console2.log("=== Testing SkillRegistry ===");
-        
+
         // Register a skill
         bytes32 metadataHash = keccak256("test-skill-metadata");
         bytes32 codeHash = keccak256("test-skill-code");
         console2.log("Registering skill with metadataHash:", vm.toString(metadataHash));
-        
+
         console2.log("=== Testing ActionSealer ===");
-        
+
         // Seal an action
         bytes memory testPayload = abi.encode("test action");
         console2.log("Sealing action with payload:", vm.toString(testPayload));
@@ -125,22 +125,22 @@ contract DeployAndInteract is Script {
 
         // Deploy all contracts
         console2.log("=== Phase 1: Deploying Contracts ===");
-        
+
         AgentVault agentVault = new AgentVault();
         console2.log("AgentVault:", address(agentVault));
-        
+
         AgentMemory agentMemory = new AgentMemory();
         console2.log("AgentMemory:", address(agentMemory));
-        
+
         SkillRegistry skillRegistry = new SkillRegistry();
         console2.log("SkillRegistry:", address(skillRegistry));
-        
+
         ActionSealer actionSealer = new ActionSealer();
         console2.log("ActionSealer:", address(actionSealer));
 
         console2.log("");
         console2.log("=== Phase 2: Testing AgentVault ===");
-        
+
         // Test AgentVault functions
         // Note: In real FHE, we would use encrypted values
         // Here we simulate the interface
@@ -148,13 +148,13 @@ contract DeployAndInteract is Script {
 
         console2.log("");
         console2.log("=== Phase 3: Testing AgentMemory ===");
-        
+
         // Test AgentMemory functions
         console2.log("AgentMemory initializeAgent interface tested");
 
         console2.log("");
         console2.log("=== Phase 4: Testing SkillRegistry ===");
-        
+
         // Test SkillRegistry functions
         bytes32 metadataHash = keccak256("email-skill-v1");
         bytes32 codeHash = keccak256("email-skill-code");
@@ -162,9 +162,9 @@ contract DeployAndInteract is Script {
 
         console2.log("");
         console2.log("=== Phase 5: Testing ActionSealer ===");
-        
+
         // Test ActionSealer functions
-        bytes memory payload = abi.encode(12345);
+        bytes memory payload = abi.encode(12_345);
         console2.log("Action payload:", vm.toString(payload));
 
         vm.stopBroadcast();
@@ -173,7 +173,7 @@ contract DeployAndInteract is Script {
         console2.log("===========================================");
         console2.log("Deployment & Testing Complete!");
         console2.log("===========================================");
-        
+
         // Output deployment info for verification
         console2.log("");
         console2.log("Deployed Contracts:");

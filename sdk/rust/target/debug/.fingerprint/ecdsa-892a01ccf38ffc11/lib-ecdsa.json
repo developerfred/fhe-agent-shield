@@ -1,1 +1,22 @@
-{"rustc":16243257175721966122,"features":"[\"alloc\", \"arithmetic\", \"der\", \"digest\", \"hazmat\", \"pkcs8\", \"rfc6979\", \"signing\", \"spki\", \"std\", \"verifying\"]","declared_features":"[\"alloc\", \"arithmetic\", \"default\", \"der\", \"dev\", \"digest\", \"hazmat\", \"pem\", \"pkcs8\", \"rfc6979\", \"serde\", \"serdect\", \"sha2\", \"signing\", \"spki\", \"std\", \"verifying\"]","target":5012119522651993362,"profile":8276155916380437441,"path":3762998495518606349,"deps":[[4234225094004207019,"rfc6979",false,11092104415490918904],[10149501514950982522,"elliptic_curve",false,8622869748855529614],[10800937535932116261,"der",false,4689435888279429901],[11285023886693207100,"spki",false,15187571384648518718],[13895928991373641935,"signature",false,8942160195669299493],[17475753849556516473,"digest",false,8403047988712189794]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/ecdsa-892a01ccf38ffc11/dep-lib-ecdsa","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"alloc\", \"arithmetic\", \"der\", \"digest\", \"hazmat\", \"pkcs8\", \"rfc6979\", \"signing\", \"spki\", \"std\", \"verifying\"]",
+  "declared_features": "[\"alloc\", \"arithmetic\", \"default\", \"der\", \"dev\", \"digest\", \"hazmat\", \"pem\", \"pkcs8\", \"rfc6979\", \"serde\", \"serdect\", \"sha2\", \"signing\", \"spki\", \"std\", \"verifying\"]",
+  "target": 5012119522651993362,
+  "profile": 8276155916380437441,
+  "path": 3762998495518606349,
+  "deps": [
+    [4234225094004207019, "rfc6979", false, 11092104415490918904],
+    [10149501514950982522, "elliptic_curve", false, 8622869748855529614],
+    [10800937535932116261, "der", false, 4689435888279429901],
+    [11285023886693207100, "spki", false, 15187571384648518718],
+    [13895928991373641935, "signature", false, 8942160195669299493],
+    [17475753849556516473, "digest", false, 8403047988712189794]
+  ],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/ecdsa-892a01ccf38ffc11/dep-lib-ecdsa", "checksum": false } }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

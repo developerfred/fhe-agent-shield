@@ -1,1 +1,26 @@
-{"rustc":16243257175721966122,"features":"[\"compiled_data\"]","declared_features":"[\"compiled_data\", \"datagen\", \"default\", \"experimental\", \"icu_properties\", \"serde\", \"utf16_iter\", \"utf8_iter\", \"write16\"]","target":4082895731217690114,"profile":6954320141071726532,"path":8004922603178930376,"deps":[[3666196340704888985,"smallvec",false,7472918963310567894],[5251024081607271245,"icu_provider",false,6769116236564743684],[8584278803131124045,"icu_normalizer_data",false,6325939792036289676],[14324911895384364736,"icu_collections",false,15418680002968101105],[14563910249377136032,"zerovec",false,6236344781096257324]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/icu_normalizer-f484ecc8011793b2/dep-lib-icu_normalizer","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"compiled_data\"]",
+  "declared_features": "[\"compiled_data\", \"datagen\", \"default\", \"experimental\", \"icu_properties\", \"serde\", \"utf16_iter\", \"utf8_iter\", \"write16\"]",
+  "target": 4082895731217690114,
+  "profile": 6954320141071726532,
+  "path": 8004922603178930376,
+  "deps": [
+    [3666196340704888985, "smallvec", false, 7472918963310567894],
+    [5251024081607271245, "icu_provider", false, 6769116236564743684],
+    [8584278803131124045, "icu_normalizer_data", false, 6325939792036289676],
+    [14324911895384364736, "icu_collections", false, 15418680002968101105],
+    [14563910249377136032, "zerovec", false, 6236344781096257324]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/icu_normalizer-f484ecc8011793b2/dep-lib-icu_normalizer",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

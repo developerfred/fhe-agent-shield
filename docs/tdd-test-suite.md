@@ -35,26 +35,26 @@ This document defines the TDD approach for verifying all FHE-Agent Shield SDK in
 
 Each SDK must have its own unit tests covering:
 
-| Test Category | TypeScript | Python | Rust |
-|--------------|------------|--------|------|
-| Client initialization | ✅ | ✅ | ✅ |
-| Credential store/retrieve | ✅ | ✅ | ✅ |
-| Memory append/get | ✅ | ✅ | ✅ |
-| Action seal/approve/release | ✅ | ✅ | ✅ |
-| Network configuration | ✅ | ✅ | ✅ |
-| Error handling | ✅ | ✅ | ✅ |
+| Test Category               | TypeScript | Python | Rust |
+| --------------------------- | ---------- | ------ | ---- |
+| Client initialization       | ✅         | ✅     | ✅   |
+| Credential store/retrieve   | ✅         | ✅     | ✅   |
+| Memory append/get           | ✅         | ✅     | ✅   |
+| Action seal/approve/release | ✅         | ✅     | ✅   |
+| Network configuration       | ✅         | ✅     | ✅   |
+| Error handling              | ✅         | ✅     | ✅   |
 
 ### 2. Integration Tests
 
 Tests that verify SDKs work with real contracts:
 
-| Test | Description |
-|------|-------------|
-| `test_full_credential_flow` | Store → Retrieve credential end-to-end |
-| `test_full_memory_flow` | Append → Get context end-to-end |
-| `test_full_action_flow` | Seal → Approve → Release action |
-| `test_multi_network` | Verify same code works on all 4 networks |
-| `test_threshold_enforcement` | Verify threshold is enforced |
+| Test                         | Description                              |
+| ---------------------------- | ---------------------------------------- |
+| `test_full_credential_flow`  | Store → Retrieve credential end-to-end   |
+| `test_full_memory_flow`      | Append → Get context end-to-end          |
+| `test_full_action_flow`      | Seal → Approve → Release action          |
+| `test_multi_network`         | Verify same code works on all 4 networks |
+| `test_threshold_enforcement` | Verify threshold is enforced             |
 
 ### 3. Contract ABI Compatibility
 
@@ -69,7 +69,7 @@ Verify all SDKs use consistent ABIs:
     "outputs": [{"name": "", "type": "bytes32"}]
   },
   {
-    "name": "retrieveCredential", 
+    "name": "retrieveCredential",
     "inputs": [{"name": "handle", "type": "bytes32"}],
     "outputs": [{"name": "", "type": "string"}]
   }
@@ -80,28 +80,29 @@ Verify all SDKs use consistent ABIs:
 
 ### Test Networks
 
-| Network | Chain ID | RPC URL | Status |
-|---------|----------|---------|--------|
-| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org` | ⚠️ RPC issues |
-| Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | ✅ Available |
-| Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | ✅ Working |
-| Base Sepolia | 84532 | `https://sepolia.base.org` | ✅ Working |
+| Network          | Chain ID | RPC URL                                  | Status        |
+| ---------------- | -------- | ---------------------------------------- | ------------- |
+| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org`                | ⚠️ RPC issues |
+| Arbitrum Sepolia | 421614   | `https://sepolia-rollup.arbitrum.io/rpc` | ✅ Available  |
+| Arbitrum Sepolia | 421614   | `https://sepolia-rollup.arbitrum.io/rpc` | ✅ Working    |
+| Base Sepolia     | 84532    | `https://sepolia.base.org`               | ✅ Working    |
 
 ### Network Test Matrix
 
 ```
 Network              | Store | Retrieve | Memory | Actions
 ---------------------|-------|----------|--------|--------
-Ethereum Sepolia       |   -   |    -     |   -    |    -   
-Arbitrum Sepolia      |   ✅   |    ✅    |   ✅   |    ✅   
-Arbitrum Sepolia     |   ✅   |    ✅    |   ✅   |    ✅   
-Base Sepolia         |   ✅   |    ✅    |   ✅   |    ✅   
-Anvil Local         |   ✅   |    ✅    |   ✅   |    ✅   
+Ethereum Sepolia       |   -   |    -     |   -    |    -
+Arbitrum Sepolia      |   ✅   |    ✅    |   ✅   |    ✅
+Arbitrum Sepolia     |   ✅   |    ✅    |   ✅   |    ✅
+Base Sepolia         |   ✅   |    ✅    |   ✅   |    ✅
+Anvil Local         |   ✅   |    ✅    |   ✅   |    ✅
 ```
 
 ## Test Commands
 
 ### Foundry Tests
+
 ```bash
 forge test
 forge test --match-contract "FhevmRealTest" -vvv
@@ -109,6 +110,7 @@ forge test --match-contract "FheIntegrationTest" -vvv
 ```
 
 ### TypeScript SDK Tests
+
 ```bash
 cd sdk/typescript
 npm install
@@ -116,6 +118,7 @@ npm test
 ```
 
 ### Python SDK Tests
+
 ```bash
 cd sdk/python
 pip install -e ".[dev]"
@@ -123,6 +126,7 @@ pytest tests/
 ```
 
 ### Rust SDK Tests
+
 ```bash
 cd sdk/rust
 cargo test
@@ -130,6 +134,7 @@ cargo test --all-features
 ```
 
 ### Integration Tests
+
 ```bash
 # Run all integration tests
 ./scripts/run-integration-tests.sh
@@ -141,6 +146,7 @@ cargo test --all-features
 ## Success Criteria
 
 ### For TypeScript SDK
+
 - [ ] `FHEAgentShield` class implements all 4 contract interfaces
 - [ ] Supports all 4 networks via configuration
 - [ ] Uses viem (not ethers)
@@ -148,6 +154,7 @@ cargo test --all-features
 - [ ] README with working examples
 
 ### For Python SDK
+
 - [ ] `FHEAgentShield` class with async support
 - [ ] Uses web3.py (not web3.js)
 - [ ] 10+ passing unit tests
@@ -155,6 +162,7 @@ cargo test --all-features
 - [ ] README with working examples
 
 ### For Rust SDK
+
 - [ ] `FHEAgentShield` struct with async/await
 - [ ] Uses ethers-rs
 - [ ] 10+ passing unit tests
@@ -162,12 +170,14 @@ cargo test --all-features
 - [ ] README with working examples
 
 ### For ElizaOS Plugin
+
 - [ ] Implements Plugin interface
 - [ ] All 4 actions defined
 - [ ] Providers implemented
 - [ ] Tests passing
 
 ### For Nanobot Integration
+
 - [ ] Plugin architecture followed
 - [ ] FHE decorators working
 - [ ] Tests passing
@@ -230,10 +240,10 @@ name: SDK Tests
 on:
   push:
     paths:
-      - 'sdk/**'
+      - "sdk/**"
   pull_request:
     paths:
-      - 'sdk/**'
+      - "sdk/**"
 
 jobs:
   typescript:
@@ -242,7 +252,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
       - name: Install and test
         run: |
           cd sdk/typescript
@@ -255,7 +265,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - name: Install and test
         run: |
           cd sdk/python
@@ -268,7 +278,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@v1
         with:
-          rust-version: '1.75'
+          rust-version: "1.75"
       - name: Install and test
         run: |
           cd sdk/rust
@@ -278,6 +288,7 @@ jobs:
 ## Test Data
 
 ### Test Addresses
+
 ```
 Deployer: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 Agent1:   0x70997970C51812dc3A010C7d01b50e0d17dc79C8
@@ -286,15 +297,17 @@ Approver: 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
 ```
 
 ### Test Credentials
+
 ```
 key: "OPENAI_API_KEY"
 value: "sk-test-1234567890"
 
-key: "SENDGRID_KEY"  
+key: "SENDGRID_KEY"
 value: "SG.test-key-123"
 ```
 
 ### Test Actions
+
 ```json
 {
   "type": "send_email",

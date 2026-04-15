@@ -1,1 +1,23 @@
-{"rustc":16243257175721966122,"features":"[]","declared_features":"[\"strict-macro\"]","target":6875603382767429092,"profile":8985974432223134688,"path":6591654623681381669,"deps":[[2523730735144528079,"wasm_bindgen_macro_support",false,8362696876085428158],[13111758008314797071,"quote",false,14843622700089442107]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/wasm-bindgen-macro-1f71a821f1b19ab4/dep-lib-wasm_bindgen_macro","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[]",
+  "declared_features": "[\"strict-macro\"]",
+  "target": 6875603382767429092,
+  "profile": 8985974432223134688,
+  "path": 6591654623681381669,
+  "deps": [
+    [2523730735144528079, "wasm_bindgen_macro_support", false, 8362696876085428158],
+    [13111758008314797071, "quote", false, 14843622700089442107]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/wasm-bindgen-macro-1f71a821f1b19ab4/dep-lib-wasm_bindgen_macro",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

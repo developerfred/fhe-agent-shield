@@ -7,20 +7,21 @@
 ### useFHEClient()
 
 ```typescript
-import { useFHEClient } from '@cofhe/react';
+import { useFHEClient } from "@cofhe/react";
 
 function useFHEClient() {
   const { client, isReady, error } = useFHEClient();
-  
+
   if (isReady) {
     return { client, isReady, error };
   }
-  
+
   return { client: null, isReady: false, error };
 }
 ```
 
 **Returns:**
+
 - `client: FheTypes.Client | null` - The FHE client instance
 - `isReady: boolean` - Whether client is initialized
 - `error: Error | null` - Any initialization errors
@@ -28,21 +29,21 @@ function useFHEClient() {
 ### useEncrypt()
 
 ```typescript
-import { useEncrypt } from '@cofhe/react';
-import { Encryptable } from '@cofhe/sdk';
+import { useEncrypt } from "@cofhe/react";
+import { Encryptable } from "@cofhe/sdk";
 
 function MyComponent() {
   const { encrypt, encryptedValues, isEncrypting, error } = useEncrypt();
-  
+
   const handleEncrypt = async (value: bigint) => {
     const result = await encrypt([Encryptable.uint256(value)]);
-    console.log('Encrypted:', result);
+    console.log("Encrypted:", result);
   };
 }
 ```
 
-**Parameters:** Array of `Encryptable` values
-**Returns:**
+**Parameters:** Array of `Encryptable` values **Returns:**
+
 - `encrypt(values: Encryptable[]): Promise<EncryptedNumber[]>` - Encrypt values
 - `encryptedValues: EncryptedNumber[]` - Last encrypted values
 - `isEncrypting: boolean` - Loading state
@@ -51,24 +52,26 @@ function MyComponent() {
 ### useDecrypt()
 
 ```typescript
-import { useDecrypt } from '@cofhe/react';
-import { FheTypes } from '@cofhe/sdk';
+import { useDecrypt } from "@cofhe/react";
+import { FheTypes } from "@cofhe/sdk";
 
 function MyComponent() {
   const { decrypt, decryptedValue, isDecrypting, error } = useDecrypt();
-  
+
   const handleDecrypt = async (encryptedHandle: string) => {
     const result = await decrypt(encryptedHandle, FheTypes.Uint256);
-    console.log('Decrypted:', result);
+    console.log("Decrypted:", result);
   };
 }
 ```
 
 **Parameters:**
+
 - `encryptedHandle: string` - The encrypted value handle
 - `type: FheTypes` - The plaintext type (Uint256, Uint32, etc.)
 
 **Returns:**
+
 - `decrypt(handle, type): Promise<bigint>` - Decrypt and return plaintext
 - `decryptedValue: bigint | null` - Last decrypted value
 - `isDecrypting: boolean` - Loading state
@@ -77,24 +80,25 @@ function MyComponent() {
 ### useWrite()
 
 ```typescript
-import { useWrite } from '@cofhe/react';
+import { useWrite } from "@cofhe/react";
 
 function MyContractComponent() {
   const { write, isWriting, txHash, error } = useWrite();
-  
+
   const incrementCounter = async () => {
     const tx = await write({
-      contractAddress: '0x...',
-      contractName: 'Counter',
-      method: 'increment',
+      contractAddress: "0x...",
+      contractName: "Counter",
+      method: "increment",
       params: [],
     });
-    console.log('Transaction:', tx.hash);
+    console.log("Transaction:", tx.hash);
   };
 }
 ```
 
 **Parameters:** WriteConfig object
+
 ```typescript
 interface WriteConfig {
   contractAddress: string;
@@ -106,6 +110,7 @@ interface WriteConfig {
 ```
 
 **Returns:**
+
 - `write(config): Promise<TransactionResponse>` - Execute transaction
 - `isWriting: boolean` - Transaction pending state
 - `txHash: string | null` - Last transaction hash
@@ -121,7 +126,7 @@ import { useFHEClient } from '@cofhe/react';
 
 function EncryptedBalance() {
   const { client, isReady } = useFHEClient();
-  
+
   // Standard contract read
   const { data: encryptedBalance } = useContractRead({
     address: '0x...',
@@ -129,10 +134,10 @@ function EncryptedBalance() {
     functionName: 'encryptedBalanceOf',
     args: [address],
   });
-  
+
   // Decrypt when client is ready
   const { decrypt } = useDecrypt();
-  
+
   useEffect(() => {
     if (encryptedBalance && isReady && client) {
       decrypt(encryptedBalance, FheTypes.Uint256)
@@ -149,18 +154,18 @@ function SetValueComponent() {
   const { client, isReady } = useFHEClient();
   const { encrypt } = useEncrypt();
   const { write } = useWrite();
-  
+
   const setValue = async (newValue: bigint) => {
     if (!isReady || !client) return;
-    
+
     // Step 1: Encrypt the input
     const [encryptedValue] = await encrypt([Encryptable.uint256(newValue)]);
-    
+
     // Step 2: Send transaction with encrypted input
     await write({
-      contractAddress: '0x...',
-      contractName: 'MyContract',
-      method: 'setValue',
+      contractAddress: "0x...",
+      contractName: "MyContract",
+      method: "setValue",
       params: [encryptedValue],
     });
   };
@@ -174,17 +179,17 @@ function TransferComponent() {
   const { client, isReady } = useFHEClient();
   const { encrypt } = useEncrypt();
   const { write } = useWrite();
-  
+
   const transfer = async (to: string, amount: bigint) => {
     if (!isReady || !client) return;
-    
+
     // Encrypt amount (no need to encrypt 'to' - it's an address)
     const [encryptedAmount] = await encrypt([Encryptable.uint256(amount)]);
-    
+
     await write({
-      contractAddress: '0x...',
-      contractName: 'FHERC20',
-      method: 'transferEncrypted',
+      contractAddress: "0x...",
+      contractName: "FHERC20",
+      method: "transferEncrypted",
       params: [to, encryptedAmount],
     });
   };
@@ -220,18 +225,18 @@ function SecureComponent() {
   const { client, isReady, error: clientError } = useFHEClient();
   const { decrypt, error: decryptError } = useDecrypt();
   const { write, error: writeError } = useWrite();
-  
+
   // Combine errors
   const error = clientError || decryptError || writeError;
-  
+
   if (error) {
     return <ErrorBoundary error={error} />;
   }
-  
+
   if (!isReady) {
     return <Loading />;
   }
-  
+
   return <SecureContent />;
 }
 ```
@@ -246,12 +251,12 @@ function SecureComponent() {
 
 ## Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| "Client not initialized" | Wrap in `FHEProvider` |
-| "Invalid handle" | Check encrypted value is properly encoded |
-| "Permit required" | Use `.withPermit()` before decrypt |
-| "Network mismatch" | Verify network config in FHEProvider |
+| Issue                    | Solution                                  |
+| ------------------------ | ----------------------------------------- |
+| "Client not initialized" | Wrap in `FHEProvider`                     |
+| "Invalid handle"         | Check encrypted value is properly encoded |
+| "Permit required"        | Use `.withPermit()` before decrypt        |
+| "Network mismatch"       | Verify network config in FHEProvider      |
 
 ## Example: Complete Encrypted Counter
 
@@ -267,21 +272,21 @@ export function EncryptedCounter({ contractAddress }: { contractAddress: string 
   const { encrypt } = useEncrypt();
   const { decrypt } = useDecrypt();
   const { write, isWriting } = useWrite();
-  
+
   // Read encrypted count
   const { data: encryptedCount } = useContractRead({
     address: contractAddress,
     abi: ['function count() view returns (bytes)'],
     functionName: 'count',
   });
-  
+
   // Auto-decrypt when value changes
   useEffect(() => {
     if (encryptedCount && isReady && client) {
       decrypt(encryptedCount, FheTypes.Uint32).then(setLocalCount);
     }
   }, [encryptedCount, isReady]);
-  
+
   const increment = async () => {
     if (!isReady) return;
     await write({
@@ -291,7 +296,7 @@ export function EncryptedCounter({ contractAddress }: { contractAddress: string 
       params: [],
     });
   };
-  
+
   const incrementBy = async (amount: number) => {
     if (!isReady) return;
     const [encrypted] = await encrypt([Encryptable.uint32(amount)]);
@@ -302,7 +307,7 @@ export function EncryptedCounter({ contractAddress }: { contractAddress: string 
       params: [encrypted],
     });
   };
-  
+
   return (
     <div>
       <p>Count: {localCount?.toString() ?? '...'}</p>

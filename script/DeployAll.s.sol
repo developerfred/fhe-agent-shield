@@ -40,7 +40,7 @@ contract Deploy is Script {
         ActionSealer actionSealer = new ActionSealer();
         console2.log("ActionSealer deployed at:", address(actionSealer));
 
-        ExampleToken exampleToken = new ExampleToken("FHE Agent Token", "FHET", 1000000);
+        ExampleToken exampleToken = new ExampleToken("FHE Agent Token", "FHET", 1_000_000);
         console2.log("ExampleToken deployed at:", address(exampleToken));
 
         vm.stopBroadcast();

@@ -49,11 +49,13 @@ contract FheEnabled {
 ```
 
 ### Vantagens
+
 - ✅ Funciona em ANY network (Anvil, fork, etc)
 - ✅ Não requer precompile real
 - ✅ Testes rápidos
 
 ### Desvantagens
+
 - ❌ Não é real FHE (dados expostos)
 - ❌ Não testa ZK proofs
 - ❌ Para testes de segurança, usar testnet real
@@ -67,7 +69,7 @@ contract MyTest is Test, FheEnabled {
     function setUp() public {
         initializeFhe();
     }
-    
+
     function testFheOps() public {
         inEuint256 memory encrypted = encrypt256(42);
         // MockFheOps processa isso
@@ -90,7 +92,7 @@ contract MyTest is CoFheTest {
     function setUp() public {
         // Deploya MockTaskManager, ACL, MockZkVerifier, etc
     }
-    
+
     function testWithMocks() public {
         InEuint256 memory input = createInEuint256(42, 0, address(this));
         // Usa mock completo com validação ZK
@@ -115,11 +117,13 @@ contract MyTest is CoFheTest {
 ```
 
 ### Vantagens
+
 - ✅ Arquitetura completa mockada
 - ✅ Suporte a permissões e ACL
 - ✅ Testes mais realistas
 
 ### Desvantagens
+
 - ❌ Ainda não é FHE real
 - ❌ Setup mais complexo
 
@@ -137,11 +141,11 @@ import { FhevmTest } from "forge-fhevm/FhevmTest.sol";
 contract MyTest is FhevmTest {
     function testEncryptAndDecrypt() public {
         (externalEuint64 handle, bytes memory proof) = encryptUint64(42, address(this));
-        
+
         euint64 verified = euint64.wrap(
             _executor.verifyInput(externalEuint64.unwrap(handle), address(this), proof, FheType.Uint64)
         );
-        
+
         assertEq(decrypt(verified), 42);
     }
 }
@@ -173,12 +177,14 @@ contract MyTest is FhevmTest {
 5. Testes podem fazer assertEq com valores reais!
 
 ### Vantagens
+
 - ✅ Contratos REAIS (mesmo código de produção)
 - ✅ Testa ZK proofs
 - ✅ Comportamento idêntico à mainnet
 - ✅ Sem precompile necessário
 
 ### Desvantagens
+
 - ❌ Requer setup adicional
 - ❌ Mais pesado que mocks simples
 
@@ -205,11 +211,11 @@ forge-fhevm/=lib/forge-fhevm/src/
 
 ### Redes Suportadas
 
-| Rede | Chain ID | RPC | Explorer |
-|------|----------|-----|----------|
-| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org` | `sepolia.etherscan.io` |
-| Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | `sepolia.arbiscan.io` |
-| Base Sepolia | 84532 | `https://sepolia.base.org` | `sepolia.basescan.org` |
+| Rede             | Chain ID | RPC                                      | Explorer               |
+| ---------------- | -------- | ---------------------------------------- | ---------------------- |
+| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org`                | `sepolia.etherscan.io` |
+| Arbitrum Sepolia | 421614   | `https://sepolia-rollup.arbitrum.io/rpc` | `sepolia.arbiscan.io`  |
+| Base Sepolia     | 84532    | `https://sepolia.base.org`               | `sepolia.basescan.org` |
 
 ### Testes em Fork
 
@@ -225,12 +231,12 @@ forge script script/Deploy.s.sol --rpc-url http://localhost:8545 --broadcast
 
 ## Comparação de Estratégias
 
-| Estratégia | FHE Real | ZK Proofs | Velocidade | Complexidade |
-|-----------|----------|-----------|------------|--------------|
-| MockFheOps | ❌ | ❌ | ⚡⚡⚡ | Baixa |
-| CoFheTest | ❌ | ⚡⚡ | ⚡⚡ | Média |
-| forge-fhevm | ✅ | ✅ | ⚡⚡ | Média |
-| Testnet Real | ✅ | ✅ | ⚡ | Alta |
+| Estratégia   | FHE Real | ZK Proofs | Velocidade | Complexidade |
+| ------------ | -------- | --------- | ---------- | ------------ |
+| MockFheOps   | ❌       | ❌        | ⚡⚡⚡     | Baixa        |
+| CoFheTest    | ❌       | ⚡⚡      | ⚡⚡       | Média        |
+| forge-fhevm  | ✅       | ✅        | ⚡⚡       | Média        |
+| Testnet Real | ✅       | ✅        | ⚡         | Alta         |
 
 ---
 
@@ -263,12 +269,12 @@ forge script script/Deploy.s.sol --rpc-url http://localhost:8545 --broadcast
 
 ### Status Atual
 
-| Teste | Status | Estratégia |
-|-------|--------|-----------|
-| Foundry (local) | ✅ 150 passing | MockFheOps |
-| Fork Arbitrum Sepolia | ✅ Working | `vm.etch` + contracts |
-| Fork Ethereum Sepolia | ⚠️ RPC issue | Aguardando |
-| forge-fhevm | ❌ Not integrated | Próximo passo |
+| Teste                 | Status            | Estratégia            |
+| --------------------- | ----------------- | --------------------- |
+| Foundry (local)       | ✅ 150 passing    | MockFheOps            |
+| Fork Arbitrum Sepolia | ✅ Working        | `vm.etch` + contracts |
+| Fork Ethereum Sepolia | ⚠️ RPC issue      | Aguardando            |
+| forge-fhevm           | ❌ Not integrated | Próximo passo         |
 
 ---
 

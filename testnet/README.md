@@ -10,10 +10,10 @@ This directory contains the full credential flow demonstration for Fhenix testne
 
 ## Networks
 
-| Network | RPC URL | Explorer |
-|---------|---------|---------|
-| Ethereum Sepolia | https://rpc.sepolia.org | https://sepolia.etherscan.io |
-| Arbitrum Sepolia | https://sepolia-rollup.arbitrum.io/rpc | https://sepolia.arbiscan.io |
+| Network          | RPC URL                                | Explorer                     |
+| ---------------- | -------------------------------------- | ---------------------------- |
+| Ethereum Sepolia | https://rpc.sepolia.org                | https://sepolia.etherscan.io |
+| Arbitrum Sepolia | https://sepolia-rollup.arbitrum.io/rpc | https://sepolia.arbiscan.io  |
 
 ## Quick Start
 

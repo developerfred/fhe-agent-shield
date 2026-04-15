@@ -6,18 +6,20 @@
 [![Buildathon: Fhenix Privacy-by-Design](https://img.shields.io/badge/Buildathon-Fhenix-green.svg)](https://fhenix.io)
 [![Tests: 150 Passing](https://img.shields.io/badge/Tests-150%20Passing-brightgreen.svg)]()
 
-**FHE-Agent Shield** protects AI agents from credential theft, prompt injection, and data exfiltration attacks using Fully Homomorphic Encryption (FHE) via Fhenix CoFHE — the FHE coprocessor that runs on existing EVM host chains (Ethereum, Arbitrum, Base).
+**FHE-Agent Shield** protects AI agents from credential theft, prompt injection, and data exfiltration attacks using
+Fully Homomorphic Encryption (FHE) via Fhenix CoFHE — the FHE coprocessor that runs on existing EVM host chains
+(Ethereum, Arbitrum, Base).
 
 ## Problem Statement
 
 OpenClaw (250K+ GitHub stars) suffers from critical security vulnerabilities:
 
-| Vulnerability | Impact | FHE-Agent Shield Solution |
-|--------------|--------|---------------------------|
-| **Credential Exposure** | 135K+ instances with plaintext API keys | Encrypted credential vault with threshold decryption |
-| **Prompt Injection** | 91% attack success rate | FHE-protected input processing |
-| **Data Exfiltration** | Agent reads local files, exfiltrates to attackers | Encrypted agent memory |
-| **ClawHavoc Supply Chain** | 1,184+ malicious skills | FHE-verified skill execution |
+| Vulnerability              | Impact                                            | FHE-Agent Shield Solution                            |
+| -------------------------- | ------------------------------------------------- | ---------------------------------------------------- |
+| **Credential Exposure**    | 135K+ instances with plaintext API keys           | Encrypted credential vault with threshold decryption |
+| **Prompt Injection**       | 91% attack success rate                           | FHE-protected input processing                       |
+| **Data Exfiltration**      | Agent reads local files, exfiltrates to attackers | Encrypted agent memory                               |
+| **ClawHavoc Supply Chain** | 1,184+ malicious skills                           | FHE-verified skill execution                         |
 
 ## Solution
 
@@ -56,37 +58,37 @@ FHE-Agent Shield wraps OpenClaw skills with FHE protection:
 
 ### Core Smart Contracts
 
-| Contract | Description |
-|----------|-------------|
-| **AgentVault** | Encrypted credential storage with threshold decryption |
-| **AgentMemory** | Encrypted agent context with snapshot/restore |
-| **SkillRegistry** | FHE-verified marketplace for AI agent skills |
-| **ActionSealer** | Threshold-released sealed actions |
+| Contract          | Description                                            |
+| ----------------- | ------------------------------------------------------ |
+| **AgentVault**    | Encrypted credential storage with threshold decryption |
+| **AgentMemory**   | Encrypted agent context with snapshot/restore          |
+| **SkillRegistry** | FHE-verified marketplace for AI agent skills           |
+| **ActionSealer**  | Threshold-released sealed actions                      |
 
 ### FHE-Protected Skills
 
-| Skill | Description |
-|-------|-------------|
-| **EmailSkill** | Encrypted email operations (compose, send, read) |
-| **BrowserSkill** | Encrypted browser session management |
-| **FileSkill** | Encrypted file operations with access control |
+| Skill            | Description                                      |
+| ---------------- | ------------------------------------------------ |
+| **EmailSkill**   | Encrypted email operations (compose, send, read) |
+| **BrowserSkill** | Encrypted browser session management             |
+| **FileSkill**    | Encrypted file operations with access control    |
 
 ### Integration
 
-| Module | Description |
-|--------|-------------|
-| **FHESkillDecorator** | Wrap OpenClaw skills with FHE protection |
+| Module                     | Description                              |
+| -------------------------- | ---------------------------------------- |
+| **FHESkillDecorator**      | Wrap OpenClaw skills with FHE protection |
 | **FHEAgentMemoryProvider** | OpenClaw memory provider with encryption |
-| **FHECredentialVault** | OpenClaw credential manager |
+| **FHECredentialVault**     | OpenClaw credential manager              |
 
 ### React Hooks
 
-| Hook | Description |
-|------|-------------|
-| **useFHEClient** | Core FHE encryption/decryption client |
-| **useEncryptedAgent** | Encrypted agent state management |
-| **useAgentVault** | Credential storage hooks |
-| **useSealedAction** | Sealed action management |
+| Hook                  | Description                           |
+| --------------------- | ------------------------------------- |
+| **useFHEClient**      | Core FHE encryption/decryption client |
+| **useEncryptedAgent** | Encrypted agent state management      |
+| **useAgentVault**     | Credential storage hooks              |
+| **useSealedAction**   | Sealed action management              |
 
 ## Quick Start
 
@@ -94,8 +96,10 @@ FHE-Agent Shield wraps OpenClaw skills with FHE protection:
 
 - [Foundry](https://getfoundry.sh/) - Ethereum development toolkit
 - [Node.js](https://nodejs.org/) 18+
-- Access to a CoFHE-supported host chain — Ethereum Sepolia, Arbitrum Sepolia, or Base Sepolia. See the [CoFHE compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility)
-- (Optional) [`@cofhe/sdk`](https://cofhe-docs.fhenix.zone/client-sdk/introduction/installation) `^0.4.0` for FHE client interactions
+- Access to a CoFHE-supported host chain — Ethereum Sepolia, Arbitrum Sepolia, or Base Sepolia. See the
+  [CoFHE compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility)
+- (Optional) [`@cofhe/sdk`](https://cofhe-docs.fhenix.zone/client-sdk/introduction/installation) `^0.4.0` for FHE client
+  interactions
 
 ### Installation
 
@@ -152,7 +156,8 @@ forge script script/DeployAll.s.sol --rpc-url $SEPOLIA_RPC --broadcast
 forge script script/Demo.s.sol --rpc-url $SEPOLIA_RPC --broadcast
 ```
 
-> Fhenix CoFHE is a coprocessor — it runs alongside any supported EVM chain, rather than as a standalone L1/L2. Deployments target the host chain directly.
+> Fhenix CoFHE is a coprocessor — it runs alongside any supported EVM chain, rather than as a standalone L1/L2.
+> Deployments target the host chain directly.
 
 ## Project Structure
 
@@ -227,39 +232,35 @@ address actionId = actionSealer.sealAction(
 ### TypeScript / React
 
 ```typescript
-import { FHESkillDecorator } from './openclaw/fhe-skill-decorator';
-import { useEncryptedAgent } from './hooks/useEncryptedAgent';
-import { useAgentVault } from './hooks/useAgentVault';
+import { FHESkillDecorator } from "./openclaw/fhe-skill-decorator";
+import { useEncryptedAgent } from "./hooks/useEncryptedAgent";
+import { useAgentVault } from "./hooks/useAgentVault";
 
 // Create FHE-protected skill
 const secureEmailSkill = FHESkillDecorator.wrap(emailSkill, {
   inputEncryption: true,
   outputEncryption: true,
   credentialVault: vaultAddress,
-  requirePermits: ['read_email', 'send_email'],
+  requirePermits: ["read_email", "send_email"],
 });
 
 // Store encrypted credential
 const { storeCredential } = useAgentVault(agentId);
-await storeCredential('OPENAI_API_KEY', 'sk-...');
+await storeCredential("OPENAI_API_KEY", "sk-...");
 
 // Append encrypted context
 const { appendContext } = useEncryptedAgent(agentId);
-await appendContext('User wants to schedule a meeting...');
+await appendContext("User wants to schedule a meeting...");
 ```
 
 ### OpenClaw Integration
 
 ```typescript
-import { createAgent } from 'openclaw-sdk';
-import { 
-  FHESkillDecorator, 
-  FHEAgentMemoryProvider, 
-  FHECredentialVault 
-} from '@fhe-agent-shield/openclaw';
+import { createAgent } from "openclaw-sdk";
+import { FHESkillDecorator, FHEAgentMemoryProvider, FHECredentialVault } from "@fhe-agent-shield/openclaw";
 
 const agent = createAgent({
-  name: 'SecureAgent',
+  name: "SecureAgent",
   memoryProvider: new FHEAgentMemoryProvider({
     contractAddress: process.env.AGENT_MEMORY_ADDRESS,
     thresholdNetworkUrl: process.env.THRESHOLD_RPC,
@@ -270,38 +271,43 @@ const agent = createAgent({
 
 ## Testnet Information
 
-CoFHE is a coprocessor — it deploys on existing EVM host chains. Per the [CoFHE compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility), the supported testnets are:
+CoFHE is a coprocessor — it deploys on existing EVM host chains. Per the
+[CoFHE compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility), the supported
+testnets are:
 
-| Network | Chain ID | RPC URL | Explorer |
-|---------|----------|---------|----------|
-| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org` | [sepolia.etherscan.io](https://sepolia.etherscan.io) |
-| Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | [sepolia.arbiscan.io](https://sepolia.arbiscan.io) |
-| Base Sepolia | 84532 | `https://sepolia.base.org` | [sepolia.basescan.org](https://sepolia.basescan.org) |
+| Network          | Chain ID | RPC URL                                  | Explorer                                             |
+| ---------------- | -------- | ---------------------------------------- | ---------------------------------------------------- |
+| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org`                | [sepolia.etherscan.io](https://sepolia.etherscan.io) |
+| Arbitrum Sepolia | 421614   | `https://sepolia-rollup.arbitrum.io/rpc` | [sepolia.arbiscan.io](https://sepolia.arbiscan.io)   |
+| Base Sepolia     | 84532    | `https://sepolia.base.org`               | [sepolia.basescan.org](https://sepolia.basescan.org) |
 
-> The legacy Fhenix L2 testnets (Helium, Nitrogen) have been retired. All CoFHE deployments now happen on host chains via `@fhenixprotocol/cofhe-contracts` ≥ 0.1.3 and the `@cofhe/sdk` ≥ 0.4.0 client.
+> The legacy Fhenix L2 testnets (Helium, Nitrogen) have been retired. All CoFHE deployments now happen on host chains
+> via `@fhenixprotocol/cofhe-contracts` ≥ 0.1.3 and the `@cofhe/sdk` ≥ 0.4.0 client.
 
 ## SDKs (In Development)
 
-| SDK | Language | Status | Package |
-|-----|----------|--------|---------|
+| SDK            | Language   | Status      | Package                 |
+| -------------- | ---------- | ----------- | ----------------------- |
 | **TypeScript** | TypeScript | 🔄 Building | `@fhe-agent-shield/sdk` |
-| **Python** | Python | 🔄 Building | `fhe-agent-shield` |
-| **Rust** | Rust | 🔄 Building | `fhe-agent-shield` |
+| **Python**     | Python     | 🔄 Building | `fhe-agent-shield`      |
+| **Rust**       | Rust       | 🔄 Building | `fhe-agent-shield`      |
 
 ### Framework Integrations
 
-| Framework | Language | Status | Type |
-|-----------|----------|--------|------|
-| **ElizaOS** | TypeScript | 🔄 Building | Plugin |
-| **Nanobot** | Python | 🔄 Building | Integration |
+| Framework   | Language   | Status      | Type        |
+| ----------- | ---------- | ----------- | ----------- |
+| **ElizaOS** | TypeScript | 🔄 Building | Plugin      |
+| **Nanobot** | Python     | 🔄 Building | Integration |
 
 ### Demo Deployment
 
 Demo contracts are deployed at:
+
 - `AgentVault`: Check `script/Demo.s.sol` after deployment
 - `AgentMemory`: Check `script/Demo.s.sol` after deployment
 
 Run the demo:
+
 ```bash
 ./demo.sh
 ```
@@ -322,12 +328,12 @@ Run the demo:
 
 ### Threat Mitigation
 
-| Threat | Mitigation |
-|--------|------------|
-| Credential Theft | Encrypted storage + threshold decryption |
-| Prompt Injection | FHE input encryption |
-| Data Exfiltration | Encrypted agent memory |
-| Malicious Skills | FHE skill verification |
+| Threat            | Mitigation                               |
+| ----------------- | ---------------------------------------- |
+| Credential Theft  | Encrypted storage + threshold decryption |
+| Prompt Injection  | FHE input encryption                     |
+| Data Exfiltration | Encrypted agent memory                   |
+| Malicious Skills  | FHE skill verification                   |
 
 ### Access Control Layers
 

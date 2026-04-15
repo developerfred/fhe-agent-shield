@@ -3,17 +3,17 @@
     {
       "name": "storeCredential",
       "inputs": [
-        {"name": "agentId", "type": "address"},
-        {"name": "encryptedData", "type": "bytes32"}
+        { "name": "agentId", "type": "address" },
+        { "name": "encryptedData", "type": "bytes32" }
       ],
-      "outputs": [{"name": "", "type": "bytes32"}],
+      "outputs": [{ "name": "", "type": "bytes32" }],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "name": "retrieveCredential",
-      "inputs": [{"name": "handle", "type": "bytes32"}],
-      "outputs": [{"name": "", "type": "string"}],
+      "inputs": [{ "name": "handle", "type": "bytes32" }],
+      "outputs": [{ "name": "", "type": "string" }],
       "stateMutability": "view",
       "type": "function"
     }

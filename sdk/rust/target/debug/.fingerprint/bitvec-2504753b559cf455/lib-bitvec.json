@@ -1,1 +1,20 @@
-{"rustc":16243257175721966122,"features":"[\"alloc\", \"atomic\", \"default\", \"std\"]","declared_features":"[\"alloc\", \"atomic\", \"default\", \"serde\", \"std\", \"testing\"]","target":15523958261975496690,"profile":8276155916380437441,"path":16407116929507964966,"deps":[[2901717918821536064,"funty",false,10694376518374646003],[4989309779925288624,"tap",false,16424807314598098008],[7533601061668075701,"wyz",false,14101333528427241144],[13404482562374806937,"radium",false,12110710493844543881]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/bitvec-2504753b559cf455/dep-lib-bitvec","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"alloc\", \"atomic\", \"default\", \"std\"]",
+  "declared_features": "[\"alloc\", \"atomic\", \"default\", \"serde\", \"std\", \"testing\"]",
+  "target": 15523958261975496690,
+  "profile": 8276155916380437441,
+  "path": 16407116929507964966,
+  "deps": [
+    [2901717918821536064, "funty", false, 10694376518374646003],
+    [4989309779925288624, "tap", false, 16424807314598098008],
+    [7533601061668075701, "wyz", false, 14101333528427241144],
+    [13404482562374806937, "radium", false, 12110710493844543881]
+  ],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/bitvec-2504753b559cf455/dep-lib-bitvec", "checksum": false } }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

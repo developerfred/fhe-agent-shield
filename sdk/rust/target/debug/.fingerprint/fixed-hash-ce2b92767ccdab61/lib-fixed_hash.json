@@ -1,1 +1,25 @@
-{"rustc":16243257175721966122,"features":"[\"byteorder\", \"rand\", \"rustc-hex\", \"std\"]","declared_features":"[\"api-dummy\", \"arbitrary\", \"byteorder\", \"default\", \"quickcheck\", \"rand\", \"rustc-hex\", \"std\"]","target":6902524943111220286,"profile":5347358027863023418,"path":4736362766667642979,"deps":[[3712811570531045576,"byteorder",false,3843418289531459207],[5773673309955708662,"rustc_hex",false,13905853915789696036],[13208667028893622512,"rand",false,5568371690316619065],[13785866025199020095,"static_assertions",false,434088619312263379]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/fixed-hash-ce2b92767ccdab61/dep-lib-fixed_hash","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"byteorder\", \"rand\", \"rustc-hex\", \"std\"]",
+  "declared_features": "[\"api-dummy\", \"arbitrary\", \"byteorder\", \"default\", \"quickcheck\", \"rand\", \"rustc-hex\", \"std\"]",
+  "target": 6902524943111220286,
+  "profile": 5347358027863023418,
+  "path": 4736362766667642979,
+  "deps": [
+    [3712811570531045576, "byteorder", false, 3843418289531459207],
+    [5773673309955708662, "rustc_hex", false, 13905853915789696036],
+    [13208667028893622512, "rand", false, 5568371690316619065],
+    [13785866025199020095, "static_assertions", false, 434088619312263379]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/fixed-hash-ce2b92767ccdab61/dep-lib-fixed_hash",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

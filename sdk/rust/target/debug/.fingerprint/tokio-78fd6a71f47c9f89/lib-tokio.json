@@ -1,1 +1,24 @@
-{"rustc":16243257175721966122,"features":"[\"bytes\", \"default\", \"fs\", \"full\", \"io-std\", \"io-util\", \"libc\", \"macros\", \"mio\", \"net\", \"parking_lot\", \"process\", \"rt\", \"rt-multi-thread\", \"signal\", \"signal-hook-registry\", \"socket2\", \"sync\", \"time\", \"tokio-macros\"]","declared_features":"[\"bytes\", \"default\", \"fs\", \"full\", \"io-std\", \"io-uring\", \"io-util\", \"libc\", \"macros\", \"mio\", \"net\", \"parking_lot\", \"process\", \"rt\", \"rt-multi-thread\", \"signal\", \"signal-hook-registry\", \"socket2\", \"sync\", \"taskdump\", \"test-util\", \"time\", \"tokio-macros\", \"tracing\", \"windows-sys\"]","target":9605832425414080464,"profile":5925448066594685647,"path":4350632073989561399,"deps":[[2251399859588827949,"pin_project_lite",false,9651668255052435548],[2714690472991673692,"tokio_macros",false,10827331634062151029],[3870702314125662939,"bytes",false,5786248899872891252],[6684496268350303357,"signal_hook_registry",false,7581292613579306231],[9156379307790651767,"mio",false,9465739530245491885],[10947645248417156337,"socket2",false,9366954816917245565],[12459942763388630573,"parking_lot",false,13526521110304202129],[17159683253194042242,"libc",false,9943709035222746906]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/tokio-78fd6a71f47c9f89/dep-lib-tokio","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"bytes\", \"default\", \"fs\", \"full\", \"io-std\", \"io-util\", \"libc\", \"macros\", \"mio\", \"net\", \"parking_lot\", \"process\", \"rt\", \"rt-multi-thread\", \"signal\", \"signal-hook-registry\", \"socket2\", \"sync\", \"time\", \"tokio-macros\"]",
+  "declared_features": "[\"bytes\", \"default\", \"fs\", \"full\", \"io-std\", \"io-uring\", \"io-util\", \"libc\", \"macros\", \"mio\", \"net\", \"parking_lot\", \"process\", \"rt\", \"rt-multi-thread\", \"signal\", \"signal-hook-registry\", \"socket2\", \"sync\", \"taskdump\", \"test-util\", \"time\", \"tokio-macros\", \"tracing\", \"windows-sys\"]",
+  "target": 9605832425414080464,
+  "profile": 5925448066594685647,
+  "path": 4350632073989561399,
+  "deps": [
+    [2251399859588827949, "pin_project_lite", false, 9651668255052435548],
+    [2714690472991673692, "tokio_macros", false, 10827331634062151029],
+    [3870702314125662939, "bytes", false, 5786248899872891252],
+    [6684496268350303357, "signal_hook_registry", false, 7581292613579306231],
+    [9156379307790651767, "mio", false, 9465739530245491885],
+    [10947645248417156337, "socket2", false, 9366954816917245565],
+    [12459942763388630573, "parking_lot", false, 13526521110304202129],
+    [17159683253194042242, "libc", false, 9943709035222746906]
+  ],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/tokio-78fd6a71f47c9f89/dep-lib-tokio", "checksum": false } }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

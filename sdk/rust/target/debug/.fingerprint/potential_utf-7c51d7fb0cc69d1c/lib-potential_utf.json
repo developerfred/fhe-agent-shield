@@ -1,1 +1,20 @@
-{"rustc":16243257175721966122,"features":"[\"zerovec\"]","declared_features":"[\"alloc\", \"databake\", \"default\", \"serde\", \"writeable\", \"zerovec\"]","target":16089386906944150126,"profile":5347358027863023418,"path":14603622097648006431,"deps":[[14563910249377136032,"zerovec",false,18416534476204670167]],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/potential_utf-7c51d7fb0cc69d1c/dep-lib-potential_utf","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 16243257175721966122,
+  "features": "[\"zerovec\"]",
+  "declared_features": "[\"alloc\", \"databake\", \"default\", \"serde\", \"writeable\", \"zerovec\"]",
+  "target": 16089386906944150126,
+  "profile": 5347358027863023418,
+  "path": 14603622097648006431,
+  "deps": [[14563910249377136032, "zerovec", false, 18416534476204670167]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/potential_utf-7c51d7fb0cc69d1c/dep-lib-potential_utf",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}
