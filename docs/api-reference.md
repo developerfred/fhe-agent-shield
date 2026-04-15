@@ -885,7 +885,7 @@ import { FHEAgentMemoryProvider } from './openclaw/fhe-memory-provider';
 
 const memoryProvider = await FHEAgentMemoryProvider.create({
   contractAddress: agentMemoryAddress,
-  thresholdNetworkUrl: 'https://api.helium.fhenix.zone',
+  thresholdNetworkUrl: 'https://rpc.sepolia.org',
   minApprovals: 2n,
 });
 ```
@@ -941,7 +941,7 @@ import { FHECredentialVault } from './openclaw/fhe-credential-vault';
 
 const vault = await FHECredentialVault.create({
   contractAddress: agentVaultAddress,
-  thresholdNetworkUrl: 'https://api.helium.fhenix.zone',
+  thresholdNetworkUrl: 'https://rpc.sepolia.org',
   defaultThreshold: 2n,
 });
 ```

@@ -12,20 +12,20 @@ This directory contains the full credential flow demonstration for Fhenix testne
 
 | Network | RPC URL | Explorer |
 |---------|---------|---------|
-| Fhenix Helium | https://api.helium.fhenix.zone | https://helium.fhenix.zone |
-| Fhenix Nitrogen | https://api.nitrogen.fhenix.zone | https://nitrogen.fhenix.zone |
+| Ethereum Sepolia | https://rpc.sepolia.org | https://sepolia.etherscan.io |
+| Arbitrum Sepolia | https://sepolia-rollup.arbitrum.io/rpc | https://sepolia.arbiscan.io |
 
 ## Quick Start
 
 ```bash
-# Deploy contracts to Helium testnet
-make deploy-helium
+# Deploy contracts to Ethereum Sepolia testnet
+make deploy-sepolia
 
 # Run full credential flow
 make testnet-flow
 
 # Verify on explorer
-make verify-helium
+make verify-sepolia
 ```
 
 ## Flow Steps
@@ -33,8 +33,8 @@ make verify-helium
 ### 1. Deploy Contracts
 
 ```bash
-# Deploy to Helium
-forge script script/Deploy.s.sol --rpc-url $HELIUM_RPC --broadcast
+# Deploy to Sepolia
+forge script script/Deploy.s.sol --rpc-url $SEPOLIA_RPC --broadcast
 
 # Output contract addresses:
 # - AgentVault: 0x...
@@ -45,7 +45,7 @@ forge script script/Deploy.s.sol --rpc-url $HELIUM_RPC --broadcast
 
 ```bash
 # Initialize vault with threshold=2
-npx ts-node scripts/initialize-vault.ts --network helium --vault <VAULT_ADDRESS>
+npx ts-node scripts/initialize-vault.ts --network sepolia --vault <VAULT_ADDRESS>
 ```
 
 ### 3. Store Credential
@@ -53,7 +53,7 @@ npx ts-node scripts/initialize-vault.ts --network helium --vault <VAULT_ADDRESS>
 ```bash
 # Store encrypted credential
 npx ts-node scripts/store-credential.ts \
-  --network helium \
+  --network sepolia \
   --vault <VAULT_ADDRESS> \
   --key "openai-api-key" \
   --value "sk-..."
@@ -64,7 +64,7 @@ npx ts-node scripts/store-credential.ts \
 ```bash
 # Retrieve with 2 permits (threshold)
 npx ts-node scripts/retrieve-credential.ts \
-  --network helium \
+  --network sepolia \
   --vault <VAULT_ADDRESS> \
   --id <CREDENTIAL_ID> \
   --permits 2
@@ -75,7 +75,7 @@ npx ts-node scripts/retrieve-credential.ts \
 ```bash
 # Append encrypted memory context
 npx ts-node scripts/append-memory.ts \
-  --network helium \
+  --network sepolia \
   --memory <MEMORY_ADDRESS> \
   --agent <AGENT_ADDRESS> \
   --context "User prefers dark mode"
@@ -86,7 +86,7 @@ npx ts-node scripts/append-memory.ts \
 ```bash
 # Get recent memory context
 npx ts-node scripts/get-memory.ts \
-  --network helium \
+  --network sepolia \
   --memory <MEMORY_ADDRESS> \
   --agent <AGENT_ADDRESS> \
   --limit 10
@@ -96,8 +96,8 @@ npx ts-node scripts/get-memory.ts \
 
 ```makefile
 # Deploy contracts
-make deploy-helium       # Deploy to Helium
-make deploy-nitrogen    # Deploy to Nitrogen
+make deploy-sepolia       # Deploy to Sepolia
+make deploy-arbitrum-sepolia    # Deploy to Arbitrum Sepolia
 
 # Run flows
 make testnet-flow      # Run full credential flow
@@ -105,7 +105,7 @@ make test-vault        # Test vault only
 make test-memory       # Test memory only
 
 # Verify
-make verify-helium     # Verify contracts on Helium explorer
+make verify-sepolia     # Verify contracts on Sepolia explorer
 make etherscan-verify # Verify on Etherscan (if applicable)
 ```
 
@@ -113,7 +113,7 @@ make etherscan-verify # Verify on Etherscan (if applicable)
 
 ```
 === FHE-Agent Shield Credential Flow ===
-Network: helium
+Network: sepolia
 Threshold: 2
 
 [1] Deploying contracts...
@@ -144,8 +144,8 @@ All operations successful!
 
 ```bash
 # Required
-export HELIUM_RPC="https://api.helium.fhenix.zone"
-export NITROGEN_RPC="https://api.nitrogen.fhenix.zone"
+export SEPOLIA_RPC="https://rpc.sepolia.org"
+export ARBITRUM_SEPOLIA_RPC="https://sepolia-rollup.arbitrum.io/rpc"
 export PRIVATE_KEY="0x..."  # Deployer wallet private key
 
 # Optional

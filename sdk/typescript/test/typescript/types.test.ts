@@ -16,22 +16,22 @@ describe('TypeScript SDK', () => {
   describe('Network Configuration', () => {
     it('should have all 4 networks configured', () => {
       expect(Object.keys(NETWORKS)).toHaveLength(4);
-      expect(NETWORKS['fhenix-helium']).toBeDefined();
-      expect(NETWORKS['fhenix-nitrogen']).toBeDefined();
+      expect(NETWORKS['ethereum-sepolia']).toBeDefined();
+      expect(NETWORKS['arbitrum-sepolia']).toBeDefined();
       expect(NETWORKS['arbitrum-sepolia']).toBeDefined();
       expect(NETWORKS['base-sepolia']).toBeDefined();
     });
 
     it('should have correct chain IDs', () => {
-      expect(NETWORKS['fhenix-helium'].chainId).toBe(8008135);
-      expect(NETWORKS['fhenix-nitrogen'].chainId).toBe(8008148);
+      expect(NETWORKS['ethereum-sepolia'].chainId).toBe(11155111);
+      expect(NETWORKS['arbitrum-sepolia'].chainId).toBe(421614);
       expect(NETWORKS['arbitrum-sepolia'].chainId).toBe(421614);
       expect(NETWORKS['base-sepolia'].chainId).toBe(84532);
     });
 
     it('should have correct RPC URLs', () => {
-      expect(NETWORKS['fhenix-helium'].rpcUrl).toContain('api.helium.fhenix.zone');
-      expect(NETWORKS['fhenix-nitrogen'].rpcUrl).toContain('api.nitrogen.fhenix.zone');
+      expect(NETWORKS['ethereum-sepolia'].rpcUrl).toContain('api.sepolia.fhenix.zone');
+      expect(NETWORKS['arbitrum-sepolia'].rpcUrl).toContain('api.arbitrumSepolia.fhenix.zone');
       expect(NETWORKS['arbitrum-sepolia'].rpcUrl).toContain('sepolia-rollup.arbitrum.io');
       expect(NETWORKS['base-sepolia'].rpcUrl).toContain('sepolia.base.org');
     });
@@ -53,8 +53,8 @@ describe('TypeScript SDK', () => {
 describe('Zod Runtime Validation', () => {
   describe('NetworkNameSchema', () => {
     it('should validate valid network names', () => {
-      expect(NetworkNameSchema.parse('fhenix-helium')).toBe('fhenix-helium');
-      expect(NetworkNameSchema.parse('fhenix-nitrogen')).toBe('fhenix-nitrogen');
+      expect(NetworkNameSchema.parse('ethereum-sepolia')).toBe('ethereum-sepolia');
+      expect(NetworkNameSchema.parse('arbitrum-sepolia')).toBe('arbitrum-sepolia');
       expect(NetworkNameSchema.parse('arbitrum-sepolia')).toBe('arbitrum-sepolia');
       expect(NetworkNameSchema.parse('base-sepolia')).toBe('base-sepolia');
     });
@@ -69,32 +69,32 @@ describe('Zod Runtime Validation', () => {
   describe('NetworkConfigSchema', () => {
     it('should validate correct network config', () => {
       const config = {
-        name: 'fhenix-helium',
-        rpcUrl: 'https://api.helium.fhenix.zone',
-        chainId: 8008135,
-        explorerUrl: 'https://explorer.helium.fhenix.zone',
+        name: 'ethereum-sepolia',
+        rpcUrl: 'https://rpc.sepolia.org',
+        chainId: 11155111,
+        explorerUrl: 'https://sepolia.etherscan.io',
       };
       const result = NetworkConfigSchema.parse(config);
-      expect(result.name).toBe('fhenix-helium');
-      expect(result.chainId).toBe(8008135);
+      expect(result.name).toBe('ethereum-sepolia');
+      expect(result.chainId).toBe(11155111);
     });
 
     it('should reject invalid chain ID', () => {
       const config = {
-        name: 'fhenix-helium',
-        rpcUrl: 'https://api.helium.fhenix.zone',
+        name: 'ethereum-sepolia',
+        rpcUrl: 'https://rpc.sepolia.org',
         chainId: -1,
-        explorerUrl: 'https://explorer.helium.fhenix.zone',
+        explorerUrl: 'https://sepolia.etherscan.io',
       };
       expect(() => NetworkConfigSchema.parse(config)).toThrow();
     });
 
     it('should reject invalid RPC URL', () => {
       const config = {
-        name: 'fhenix-helium',
+        name: 'ethereum-sepolia',
         rpcUrl: 'not-a-url',
-        chainId: 8008135,
-        explorerUrl: 'https://explorer.helium.fhenix.zone',
+        chainId: 11155111,
+        explorerUrl: 'https://sepolia.etherscan.io',
       };
       expect(() => NetworkConfigSchema.parse(config)).toThrow();
     });
@@ -198,10 +198,10 @@ describe('Validation Helper Functions', () => {
   describe('validateNetworkConfig', () => {
     it('should return validated config', () => {
       const config = {
-        name: 'fhenix-helium',
-        rpcUrl: 'https://api.helium.fhenix.zone',
-        chainId: 8008135,
-        explorerUrl: 'https://explorer.helium.fhenix.zone',
+        name: 'ethereum-sepolia',
+        rpcUrl: 'https://rpc.sepolia.org',
+        chainId: 11155111,
+        explorerUrl: 'https://sepolia.etherscan.io',
       };
       const result = validateNetworkConfig(config);
       expect(result).toEqual(config);

@@ -209,7 +209,7 @@ When the Fhenix testnet RPC is accessible, you can fork it with Anvil:
 
 ```bash
 # Fork Fhenix testnet (when RPC is available)
-anvil --fork-url https://api.helium.fhenix.zone --port 8545
+anvil --fork-url https://rpc.sepolia.org --port 8545
 
 # Deploy contracts
 forge script script/DeployAll.s.sol --rpc-url http://localhost:8545 --broadcast
@@ -271,7 +271,7 @@ npx tsx sandbox/test-openclaw-integration.ts
 ### Fork Tests (Fhenix Testnet)
 
 ```bash
-export FHENIX_RPC_URL="https://api.helium.fhenix.zone"
+export SEPOLIA_RPC_URL="https://rpc.sepolia.org"
 forge test --match-path "test/fork/*" -vvv
 ```
 

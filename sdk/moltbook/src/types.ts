@@ -5,11 +5,12 @@
 export interface MoltbookConfig {
   /** Moltbook API base URL */
   baseUrl?: string;
-  /** Fhenix network */
-  network: 'fhenix-helium' | 'fhenix-nitrogen';
+  /** CoFHE-supported host chain. CoFHE is a coprocessor on existing EVM
+   *  chains; the legacy Fhenix L2 testnets (Helium, Nitrogen) are retired. */
+  network: 'ethereum-sepolia' | 'arbitrum-sepolia' | 'base-sepolia';
   /** Agent's private key for FHE operations */
   privateKey: `0x${string}`;
-  /** Fhenix RPC URL */
+  /** Host chain RPC URL */
   rpcUrl: string;
   /** Contract addresses for FHE contracts */
   contracts: {
@@ -33,7 +34,7 @@ export interface FHEConfig {
   /** Threshold required for decryption */
   threshold: number;
   /** Network to use */
-  network: 'fhenix-helium' | 'fhenix-nitrogen';
+  network: 'ethereum-sepolia' | 'arbitrum-sepolia' | 'base-sepolia';
 }
 
 export interface Credential {

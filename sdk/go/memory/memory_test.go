@@ -10,7 +10,7 @@ import (
 // TestAppendContext tests adding encrypted context to memory
 func TestAppendContext(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -58,7 +58,7 @@ func TestAppendContext(t *testing.T) {
 // TestGetContext tests retrieving memory context
 func TestGetContext(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -86,7 +86,7 @@ func TestGetContext(t *testing.T) {
 // TestClearMemory tests clearing all memory
 func TestClearMemory(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -112,7 +112,7 @@ func TestClearMemory(t *testing.T) {
 // TestCreateSnapshot tests creating a memory snapshot
 func TestCreateSnapshot(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -134,7 +134,7 @@ func TestCreateSnapshot(t *testing.T) {
 // TestRestoreSnapshot tests restoring from a snapshot
 func TestRestoreSnapshot(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {

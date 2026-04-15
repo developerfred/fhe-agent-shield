@@ -6,12 +6,12 @@ def test_networks_have_four_entries():
     assert len(NETWORKS) == 4
 
 
-def test_fhenix_helium_chain_id():
-    assert NETWORKS[NetworkName.FHENIX_HELIUM].chain_id == 8008135
+def test_ethereum_sepolia_chain_id():
+    assert NETWORKS[NetworkName.SEPOLIA].chain_id == 11155111
 
 
-def test_fhenix_nitrogen_chain_id():
-    assert NETWORKS[NetworkName.FHENIX_NITROGEN].chain_id == 8008148
+def test_arbitrum_sepolia_chain_id():
+    assert NETWORKS[NetworkName.ARBITRUM_SEPOLIA].chain_id == 421614
 
 
 def test_arbitrum_sepolia_chain_id():

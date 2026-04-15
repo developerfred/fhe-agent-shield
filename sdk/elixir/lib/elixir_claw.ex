@@ -7,8 +7,8 @@ defmodule FHEAgentShield do
 
   ## Supported Networks
 
-  - Fhenix Helium (mainnet)
-  - Fhenix Nitrogen (testnet)
+  - Ethereum Sepolia (mainnet)
+  - Arbitrum Sepolia (testnet)
   - Arbitrum Sepolia (testnet)
   - Base Sepolia (testnet)
 
@@ -16,7 +16,7 @@ defmodule FHEAgentShield do
 
       # Create a new FHE agent shield client
       {:ok, client} = FHEAgentShield.new(
-        network: :fhenix_helium,
+        network: :ethereum_sepolia,
         private_key: System.get_env("PRIVATE_KEY")
       )
 
@@ -38,7 +38,7 @@ defmodule FHEAgentShield do
   alias FHEAgentShield.{Client, Config, Credentials, Memory, Contracts}
   alias FHEAgentShield.Transactions.TransactionBuilder
 
-  @type network :: :fhenix_helium | :fhenix_nitrogen | :arbitrum_sepolia | :base_sepolia
+  @type network :: :ethereum_sepolia | :arbitrum_sepolia | :base_sepolia
   @type address :: String.t()
   @type tx_hash :: String.t()
 
@@ -47,7 +47,7 @@ defmodule FHEAgentShield do
 
   ## Options
 
-  - `:network` - Network to connect to (default: :fhenix_helium)
+  - `:network` - Network to connect to (default: :ethereum_sepolia)
   - `:private_key` - Wallet private key (hex string or file path)
   - `:contracts` - Custom contract addresses
   - `:rpc_url` - Custom RPC URL
@@ -55,7 +55,7 @@ defmodule FHEAgentShield do
   ## Examples
 
       iex> {:ok, client} = FHEAgentShield.new(
-      ...>   network: :fhenix_helium,
+      ...>   network: :ethereum_sepolia,
       ...>   private_key: "0x..."
       ...> )
       iex> client.address

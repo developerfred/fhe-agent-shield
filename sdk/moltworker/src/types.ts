@@ -3,16 +3,20 @@
  */
 
 export interface Env {
-  /** Fhenix network (helium or nitrogen) */
-  FHENIX_NETWORK?: string;
-  /** FHE Contract address on Fhenix */
+  /** CoFHE-supported host chain (sepolia, arbitrum-sepolia, base-sepolia) */
+  COFHE_NETWORK?: string;
+  /** FHE Contract address on the host chain */
   FHE_CONTRACT_ADDRESS?: string;
   /** Cloudflare KV for credential storage */
   CREDENTIAL_KV?: KVNamespace;
 }
 
 export interface FHEProxyConfig {
-  network: 'helium' | 'nitrogen';
+  /**
+   * CoFHE-supported host chain. The legacy Fhenix L2 testnets (Helium,
+   * Nitrogen) have been retired — CoFHE now runs on existing EVM chains.
+   */
+  network: 'sepolia' | 'arbitrum-sepolia' | 'base-sepolia';
   rpcUrl: string;
   contractAddress: string;
 }

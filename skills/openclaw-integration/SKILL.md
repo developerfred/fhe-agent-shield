@@ -420,7 +420,7 @@ agent:
 ```bash
 FHE_VAULT_ADDRESS=0x... \
 FHE_MEMORY_ADDRESS=0x... \
-THRESHOLD_RPC=https://api.helium.fhenix.zone \
+THRESHOLD_RPC=https://rpc.sepolia.org \
 openclaw-gateway start
 ```
 

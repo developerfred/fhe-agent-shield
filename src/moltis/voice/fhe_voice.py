@@ -14,10 +14,10 @@ import base64
 class VoiceConfig:
     """Configuration for FHE Voice Provider"""
 
-    network: str = "helium"
+    network: str = "sepolia"
     contract_address: str = "0x" + "0" * 40
     threshold: int = 2
-    rpc_url: str = "https://api.helium.fhenix.zone"
+    rpc_url: str = "https://rpc.sepolia.org"
 
 
 class FHEVoiceProvider:

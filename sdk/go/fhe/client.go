@@ -13,8 +13,7 @@ import (
 type Network int
 
 const (
-	FhenixHelium Network = iota
-	FhenixNitrogen
+	EthereumSepolia Network = iota
 	ArbitrumSepolia
 	BaseSepolia
 )
@@ -22,10 +21,8 @@ const (
 // String returns the network name
 func (n Network) String() string {
 	switch n {
-	case FhenixHelium:
-		return "Fhenix Helium"
-	case FhenixNitrogen:
-		return "Fhenix Nitrogen"
+	case EthereumSepolia:
+		return "Ethereum Sepolia"
 	case ArbitrumSepolia:
 		return "Arbitrum Sepolia"
 	case BaseSepolia:
@@ -38,10 +35,8 @@ func (n Network) String() string {
 // RPCURL returns the RPC endpoint for the network
 func (n Network) RPCURL() string {
 	switch n {
-	case FhenixHelium:
-		return "https://api.helium.fhenix.zone"
-	case FhenixNitrogen:
-		return "https://api.nitrogen.fhenix.zone"
+	case EthereumSepolia:
+		return "https://rpc.sepolia.org"
 	case ArbitrumSepolia:
 		return "https://sepolia-rollup.arbitrum.io/rpc"
 	case BaseSepolia:
@@ -54,10 +49,8 @@ func (n Network) RPCURL() string {
 // ChainID returns the chain ID for the network
 func (n Network) ChainID() uint64 {
 	switch n {
-	case FhenixHelium:
-		return 42069
-	case FhenixNitrogen:
-		return 42070
+	case EthereumSepolia:
+		return 11155111
 	case ArbitrumSepolia:
 		return 421614
 	case BaseSepolia:

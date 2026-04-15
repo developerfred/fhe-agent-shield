@@ -10,7 +10,7 @@ describe('FHEVaultProxy', () => {
 
   beforeEach(() => {
     vault = new FHEVaultProxy({
-      network: 'helium',
+      network: 'sepolia',
       vaultAddress: '0x' + '0'.repeat(40),
       memoryAddress: '0x' + '0'.repeat(40),
       threshold: 2,
@@ -46,7 +46,7 @@ describe('FHEMemoryProxy', () => {
 
   beforeEach(() => {
     memory = new FHEMemoryProxy({
-      network: 'helium',
+      network: 'sepolia',
       vaultAddress: '0x' + '0'.repeat(40),
       memoryAddress: '0x' + '0'.repeat(40),
       threshold: 2,
@@ -76,7 +76,7 @@ describe('FHEMemoryProxy', () => {
 describe('FHESkillWrapper', () => {
   it('should wrap skill with FHE', async () => {
     const vault = new FHEVaultProxy({
-      network: 'helium',
+      network: 'sepolia',
       vaultAddress: '0x' + '0'.repeat(40),
       memoryAddress: '0x' + '0'.repeat(40),
       threshold: 2,
@@ -84,7 +84,7 @@ describe('FHESkillWrapper', () => {
     });
 
     const memory = new FHEMemoryProxy({
-      network: 'helium',
+      network: 'sepolia',
       vaultAddress: '0x' + '0'.repeat(40),
       memoryAddress: '0x' + '0'.repeat(40),
       threshold: 2,

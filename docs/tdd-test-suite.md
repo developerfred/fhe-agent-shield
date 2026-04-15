@@ -82,8 +82,8 @@ Verify all SDKs use consistent ABIs:
 
 | Network | Chain ID | RPC URL | Status |
 |---------|----------|---------|--------|
-| Fhenix Helium | 8008135 | `https://api.helium.fhenix.zone` | ⚠️ RPC issues |
-| Fhenix Nitrogen | 8008148 | `https://api.nitrogen.fhenix.zone` | ✅ Available |
+| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org` | ⚠️ RPC issues |
+| Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | ✅ Available |
 | Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | ✅ Working |
 | Base Sepolia | 84532 | `https://sepolia.base.org` | ✅ Working |
 
@@ -92,8 +92,8 @@ Verify all SDKs use consistent ABIs:
 ```
 Network              | Store | Retrieve | Memory | Actions
 ---------------------|-------|----------|--------|--------
-Fhenix Helium       |   -   |    -     |   -    |    -   
-Fhenix Nitrogen      |   ✅   |    ✅    |   ✅   |    ✅   
+Ethereum Sepolia       |   -   |    -     |   -    |    -   
+Arbitrum Sepolia      |   ✅   |    ✅    |   ✅   |    ✅   
 Arbitrum Sepolia     |   ✅   |    ✅    |   ✅   |    ✅   
 Base Sepolia         |   ✅   |    ✅    |   ✅   |    ✅   
 Anvil Local         |   ✅   |    ✅    |   ✅   |    ✅   

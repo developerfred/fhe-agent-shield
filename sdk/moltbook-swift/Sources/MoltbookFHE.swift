@@ -6,8 +6,8 @@ import Foundation
 
 /// Network configuration
 public enum FHENetwork: String, Codable, Sendable {
-    case helium = "helium"
-    case nitrogen = "nitrogen"
+    case sepolia = "sepolia"
+    case arbitrumSepolia = "arbitrum-sepolia"
 }
 
 /// Moltbook FHE Configuration

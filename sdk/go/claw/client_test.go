@@ -8,7 +8,7 @@ import (
 
 func TestClientCreation(t *testing.T) {
 	config := Config{
-		Network:         NetworkHelium,
+		Network:         NetworkSepolia,
 		ContractAddress: [20]byte{1, 2, 3},
 		RPCURL:          "http://localhost:8545",
 		Threshold:       2,

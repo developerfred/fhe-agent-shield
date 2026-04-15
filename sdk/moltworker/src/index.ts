@@ -20,7 +20,7 @@ app.get('/', (c) => {
     status: 'ok',
     service: 'fhe-agent-shield-moltworker',
     version: '0.1.0',
-    network: c.env.FHENIX_NETWORK,
+    network: c.env.COFHE_NETWORK,
   });
 });
 
@@ -37,7 +37,7 @@ app.post('/credentials', async (c) => {
   }>();
 
   const store = new FHECredentialStore({
-    network: c.env.FHENIX_NETWORK as 'helium' | 'nitrogen',
+    network: c.env.COFHE_NETWORK as 'sepolia' | 'arbitrum-sepolia',
     contractAddress: c.env.FHE_CONTRACT_ADDRESS,
     kv: c.env.CREDENTIAL_KV,
   });
@@ -51,7 +51,7 @@ app.get('/credentials/:id', async (c) => {
   const permits = parseInt(c.req.query('permits') || '2', 10);
 
   const store = new FHECredentialStore({
-    network: c.env.FHENIX_NETWORK as 'helium' | 'nitrogen',
+    network: c.env.COFHE_NETWORK as 'sepolia' | 'arbitrum-sepolia',
     contractAddress: c.env.FHE_CONTRACT_ADDRESS,
     kv: c.env.CREDENTIAL_KV,
   });
@@ -67,8 +67,8 @@ app.post('/fhe/:action', async (c) => {
   const action = c.req.param('action');
   const body = await c.req.json();
   const proxy = new FHEProxy({
-    network: c.env.FHENIX_NETWORK as 'helium' | 'nitrogen',
-    rpcUrl: `https://api.${c.env.FHENIX_NETWORK}.fhenix.zone`,
+    network: c.env.COFHE_NETWORK as 'sepolia' | 'arbitrum-sepolia',
+    rpcUrl: c.env.COFHE_NETWORK === 'sepolia' ? 'https://rpc.sepolia.org' : 'https://sepolia-rollup.arbitrum.io/rpc',
     contractAddress: c.env.FHE_CONTRACT_ADDRESS,
   });
 
@@ -90,7 +90,7 @@ app.get('/ws', (c) => {
  */
 app.get('/admin/credentials', async (c) => {
   const store = new FHECredentialStore({
-    network: c.env.FHENIX_NETWORK as 'helium' | 'nitrogen',
+    network: c.env.COFHE_NETWORK as 'sepolia' | 'arbitrum-sepolia',
     contractAddress: c.env.FHE_CONTRACT_ADDRESS,
     kv: c.env.CREDENTIAL_KV,
   });

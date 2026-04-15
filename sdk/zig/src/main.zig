@@ -148,7 +148,7 @@ pub const MemoryManager = struct {
 
 test "credential store and retrieve" {
     const config = Config{
-        .network = .fhenix_helium,
+        .network = .ethereum_sepolia,
         .private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
     };
     var client = try initClient(config);
@@ -160,7 +160,7 @@ test "credential store and retrieve" {
 
 test "memory append and retrieve" {
     const config = Config{
-        .network = .fhenix_helium,
+        .network = .ethereum_sepolia,
         .private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
     };
     var client = try initClient(config);
@@ -175,7 +175,7 @@ test "memory append and retrieve" {
 
 test "memory snapshot and restore" {
     const config = Config{
-        .network = .fhenix_helium,
+        .network = .ethereum_sepolia,
         .private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
     };
     var client = try initClient(config);
@@ -194,7 +194,7 @@ test "memory snapshot and restore" {
 
 test "credential empty key error" {
     const config = Config{
-        .network = .fhenix_helium,
+        .network = .ethereum_sepolia,
         .private_key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
     };
     var client = try initClient(config);

@@ -6,7 +6,7 @@
 [![Buildathon: Fhenix Privacy-by-Design](https://img.shields.io/badge/Buildathon-Fhenix-green.svg)](https://fhenix.io)
 [![Tests: 150 Passing](https://img.shields.io/badge/Tests-150%20Passing-brightgreen.svg)]()
 
-**FHE-Agent Shield** protects AI agents from credential theft, prompt injection, and data exfiltration attacks using Fully Homomorphic Encryption (FHE) via Fhenix CoFHE.
+**FHE-Agent Shield** protects AI agents from credential theft, prompt injection, and data exfiltration attacks using Fully Homomorphic Encryption (FHE) via Fhenix CoFHE — the FHE coprocessor that runs on existing EVM host chains (Ethereum, Arbitrum, Base).
 
 ## Problem Statement
 
@@ -41,11 +41,15 @@ FHE-Agent Shield wraps OpenClaw skills with FHE protection:
 │                              │                              │
 │                              ▼                              │
 │  ┌─────────────────────────────────────────────────────┐   │
-│  │              Fhenix CoFHE Layer                       │   │
-│  │  • FHE Precompiles (tfhe_add, tfhe_mul, etc.)       │   │
-│  │  • Threshold decryption network                     │   │
+│  │        Fhenix CoFHE Coprocessor (off-chain)           │   │
+│  │  • FheOS Server — executes FHE operations           │   │
+│  │  • Threshold Network — MPC-based decryption         │   │
+│  │  • cofhe-contracts on host chain (Task Manager,     │   │
+│  │    Ciphertext Registry) consulted via FHE.sol       │   │
 │  └─────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────┘
+
+> Shield contracts deploy directly to a CoFHE-supported **host chain** (Ethereum Sepolia, Arbitrum Sepolia, or Base Sepolia). Fhenix is no longer a separate L1/L2 chain — CoFHE is a coprocessor that augments any compatible EVM chain with FHE capabilities.
 ```
 
 ## Features
@@ -89,8 +93,9 @@ FHE-Agent Shield wraps OpenClaw skills with FHE protection:
 ### Prerequisites
 
 - [Foundry](https://getfoundry.sh/) - Ethereum development toolkit
-- [Node.js](https://nodejs.org/) 18+ 
-- [Fhenix Helium Testnet](https://docs.fhenix.zone/) access
+- [Node.js](https://nodejs.org/) 18+
+- Access to a CoFHE-supported host chain — Ethereum Sepolia, Arbitrum Sepolia, or Base Sepolia. See the [CoFHE compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility)
+- (Optional) [`@cofhe/sdk`](https://cofhe-docs.fhenix.zone/client-sdk/introduction/installation) `^0.4.0` for FHE client interactions
 
 ### Installation
 
@@ -127,19 +132,27 @@ npx tsx sandbox/test-openclaw-integration.ts
 
 For detailed FHE testing documentation, see [docs/fhe-testing.md](docs/fhe-testing.md).
 
-### Deploy to Fhenix Helium Testnet
+### Deploy to a CoFHE-supported host chain
+
+Choose any of the three supported testnets (Ethereum Sepolia, Arbitrum Sepolia, or Base Sepolia):
 
 ```bash
 # Set environment variables
 export PRIVATE_KEY=your_private_key
-export HELIUM_RPC=https://api.helium.fhenix.zone
+
+# Pick the target host chain
+export SEPOLIA_RPC="https://sepolia.infura.io/v3/${API_KEY_INFURA}"           # Ethereum Sepolia (11155111)
+# export ARBITRUM_SEPOLIA_RPC="https://sepolia-rollup.arbitrum.io/rpc"        # Arbitrum Sepolia (421614)
+# export BASE_SEPOLIA_RPC="https://sepolia.base.org"                          # Base Sepolia (84532)
 
 # Deploy all contracts
-forge script script/DeployAll.s.sol --rpc-url $HELIUM_RPC --broadcast
+forge script script/DeployAll.s.sol --rpc-url $SEPOLIA_RPC --broadcast
 
 # Deploy demo contracts
-forge script script/Demo.s.sol --rpc-url $HELIUM_RPC --broadcast
+forge script script/Demo.s.sol --rpc-url $SEPOLIA_RPC --broadcast
 ```
+
+> Fhenix CoFHE is a coprocessor — it runs alongside any supported EVM chain, rather than as a standalone L1/L2. Deployments target the host chain directly.
 
 ## Project Structure
 
@@ -257,12 +270,15 @@ const agent = createAgent({
 
 ## Testnet Information
 
+CoFHE is a coprocessor — it deploys on existing EVM host chains. Per the [CoFHE compatibility matrix](https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility), the supported testnets are:
+
 | Network | Chain ID | RPC URL | Explorer |
 |---------|----------|---------|----------|
-| Fhenix Helium | 8008135 | `https://api.helium.fhenix.zone` | [explorer.fhenix.zone](https://explorer.fhenix.zone) |
-| Fhenix Nitrogen | 8008148 | `https://api.nitrogen.fhenix.zone` | [explorer.nitrogen.fhenix.zone](https://explorer.nitrogen.fhenix.zone) |
+| Ethereum Sepolia | 11155111 | `https://rpc.sepolia.org` | [sepolia.etherscan.io](https://sepolia.etherscan.io) |
 | Arbitrum Sepolia | 421614 | `https://sepolia-rollup.arbitrum.io/rpc` | [sepolia.arbiscan.io](https://sepolia.arbiscan.io) |
 | Base Sepolia | 84532 | `https://sepolia.base.org` | [sepolia.basescan.org](https://sepolia.basescan.org) |
+
+> The legacy Fhenix L2 testnets (Helium, Nitrogen) have been retired. All CoFHE deployments now happen on host chains via `@fhenixprotocol/cofhe-contracts` ≥ 0.1.3 and the `@cofhe/sdk` ≥ 0.4.0 client.
 
 ## SDKs (In Development)
 

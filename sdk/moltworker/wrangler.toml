@@ -9,5 +9,5 @@ enabled = true
 endpoint = "default"
 
 [vars]
-FHENIX_NETWORK = "helium"
+COFHE_NETWORK = "sepolia"
 FHE_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"

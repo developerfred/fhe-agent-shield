@@ -10,7 +10,7 @@ import (
 // TestStoreCredential tests credential storage
 func TestStoreCredential(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -62,7 +62,7 @@ func TestStoreCredential(t *testing.T) {
 // TestRetrieveCredential tests credential retrieval
 func TestRetrieveCredential(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -91,7 +91,7 @@ func TestRetrieveCredential(t *testing.T) {
 // TestListCredentials tests listing credentials
 func TestListCredentials(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {
@@ -119,7 +119,7 @@ func TestListCredentials(t *testing.T) {
 // TestDeleteCredential tests credential deletion
 func TestDeleteCredential(t *testing.T) {
 	client, err := fhe.NewClient(fhe.Config{
-		Network:    fhe.FhenixHelium,
+		Network:    fhe.EthereumSepolia,
 		PrivateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
 	})
 	if err != nil {

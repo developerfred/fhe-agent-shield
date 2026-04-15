@@ -27,8 +27,8 @@ class CheckpointConfig:
 
     contract_address: str
     threshold: int = 2
-    rpc_url: str = "https://api.helium.fhenix.zone"
-    network: str = "helium"
+    rpc_url: str = "https://rpc.sepolia.org"
+    network: str = "sepolia"
 
 
 class FHECheckpointSaver:

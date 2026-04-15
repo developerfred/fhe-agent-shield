@@ -7,7 +7,7 @@
 import type { Env, Credential } from './types.js';
 
 interface CredentialStoreConfig {
-  network: 'helium' | 'nitrogen';
+  network: 'sepolia' | 'arbitrum-sepolia';
   contractAddress: string;
   kv?: KVNamespace;
 }

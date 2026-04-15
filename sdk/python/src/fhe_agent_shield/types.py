@@ -4,8 +4,16 @@ from typing import List, Dict, Any, Optional
 
 
 class NetworkName(Enum):
-    FHENIX_HELIUM = "fhenix-helium"
-    FHENIX_NITROGEN = "fhenix-nitrogen"
+    """CoFHE-supported host chains.
+
+    Fhenix CoFHE is a coprocessor that runs on existing EVM chains rather than
+    a dedicated L1/L2. The legacy Fhenix L2 testnets (Helium, Nitrogen) have
+    been retired.
+
+    See: https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility
+    """
+
+    ETHEREUM_SEPOLIA = "ethereum-sepolia"
     ARBITRUM_SEPOLIA = "arbitrum-sepolia"
     BASE_SEPOLIA = "base-sepolia"
 
@@ -19,17 +27,11 @@ class NetworkConfig:
 
 
 NETWORKS = {
-    NetworkName.FHENIX_HELIUM: NetworkConfig(
-        name="fhenix-helium",
-        rpc_url="https://api.helium.fhenix.zone",
-        chain_id=8008135,
-        explorer_url="https://explorer.helium.fhenix.zone",
-    ),
-    NetworkName.FHENIX_NITROGEN: NetworkConfig(
-        name="fhenix-nitrogen",
-        rpc_url="https://api.nitrogen.fhenix.zone",
-        chain_id=8008148,
-        explorer_url="https://explorer.nitrogen.fhenix.zone",
+    NetworkName.ETHEREUM_SEPOLIA: NetworkConfig(
+        name="ethereum-sepolia",
+        rpc_url="https://rpc.sepolia.org",
+        chain_id=11155111,
+        explorer_url="https://sepolia.etherscan.io",
     ),
     NetworkName.ARBITRUM_SEPOLIA: NetworkConfig(
         name="arbitrum-sepolia",

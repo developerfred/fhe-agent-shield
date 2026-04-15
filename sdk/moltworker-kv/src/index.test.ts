@@ -28,7 +28,7 @@ describe('FHEKVStore', () => {
   beforeEach(() => {
     mockKV = createMockKV();
     const config: FHEKVConfig = {
-      network: 'helium',
+      network: 'sepolia',
       kvNamespace: mockKV as unknown as KVNamespace,
       threshold: 2,
       vaultAddress: '0x' + '0'.repeat(40),

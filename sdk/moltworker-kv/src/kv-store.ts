@@ -5,7 +5,7 @@
  */
 
 export interface FHEKVConfig {
-  network: 'helium' | 'nitrogen';
+  network: 'sepolia' | 'arbitrum-sepolia';
   kvNamespace: KVNamespace;
   threshold: number;
   vaultAddress: string;
@@ -117,7 +117,7 @@ export class FHEKVStore {
  */
 export function createFHEKVStore(env: { FHE_KV?: KVNamespace }): FHEKVStore {
   return new FHEKVStore({
-    network: 'helium',
+    network: 'sepolia',
     kvNamespace: env.FHE_KV!,
     threshold: 2,
     vaultAddress: '0x' + '0'.repeat(40),

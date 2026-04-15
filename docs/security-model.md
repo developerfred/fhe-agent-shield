@@ -403,7 +403,7 @@ ebool encryptedCompare = FHE.eq(encryptedA, encryptedB);
 const domain = {
   name: 'FHE-Agent Shield',
   version: '1',
-  chainId: 80084, // Fhenix Helium testnet
+  chainId: 80084, // Ethereum Sepolia testnet
   verifyingContract: agentVaultAddress,
 };
 ```

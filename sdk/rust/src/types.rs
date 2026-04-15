@@ -4,8 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Network {
-    FhenixHelium,
-    FhenixNitrogen,
+    EthereumSepolia,
     ArbitrumSepolia,
     BaseSepolia,
     Local { rpc_url: String },
@@ -14,8 +13,7 @@ pub enum Network {
 impl Network {
     pub fn chain_id(&self) -> u64 {
         match self {
-            Network::FhenixHelium => 8008135,
-            Network::FhenixNitrogen => 8008148,
+            Network::EthereumSepolia => 11155111,
             Network::ArbitrumSepolia => 421614,
             Network::BaseSepolia => 84532,
             Network::Local { .. } => 31337,
@@ -24,8 +22,7 @@ impl Network {
 
     pub fn rpc_url(&self) -> String {
         match self {
-            Network::FhenixHelium => "https://api.helium.fhenix.zone".to_string(),
-            Network::FhenixNitrogen => "https://api.nitrogen.fhenix.zone".to_string(),
+            Network::EthereumSepolia => "https://rpc.sepolia.org".to_string(),
             Network::ArbitrumSepolia => "https://sepolia-rollup.arbitrum.io/rpc".to_string(),
             Network::BaseSepolia => "https://sepolia.base.org".to_string(),
             Network::Local { rpc_url } => rpc_url.clone(),

@@ -3,15 +3,13 @@ const testing = std.testing;
 
 // Network represents supported Fhenix networks
 pub const Network = enum(u64) {
-    fhenix_helium = 42069,
-    fhenix_nitrogen = 42070,
+    ethereum_sepolia = 11155111,
     arbitrum_sepolia = 421614,
     base_sepolia = 84532,
 
     pub fn rpcUrl(self: Network) []const u8 {
         return switch (self) {
-            .fhenix_helium => "https://api.helium.fhenix.zone",
-            .fhenix_nitrogen => "https://api.nitrogen.fhenix.zone",
+            .ethereum_sepolia => "https://rpc.sepolia.org",
             .arbitrum_sepolia => "https://sepolia-rollup.arbitrum.io/rpc",
             .base_sepolia => "https://sepolia.base.org",
         };
@@ -23,8 +21,7 @@ pub const Network = enum(u64) {
 
     pub fn name(self: Network) []const u8 {
         return switch (self) {
-            .fhenix_helium => "Fhenix Helium",
-            .fhenix_nitrogen => "Fhenix Nitrogen",
+            .ethereum_sepolia => "Ethereum Sepolia",
             .arbitrum_sepolia => "Arbitrum Sepolia",
             .base_sepolia => "Base Sepolia",
         };
@@ -80,24 +77,21 @@ pub const Config = struct {
 
 // Test network RPC URL resolution
 test "network rpc url" {
-    try testing.expectEqualStrings("https://api.helium.fhenix.zone", Network.fhenix_helium.rpcUrl());
-    try testing.expectEqualStrings("https://api.nitrogen.fhenix.zone", Network.fhenix_nitrogen.rpcUrl());
+    try testing.expectEqualStrings("https://rpc.sepolia.org", Network.ethereum_sepolia.rpcUrl());
     try testing.expectEqualStrings("https://sepolia-rollup.arbitrum.io/rpc", Network.arbitrum_sepolia.rpcUrl());
     try testing.expectEqualStrings("https://sepolia.base.org", Network.base_sepolia.rpcUrl());
 }
 
 // Test network chain ID
 test "network chain id" {
-    try testing.expectEqual(@as(u64, 42069), Network.fhenix_helium.chainId());
-    try testing.expectEqual(@as(u64, 42070), Network.fhenix_nitrogen.chainId());
+    try testing.expectEqual(@as(u64, 11155111), Network.ethereum_sepolia.chainId());
     try testing.expectEqual(@as(u64, 421614), Network.arbitrum_sepolia.chainId());
     try testing.expectEqual(@as(u64, 84532), Network.base_sepolia.chainId());
 }
 
 // Test network name
 test "network name" {
-    try testing.expectEqualStrings("Fhenix Helium", Network.fhenix_helium.name());
-    try testing.expectEqualStrings("Fhenix Nitrogen", Network.fhenix_nitrogen.name());
+    try testing.expectEqualStrings("Ethereum Sepolia", Network.ethereum_sepolia.name());
     try testing.expectEqualStrings("Arbitrum Sepolia", Network.arbitrum_sepolia.name());
     try testing.expectEqualStrings("Base Sepolia", Network.base_sepolia.name());
 }

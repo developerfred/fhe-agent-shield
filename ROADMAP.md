@@ -348,6 +348,65 @@ M8 (Polish + Eval)
 
 ---
 
-*Last Updated: March 20, 2026*
-*Version: 1.0*
-*Next: M7 Demo + M8 Submission*
+## M9: Post-Hackathon Improvement Roadmap
+
+Organized around the three judging dimensions we are targeting: **Privacy Architecture**, **User Experience**, and **Technical Execution**. Also incorporates the migration to the new Fhenix CoFHE model (coprocessor on host chains — Sepolia / Arbitrum Sepolia / Base Sepolia).
+
+### 🛡️ M9.1 — Privacy Architecture
+
+| Task | Rationale | Deliverable |
+|------|-----------|-------------|
+| Formal threat model per contract (STRIDE) | Explicit enumeration of spoof/tamper/repudiation/info-disclosure/DoS/elevation per attack surface | `docs/threat-model.md` with matrix + mitigations |
+| Permit lifecycle hardening | Enforce expiration, nonce monotonicity, revocation list; property-based fuzz on permit state machine | New tests in `test/Permit.t.sol` + invariants |
+| Access-control matrix (who can decrypt what) | Make the ACL explicit per resource × role × permit type | `docs/access-control-matrix.md` (machine-readable JSON alongside) |
+| Ciphertext rotation for long-lived credentials | API keys rotated on schedule even without compromise; threshold re-encryption pattern | `rotateCredential()` on `AgentVault` + SDK helper |
+| Side-channel / timing hardening | Decryption paths must be constant-time at the contract boundary; document threshold network latency bounds | Audit + notes in `docs/security-model.md` |
+| Migrate to `@cofhe/sdk@^0.4.0` and `@fhenixprotocol/cofhe-contracts@^0.1.3` | Align with canonical CoFHE stack (current deps go through `@fhenixprotocol/contracts/FHE.sol`) | Dependency bump + compatibility layer |
+| Zero-knowledge audit trail | Users prove permit was used correctly without exposing payload; good for enterprise compliance | Prototype with Noir or circom circuit |
+| Remove every plaintext-fallback code path | Find any branch that logs, caches, or stores plaintext secrets when FHE path fails — fail-closed instead | `grep -r "plaintext\|fallback"` cleanup + lint rule |
+| Selective-disclosure primitives | Reveal only derived values (e.g. "balance > X") without exposing underlying ciphertext | New `euint` helper contract + React hook |
+| Threshold network M-of-N analysis | Document key-holder set, rotation policy, slashing for misbehavior | `docs/threshold-network.md` |
+
+### 🎨 M9.2 — User Experience
+
+| Task | Rationale | Deliverable |
+|------|-----------|-------------|
+| Unified CLI: `fhe-agent-shield` | Single entry-point replacing Makefile targets and scattered scripts | `bin/fhe-agent-shield` with subcommands: `init`, `deploy`, `connect`, `rotate`, `audit`, `status` |
+| One-command scaffold | `pnpm dlx create-fhe-agent my-app` generates a working project with CoFHE SDK wired in | `packages/create-fhe-agent` |
+| Deployment dashboard | Read-only web UI showing deployed addresses, chain, block number, verification status per host chain | `frontend/dashboard/` (Vite + wagmi) |
+| Interactive demo playground | Try FHE-protected skills live without deploying anything; uses `cofhe-mock-contracts` under the hood | `frontend/playground/` |
+| CoFHE error-code translator | Map raw revert selectors → human actionable messages in SDK | `sdk/typescript/src/errors.ts` + parity in Python SDK |
+| Per-chain quickstart tutorials | 3 tutorials (Sepolia, Arb-Sepolia, Base-Sepolia), copy-paste runnable | `docs/tutorials/<chain>.md` |
+| Legacy-to-CoFHE migration guide | Help teams with deployments on the old Fhenix Helium/Nitrogen chains port to the coprocessor model | `docs/migration-from-fhenix-l2.md` |
+| React hook polish | Loading/error/idle states, optimistic UI, cache invalidation on permit expiration | Update `frontend/src/hooks/*` |
+| Metamask/Rabby connect flow | Network auto-add for Sepolia/Arb/Base when missing; chain switch UX | `frontend/src/connect/` |
+| Observable notifications | Toast + persistent activity log for every encrypted operation | `frontend/src/components/ActivityLog.tsx` |
+
+### ⚙️ M9.3 — Technical Execution
+
+| Task | Rationale | Deliverable |
+|------|-----------|-------------|
+| CI matrix across all host chains | Fork test on Sepolia / Arb-Sepolia / Base-Sepolia; enforce coverage floor ≥ 90% | `.github/workflows/ci.yml` (matrix) |
+| Gas benchmark suite | Per-chain gas cost for every public function, diffed on each PR | `test/Gas.t.sol` + `gas-snapshot` committed |
+| E2E harness with real CoFHE mock | Full round-trip: encrypt → store → retrieve → decrypt via `cofhe-mock-contracts` | `test/e2e/*` + dedicated CI job |
+| Dependency pinning + renovate | `@cofhe/sdk@^0.4.0`, `@fhenixprotocol/cofhe-contracts@^0.1.3`, `@cofhe/hardhat-plugin@^0.4.0` enforced via `renovate.json` | Renovate config + lockfile audit |
+| Reproducible builds | Deterministic `forge build` metadata; commit hash in deployment artifact | `script/DeployAll.s.sol` writes `deployments/<chain>.json` |
+| Structured logs + OpenTelemetry | Every SDK operation emits trace with span attributes (chain, resource, permit hash) | `sdk/typescript/src/telemetry.ts` |
+| Release automation | Changesets + semver + auto-publish SDKs on tag | `.changeset/` + `release.yml` |
+| Cross-language SDK parity tests | Same E2E scenario runs in TS, Python, Rust, Go; asserts identical ciphertext handles | `tests/parity/` |
+| Security scanning | Slither, Mythril, semgrep in CI; fail PR on new high-severity findings | `.github/workflows/security.yml` |
+| Documentation site | `docs/` → rendered via VitePress or Docusaurus at a stable URL | `docs-site/` + gh-pages deploy |
+| Mainnet readiness gate | Explicit checklist + attestation before any mainnet deploy (CoFHE mainnet TBA) | Update `docs/mainnet-readiness.md` |
+| Fork `cofhe-mock-contracts` | Upstream README still calls Fhenix an L2; fork under `developerfred/cofhe-mock-contracts`, fix docs, update `.gitmodules` in this repo to track the fork | New submodule URL + `docs/fork-notes.md` |
+
+### Sequencing
+
+1. **Privacy Architecture** items block mainnet — do threat model, permit hardening, ciphertext rotation first.
+2. **Technical Execution** foundations (CI matrix, gas benchmarks, parity tests) land next — they guard the privacy work.
+3. **User Experience** polish lands last and can be parallelized across contributors once the API surface is stable.
+
+---
+
+*Last Updated: April 15, 2026*
+*Version: 1.1 — added CoFHE migration (Fhenix is no longer an L2) and M9 improvement roadmap*
+*Next: M9 Post-Hackathon Improvements*

@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class MoltbookConfig(
-    val network: String = "helium",
+    val network: String = "sepolia",
     val vaultAddress: String = "0x" + "0".repeat(40),
     val memoryAddress: String = "0x" + "0".repeat(40),
     val threshold: Int = 2,

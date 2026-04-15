@@ -1,17 +1,17 @@
 import { z } from 'zod';
-export declare const NetworkNameSchema: z.ZodEnum<["fhenix-helium", "fhenix-nitrogen", "arbitrum-sepolia", "base-sepolia"]>;
+export declare const NetworkNameSchema: z.ZodEnum<["ethereum-sepolia", "arbitrum-sepolia", "base-sepolia"]>;
 export declare const NetworkConfigSchema: z.ZodObject<{
-    name: z.ZodEnum<["fhenix-helium", "fhenix-nitrogen", "arbitrum-sepolia", "base-sepolia"]>;
+    name: z.ZodEnum<["ethereum-sepolia", "arbitrum-sepolia", "base-sepolia"]>;
     rpcUrl: z.ZodString;
     chainId: z.ZodNumber;
     explorerUrl: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    name?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia";
+    name?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia";
     chainId?: number;
     rpcUrl?: string;
     explorerUrl?: string;
 }, {
-    name?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia";
+    name?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia";
     chainId?: number;
     rpcUrl?: string;
     explorerUrl?: string;
@@ -86,18 +86,18 @@ export declare const ContextResultSchema: z.ZodObject<{
     success?: boolean;
 }>;
 export declare const FHEAgentShieldConfigSchema: z.ZodObject<{
-    network: z.ZodUnion<[z.ZodEnum<["fhenix-helium", "fhenix-nitrogen", "arbitrum-sepolia", "base-sepolia"]>, z.ZodObject<{
-        name: z.ZodEnum<["fhenix-helium", "fhenix-nitrogen", "arbitrum-sepolia", "base-sepolia"]>;
+    network: z.ZodUnion<[z.ZodEnum<["ethereum-sepolia", "arbitrum-sepolia", "base-sepolia"]>, z.ZodObject<{
+        name: z.ZodEnum<["ethereum-sepolia", "arbitrum-sepolia", "base-sepolia"]>;
         rpcUrl: z.ZodString;
         chainId: z.ZodNumber;
         explorerUrl: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        name?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia";
+        name?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia";
         chainId?: number;
         rpcUrl?: string;
         explorerUrl?: string;
     }, {
-        name?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia";
+        name?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia";
         chainId?: number;
         rpcUrl?: string;
         explorerUrl?: string;
@@ -127,8 +127,8 @@ export declare const FHEAgentShieldConfigSchema: z.ZodObject<{
         actionSealer?: string;
     };
     privateKey?: string;
-    network?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia" | {
-        name?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia";
+    network?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia" | {
+        name?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia";
         chainId?: number;
         rpcUrl?: string;
         explorerUrl?: string;
@@ -141,8 +141,8 @@ export declare const FHEAgentShieldConfigSchema: z.ZodObject<{
         actionSealer?: string;
     };
     privateKey?: string;
-    network?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia" | {
-        name?: "fhenix-helium" | "fhenix-nitrogen" | "arbitrum-sepolia" | "base-sepolia";
+    network?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia" | {
+        name?: "ethereum-sepolia" | "arbitrum-sepolia" | "base-sepolia";
         chainId?: number;
         rpcUrl?: string;
         explorerUrl?: string;

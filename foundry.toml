@@ -45,16 +45,15 @@
   # Local
   localhost = "http://localhost:8545"
 
-  # Fhenix Networks (FHE-enabled L1 and L2s)
-  fhenixHelium = "https://api.helium.fhenix.zone"
-  fhenixNitrogen = "https://api.nitrogen.fhenix.zone"
-
-  # L2 Rollups with FHE
+  # CoFHE-supported host chains (testnets)
+  # Fhenix CoFHE is a coprocessor — it deploys on existing EVM chains rather
+  # than a dedicated Fhenix L1/L2. Supported testnets per
+  # https://cofhe-docs.fhenix.zone/get-started/introduction/compatibility
+  sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
   arbitrumSepolia = "https://sepolia-rollup.arbitrum.io/rpc"
   baseSepolia = "https://sepolia.base.org"
 
-  # Ethereum
-  sepolia = "https://sepolia.infura.io/v3/${API_KEY_INFURA}"
+  # Ethereum mainnet (CoFHE mainnet TBA)
   mainnet = "https://eth-mainnet.g.alchemy.com/v2/${API_KEY_ALCHEMY}"
 
   # Other networks

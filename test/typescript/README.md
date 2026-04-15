@@ -69,7 +69,7 @@ openclaw gateway --port 18789
 # 3. Configure FHE-Agent Shield
 export FHE_VAULT_ADDRESS=<deployed-vault-address>
 export FHE_MEMORY_ADDRESS=<deployed-memory-address>
-export THRESHOLD_RPC=https://api.helium.fhenix.zone
+export THRESHOLD_RPC=https://rpc.sepolia.org
 
 # 4. Register skills
 cp -r skills/* ~/.openclaw/workspace/skills/

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 export const NetworkNameSchema = z.enum([
-    'fhenix-helium',
-    'fhenix-nitrogen',
+    'ethereum-sepolia',
     'arbitrum-sepolia',
     'base-sepolia',
 ]);
