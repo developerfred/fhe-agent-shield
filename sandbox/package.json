@@ -7,7 +7,7 @@
     "test:anvil": "RPC_URL=http://localhost:8545 tsx test-openclaw-integration.ts"
   },
   "dependencies": {
-    "viem": "^2.21.0"
+    "viem": "^2.51.3"
   },
   "devDependencies": {
     "tsx": "^4.7.0",
